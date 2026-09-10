@@ -1,0 +1,109 @@
+{
+  "pack": "DLC2: Print finish",
+  "categories": [
+    {
+      "key": "FINISH",
+      "label": "Finish",
+      "note": "What has happened to the print since",
+      "order": 25,
+      "items": [
+        {
+          "m": "ABC",
+          "t": "Kept in a wallet for years. Soft corners, a crease down the middle, surface rubbed dull."
+        },
+        {
+          "m": "ABC",
+          "t": "Rescued from a bin. One crumple, flattened out again, the crease network permanent."
+        },
+        {
+          "m": "ABC",
+          "t": "Water damaged along one edge, colours run and feathered where the wet reached."
+        },
+        {
+          "m": "ABC",
+          "t": "Sun bleached in a window. One half nearly gone, the other half fine."
+        },
+        {
+          "m": "ABC",
+          "t": "Stuck up with tape four times. Tape marks and torn paper at each corner."
+        },
+        {
+          "m": "ABC",
+          "t": "Printed at the wrong size and trimmed by hand, slightly crooked."
+        },
+        {
+          "m": "ABC",
+          "t": "A test print with registration marks and colour bars still along one edge."
+        },
+        {
+          "m": "ABC",
+          "t": "Second hand. A previous owner's name in biro in the corner."
+        },
+        {
+          "m": "ABC",
+          "t": "Chewed. One corner has been in a mouth belonging to {4}."
+        },
+        {
+          "m": "ABC",
+          "t": "Printed on the back of something else, the other side faintly showing through."
+        },
+        {
+          "m": "ABC",
+          "t": "Screen printed by somebody learning. One colour laid on too heavy and still tacky."
+        },
+        {
+          "m": "ABC",
+          "t": "Guillotine cut through part of the image, losing a few millimetres of one side."
+        },
+        {
+          "m": "ABC",
+          "t": "A newspaper clipping, browned, with the edge of an unrelated advert attached."
+        },
+        {
+          "m": "ABC",
+          "t": "Rolled up for a long time. It will not lie flat and the drawing curves with it."
+        },
+        {
+          "m": "ABC",
+          "t": "Annotated by somebody in pencil. Small marks, no words."
+        },
+        {
+          "m": "ABC",
+          "t": "Photographed rather than scanned, on a table, at a slight angle, with real shadow."
+        },
+        {
+          "m": "ABC",
+          "t": "Held up by a hand at the edge of frame."
+        },
+        {
+          "m": "ABC",
+          "t": "Pinned behind other pieces of paper, partially covered."
+        },
+        {
+          "m": "ABC",
+          "t": "Immaculate and clearly never used, which is its own kind of sad."
+        },
+        {
+          "m": "ABC",
+          "t": "Ink still wet in one area and smudged by a thumb pulling it off the press."
+        },
+        {
+          "m": "ABC",
+          "t": "Static clinging to the surface, one hair stuck across it."
+        },
+        {
+          "m": "ABC",
+          "t": "Reproduced badly in a cheap catalogue, colours shifted green."
+        },
+        {
+          "m": "ABC",
+          "t": "Faded except where a frame protected the border, leaving a bright rectangle edge."
+        },
+        {
+          "m": "ABC",
+          "t": "Repaired with tape on the reverse, the repair visible as a line through the front."
+        }
+      ]
+    }
+  ]
+}

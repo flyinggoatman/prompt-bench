@@ -1,0 +1,81 @@
+{
+  "pack": "Format",
+  "categories": [
+    {
+      "key": "FORMAT",
+      "label": "Format",
+      "note": "What kind of object it is",
+      "order": 10,
+      "items": [
+        {
+          "m": "A",
+          "t": "Mock film poster. Overlapping hero cluster, largest figure lower centre, the others fanned around, {4} in a bottom corner."
+        },
+        {
+          "m": "A",
+          "t": "Mock gig poster. Three inks, bold flat shapes, a short hand lettered line of dates for extremely boring venues."
+        },
+        {
+          "m": "A",
+          "t": "Mock magazine cover. The three of them mid laugh, a masthead, no more than two cover lines."
+        },
+        {
+          "m": "A",
+          "t": "Mock album cover. Square, figure dense, all three crammed onto a small sofa."
+        },
+        {
+          "m": "A",
+          "t": "Mock recruitment poster for the care team. All three mid task in a kitchen doing three unrelated things."
+        },
+        {
+          "m": "A",
+          "t": "Mock public information notice. Deadpan official layout, entirely unhinged content, all three demonstrating the wrong procedure."
+        },
+        {
+          "m": "A",
+          "t": "Mock cereal box front. Bold flat shapes, invented brand name, ridiculous product claims, {4} as an unauthorised endorsement."
+        },
+        {
+          "m": "A",
+          "t": "Mock board game box lid. All three gathered around a chaotic tabletop, invented game title."
+        },
+        {
+          "m": "A",
+          "t": "Mock instruction diagram. Line art only, an exploded view of a normal Tuesday, numbered steps, one step going obviously wrong."
+        },
+        {
+          "m": "A",
+          "t": "Mock expedition photograph. Ordinary clothes, absurd location, treated as a routine shift, hand lettered banner."
+        },
+        {
+          "m": "AB",
+          "t": "Single comic splash panel. One moment, ink outlines, flat colour."
+        },
+        {
+          "m": "AC",
+          "t": "Four panel strip laid out on one canvas as a single composition, same cast throughout."
+        },
+        {
+          "m": "C",
+          "t": "Character sheet, four by four cells on one canvas, each cell a different pose and expression, plain background."
+        },
+        {
+          "m": "C",
+          "t": "Flat lay from directly overhead, objects arranged in a neat ninety degree grid, one cluster of belongings per member of the cast."
+        },
+        {
+          "m": "C",
+          "t": "Circular group avatar. Head and shoulders bust, all four squeezed in, overlapping at different heights, plain background, everything safe inside a centred circle."
+        },
+        {
+          "m": "C",
+          "t": "Four character cards sharing one frame design and colour scheme, each showing one character in a characteristic pose, a name banner only, the lower area filled with a small illustrated prop."
+        },
+        {
+          "m": "C",
+          "t": "Mock natural history plate. The three of them and the cat presented as specimens of the domestic sofa habitat, plain hand lettered name tags only."
+        }
+      ]
+    }
+  ]
+}

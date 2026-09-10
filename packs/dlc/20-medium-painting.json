@@ -1,0 +1,162 @@
+{
+  "pack": "DLC: Painting and print media",
+  "categories": [
+    {
+      "key": "MEDIUM",
+      "items": [
+        {
+          "m": "ABCD",
+          "t": "Fauvist flat colour. Unmixed saturated paint chosen for feeling rather than accuracy, visible brush, no blending, shadows in colour rather than grey."
+        },
+        {
+          "m": "ABCD",
+          "t": "Expressionist brush. Thick fast strokes, proportion bent for emotion, colours clashing on purpose, the ground showing between marks."
+        },
+        {
+          "m": "ABCD",
+          "t": "Naive folk painting. Flattened perspective, everything roughly the same size, decorative pattern in clothing and floors, no cast shadows."
+        },
+        {
+          "m": "ABCD",
+          "t": "Gouache animation background painting. Matte layered flats, soft edges only where paint met wet paint, slight paper bounce in the whites."
+        },
+        {
+          "m": "ABCD",
+          "t": "Watercolour with dip pen. Loose washes bleeding past the ink, blooms and backruns left in, white paper doing the work of light."
+        },
+        {
+          "m": "ABCD",
+          "t": "Cel animation flats. Uniform colour fields, one shadow tone, a clean line that varies in weight, painted background sitting behind the figures."
+        },
+        {
+          "m": "ABCD",
+          "t": "Ligne claire comic. Even weight ink line, flat colour, no hatching, clear silhouettes, every object drawn with equal care."
+        },
+        {
+          "m": "ABCD",
+          "t": "Linocut. Carved white lines out of one ink colour, gouge marks left showing, slight ink squash at the edges."
+        },
+        {
+          "m": "ABCD",
+          "t": "Monoprint. A ghosted second impression, uneven plate texture, soft edges where the ink thinned."
+        },
+        {
+          "m": "ABCD",
+          "t": "Chalk pastel on toned paper. Powdery strokes, the paper colour used as the midtone, smudged transitions, sharp accents only where it matters."
+        },
+        {
+          "m": "ABCD",
+          "t": "Oil pastel. Waxy heavy strokes dragged over one another, highlights scratched back through to the paper."
+        },
+        {
+          "m": "ABCD",
+          "t": "Wax crayon on cheap paper. Uneven pressure, waxy resist where colours cross, a child's confidence with an adult's composition."
+        },
+        {
+          "m": "ABCD",
+          "t": "Spray paint through stencils. Hard stencil edges, overspray haze, two or three layers slightly out of alignment."
+        },
+        {
+          "m": "ABCD",
+          "t": "Poster paint tempera. Opaque chalky flats, brush edges visible, colour laid in blocks."
+        },
+        {
+          "m": "ABCD",
+          "t": "Pop art screenprint. Benday dots, flat primaries, thick black keyline, printed out of register."
+        },
+        {
+          "m": "ABCD",
+          "t": "Constructivist poster. Diagonal composition, red black and cream, figures cut hard like photomontage, geometric blocks behind."
+        },
+        {
+          "m": "ABCD",
+          "t": "Bauhaus poster. Geometric primitives, primary colours, an asymmetrical grid, clean sans lettering if any."
+        },
+        {
+          "m": "ABCD",
+          "t": "Art deco travel poster. Stylised flattened figures, gradients done as stepped bands, four colours at most."
+        },
+        {
+          "m": "ABCD",
+          "t": "Sixties psychedelic poster. Melting organic shapes, vibrating complementary colours, dense pattern filling the ground."
+        },
+        {
+          "m": "ABCD",
+          "t": "Nineties zine photocopy. High contrast, degraded halftone, cut and paste edges, toner speckle in the blacks."
+        },
+        {
+          "m": "ABCD",
+          "t": "Saturday morning cartoon. Rubbery limbs, big simple shapes, flat colours, motion smears on anything moving."
+        },
+        {
+          "m": "ABCD",
+          "t": "Ink wash. Diluted black ink in tonal layers, drybrush at the edges, a single accent colour."
+        },
+        {
+          "m": "ABCD",
+          "t": "Digital painterly with chunky brushes. Colour blocked in planes, no smoothing, edges left unfinished on purpose."
+        },
+        {
+          "m": "ABCD",
+          "t": "Coloured pencil. Layered hatching, paper grain in the flats, burnished highlights, outlines in a darker pencil."
+        },
+        {
+          "m": "ABCD",
+          "t": "Paper cut layers. Hard edged shapes, limited colours, stacked layers with a real shadow gap between them."
+        },
+        {
+          "m": "ABCD",
+          "t": "Embroidery on fabric. Satin stitch fills with visible thread direction, French knots for texture, the weave of the cloth showing."
+        },
+        {
+          "m": "ABCD",
+          "t": "Chalkboard drawing. White and coloured chalk on a dark board, smudges, the ghost of an erased earlier drawing."
+        },
+        {
+          "m": "ABCD",
+          "t": "Airline safety card. Calm flat figures performing an absurd procedure with total seriousness, limited palette, numbered steps."
+        },
+        {
+          "m": "ABCD",
+          "t": "Stained glass. Leaded black lines, flat colour cells, light implied by colour choice rather than glow."
+        },
+        {
+          "m": "ABCD",
+          "t": "Mosaic. Small irregular tiles, grout lines, figures simplified to what tiles can carry."
+        },
+        {
+          "m": "ABCD",
+          "t": "Sticker bomb collage. Overlapping die cut shapes, thick white borders, a few peeling at the corner."
+        },
+        {
+          "m": "ABCD",
+          "t": "Woodblock print. Flat colour blocks, wood grain faintly through the large areas, key block line slightly off register from the colours."
+        },
+        {
+          "m": "ABCD",
+          "t": "Etching with aquatint. Fine scratched line, grainy tonal areas, plate mark visible around the edge."
+        },
+        {
+          "m": "ABCD",
+          "t": "Marker on brown kraft paper. White gel pen for highlights, the paper as the midtone, dark marker for shadow only."
+        },
+        {
+          "m": "ABCD",
+          "t": "Blueprint. White line on cyan ground, technical drawing conventions applied to a domestic disaster."
+        },
+        {
+          "m": "ABCD",
+          "t": "Rubber stamp. Repeated stamped shapes, uneven ink, overlaps and misses, one or two colours."
+        },
+        {
+          "m": "ABCD",
+          "t": "Felt and fabric collage. Cut felt shapes, visible fibres, stitched or glued edges."
+        },
+        {
+          "m": "ABCD",
+          "t": "Overhead projector transparency. Coloured marker on acetate, colours slightly translucent over one another, projected softness."
+        }
+      ]
+    }
+  ]
+}

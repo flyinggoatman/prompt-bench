@@ -1,0 +1,122 @@
+{
+  "pack": "DLC: More formats",
+  "categories": [
+    {
+      "key": "FORMAT",
+      "items": [
+        {
+          "m": "A",
+          "t": "Mock wanted poster. Three suspects and an accomplice, drawn from unflattering angles, charges listed as extremely minor."
+        },
+        {
+          "m": "A",
+          "t": "Mock theatre playbill. Cast list with invented roles, one review quote of four words, all of it hand set."
+        },
+        {
+          "m": "A",
+          "t": "Mock school photo day composite. Individual portraits in a grid with a group shot below, one person blinking."
+        },
+        {
+          "m": "A",
+          "t": "Mock protest placard held up in a crowd of one. Cardboard, marker, a cause nobody else would march for."
+        },
+        {
+          "m": "A",
+          "t": "Mock nutritional label. The group as a product, ingredients listed as behaviours, serving size one household."
+        },
+        {
+          "m": "A",
+          "t": "Mock museum exhibit label beside the actual exhibit, which is the three of them mid argument in a glass case."
+        },
+        {
+          "m": "A",
+          "t": "Mock seed packet. The cast as a variety of plant, growing instructions absurd, a drawing of what to expect."
+        },
+        {
+          "m": "A",
+          "t": "Mock vintage matchbook. Tiny format, one bold image, one line of type, worn at the fold."
+        },
+        {
+          "m": "A",
+          "t": "Mock vinyl record inner sleeve. Lyrics replaced with things people actually said this week, hand written."
+        },
+        {
+          "m": "A",
+          "t": "Mock local newspaper front page. One headline about nothing, the group photographed badly under it."
+        },
+        {
+          "m": "A",
+          "t": "Mock crisps packet. Flavour named after a personality trait, mascot doing something the flavour would do."
+        },
+        {
+          "m": "A",
+          "t": "Mock instruction poster for a fire drill, but for a meltdown. Calm diagram figures, clear steps, quietly kind."
+        },
+        {
+          "m": "C",
+          "t": "Enamel pin set on a backing card. Four to six pins, each one an object that stands for a person, no faces."
+        },
+        {
+          "m": "C",
+          "t": "Fridge door. Magnets, notes, a school style photo, a shopping list, all of it telling you who lives here."
+        },
+        {
+          "m": "C",
+          "t": "Keyring collection laid on a table, one per person, worn in ways that say who owns which."
+        },
+        {
+          "m": "C",
+          "t": "Passport stamp page. Invented stamps for places they have been together, one for the kitchen."
+        },
+        {
+          "m": "C",
+          "t": "Embroidered patch set. Chunky stitched badges, one per member, a team crest that is mostly a cat."
+        },
+        {
+          "m": "C",
+          "t": "Board game player pieces and cards laid out, each piece unmistakably one of the cast."
+        },
+        {
+          "m": "C",
+          "t": "A wall of polaroids held with washi tape, six to nine, candid, some blurry, one upside down."
+        },
+        {
+          "m": "C",
+          "t": "Cross stitch sampler. The cast in tiny pixel form with a motto stitched beneath."
+        },
+        {
+          "m": "D",
+          "t": "Two panels. Before and after, same framing, one thing has gone wrong in between."
+        },
+        {
+          "m": "D",
+          "t": "Three panels. Setup, escalation, {4} entering."
+        },
+        {
+          "m": "D",
+          "t": "Four panels in a square. A plan, its execution, its failure, and everyone pretending it worked."
+        },
+        {
+          "m": "D",
+          "t": "Six small panels in two rows. The same room across one day, the mess accumulating."
+        },
+        {
+          "m": "D",
+          "t": "A tall vertical strip read downward, each panel one step lower on a staircase, something getting dropped."
+        },
+        {
+          "m": "D",
+          "t": "A wide filmstrip. Five frames of the same second, motion caught between them."
+        },
+        {
+          "m": "D",
+          "t": "Comic page with one large panel and three small inset reactions."
+        },
+        {
+          "m": "D",
+          "t": "Storyboard sheet with rough panel borders, arrows for movement, a scribbled note under each."
+        }
+      ]
+    }
+  ]
+}

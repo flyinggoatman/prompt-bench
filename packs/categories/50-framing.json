@@ -1,0 +1,37 @@
+{
+  "pack": "Framing",
+  "categories": [
+    {
+      "key": "FRAMING",
+      "label": "Framing",
+      "note": "Where the viewer is standing",
+      "order": 50,
+      "items": [
+        {
+          "m": "AB",
+          "t": "Candid phone snap. Slight tilt, motion blur on one hand, someone half cropped out."
+        },
+        {
+          "m": "AB",
+          "t": "Seen from directly overhead."
+        },
+        {
+          "m": "AB",
+          "t": "Wide shot. Figures small, most of the frame is room."
+        },
+        {
+          "m": "AB",
+          "t": "Tight three quarter crop. Faces close, shoulders overlapping, nobody fully in frame."
+        },
+        {
+          "m": "AB",
+          "t": "Seen through a doorway, the foreground frame partly blocking the view."
+        },
+        {
+          "m": "AB",
+          "t": "Low angle from floor level, roughly {4}'s eyeline."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "pack": "DLC: More props",
+  "categories": [
+    {
+      "key": "PROPS",
+      "items": [
+        {
+          "m": "ABCD",
+          "t": "A plant that is not doing well and is being blamed on someone."
+        },
+        {
+          "m": "ABCD",
+          "t": "A single sock on a radiator, ownership disputed."
+        },
+        {
+          "m": "ABCD",
+          "t": "A stack of post nobody has opened, the top one clearly important."
+        },
+        {
+          "m": "ABCD",
+          "t": "A calendar with one thing written on it, underlined three times."
+        },
+        {
+          "m": "ABCD",
+          "t": "A door with a sign on it that was funny once."
+        },
+        {
+          "m": "ABCD",
+          "t": "A drying rack holding exactly one item."
+        },
+        {
+          "m": "ABCD",
+          "t": "Reading glasses on top of somebody's head, currently being searched for."
+        },
+        {
+          "m": "ABCD",
+          "t": "A charging cable that reaches the sofa if you sit at an angle."
+        },
+        {
+          "m": "ABCD",
+          "t": "A jar of something nobody will finish and nobody will throw away."
+        },
+        {
+          "m": "ABCD",
+          "t": "A takeaway menu used as a coaster since forever."
+        },
+        {
+          "m": "ABCD",
+          "t": "A tin of biscuits containing sewing supplies."
+        },
+        {
+          "m": "ABCD",
+          "t": "A remote shaped gap on the sofa arm where something used to live."
+        },
+        {
+          "m": "ABCD",
+          "t": "Shoes by the door in a pile that has a system only one person understands."
+        },
+        {
+          "m": "ABCD",
+          "t": "A blanket on the back of the sofa that {4} regards as structurally load bearing."
+        },
+        {
+          "m": "ABCD",
+          "t": "One good pen everyone knows not to take."
+        },
+        {
+          "m": "ABCD",
+          "t": "A whiteboard with nothing on it but a drawing of {4}."
+        }
+      ]
+    }
+  ]
+}

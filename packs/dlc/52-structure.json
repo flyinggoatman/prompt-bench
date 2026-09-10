@@ -1,0 +1,61 @@
+{
+  "pack": "DLC: Composition structure",
+  "categories": [
+    {
+      "key": "STRUCTURE",
+      "label": "Structure",
+      "note": "How the frame is organised",
+      "order": 52,
+      "items": [
+        {
+          "m": "ABD",
+          "t": "A strong diagonal from bottom left to top right, the action climbing it."
+        },
+        {
+          "m": "ABD",
+          "t": "Everything happening in the bottom third, empty room above."
+        },
+        {
+          "m": "ABD",
+          "t": "Frame within a frame: a doorway, a window, a mirror holding the real subject."
+        },
+        {
+          "m": "ABD",
+          "t": "Foreground object out of focus and enormous, the people small behind it."
+        },
+        {
+          "m": "ABD",
+          "t": "Triangular arrangement, but one corner is {4}."
+        },
+        {
+          "m": "ABD",
+          "t": "Leading lines from floorboards or a table edge pointing at the wrong person."
+        },
+        {
+          "m": "ABD",
+          "t": "Figures pushed to the far left, the right half of the frame is what they are all looking at."
+        },
+        {
+          "m": "ABD",
+          "t": "Repetition. Three of the same object, three of the same gesture, one broken."
+        },
+        {
+          "m": "ABD",
+          "t": "Silhouette against a light wall, details only in the edges."
+        },
+        {
+          "m": "ABD",
+          "t": "Two thirds of the frame is ceiling. The people are at the bottom, small."
+        },
+        {
+          "m": "ABD",
+          "t": "The subject is cut in half by the frame edge on purpose."
+        },
+        {
+          "m": "ABD",
+          "t": "A circle of people seen from above, feet pointing in, one pair of feet pointing out."
+        }
+      ]
+    }
+  ]
+}

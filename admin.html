@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Prompt Bench admin</title>
+<style>
+:root{--paper:#E7E4DC;--paper-2:#F3F1EC;--ink:#16233F;--ink-soft:#5C6880;
+  --pink:#F0407F;--teal:#1B837C;--rule:#C9C4B8;--warn:#B4451F}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);
+  font:400 16px/1.5 "Helvetica Neue",Helvetica,Arial,sans-serif;padding:0 0 60px}
+body.drag{outline:4px dashed var(--pink);outline-offset:-8px}
+.wrap{max-width:680px;margin:0 auto;padding:20px 16px 0}
+header{padding:8px 0 16px;border-bottom:2px solid var(--ink)}
+h1{font-size:28px;line-height:1.05;letter-spacing:-.02em;margin:0 0 6px;font-weight:700}
+header p{margin:0;color:var(--ink-soft);font-size:14px;max-width:56ch}
+header a{color:var(--ink)}
+h2{font-size:13px;font-weight:700;margin:26px 0 4px}
+h2 .n{color:var(--pink);font-weight:400;font-variant-numeric:tabular-nums}
+.hint{margin:0 0 12px;color:var(--ink-soft);font-size:13px;max-width:58ch}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+button{font:600 15px/1 inherit;padding:12px 14px;border:1px solid var(--ink);
+  background:var(--paper-2);color:var(--ink);cursor:pointer}
+button.primary{background:var(--ink);color:var(--paper-2)}
+button.accent{background:var(--pink);border-color:var(--pink);color:#fff}
+button.danger{border-color:var(--warn);color:var(--warn)}
+button:active{transform:translateY(1px)}
+button:focus-visible{outline:2px solid var(--pink);outline-offset:2px}
+.hiddenfile{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;font-size:12px;color:var(--ink-soft);font-weight:600;
+  border-bottom:1px solid var(--rule);padding:6px 8px 6px 0}
+td{border-bottom:1px solid var(--rule);padding:8px 8px 8px 0;vertical-align:top}
+td.path{font:400 12.5px/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--ink-soft)}
+td.act{text-align:right;white-space:nowrap}
+td.act button{padding:6px 9px;font-size:12.5px}
+.tag{display:inline-block;font-size:11px;border:1px solid var(--rule);
+  background:var(--paper-2);padding:1px 6px;margin-left:6px}
+.tag.priv{border-color:var(--warn);color:var(--warn)}
+.tag.up{border-color:var(--teal);color:var(--teal)}
+.tag.broken{border-color:var(--warn);background:var(--warn);color:#fff}
+.log{background:#fff;border:1px solid var(--ink);border-top:5px solid var(--pink);padding:12px;
+  margin-top:12px;font:400 12.5px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  white-space:pre-wrap;max-height:36vh;overflow:auto}
+.log:empty{display:none}
+.note{border-left:4px solid var(--warn);background:var(--paper-2);padding:10px 12px;
+  font-size:13px;margin:0 0 14px}
+footer{margin-top:28px;border-top:1px solid var(--rule);padding-top:12px;
+  font-size:12.5px;color:var(--ink-soft)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Prompt Bench admin</h1>
+  <p>Install and remove content packs, and load your private packs into this browser. The bench itself is at <a href="/">the main page</a> and needs no password.</p>
+</header>
+
+<div class="note" id="privnote" style="display:none"></div>
+
+<h2>Install a pack</h2>
+<p class="hint">JSON only. Each file is parsed and checked for recognised pack keys before anything is written. Files land in the uploads folder and appear on the main page for everyone as soon as they reload, unless the file sets <code>"private": true</code>.</p>
+<div class="row">
+  <button class="primary" id="pick">Choose files</button>
+  <button id="pickFolder">Choose a folder</button>
+  <button id="refresh">Refresh list</button>
+</div>
+<input type="file" id="f" class="hiddenfile" multiple accept=".json,application/json">
+<input type="file" id="fdir" class="hiddenfile" webkitdirectory directory multiple>
+<p class="hint">You can also drag files anywhere onto this page.</p>
+
+<h2>Installed packs <span class="n" id="count"></span></h2>
+<div id="list"></div>
+
+<h2>Private packs</h2>
+<p class="hint">Packs marked private are never sent to the public page. Pull them into this browser once and they stay in its local storage, so your cast travels with your device and not with the site.</p>
+<div class="row">
+  <button class="accent" id="pull">Load private packs into this browser</button>
+  <button class="danger" id="forget">Forget them again</button>
+</div>
+
+<div class="log" id="log" aria-live="polite"></div>
+
+<footer>
+  Uploads are capped at 512 KB per file, filenames are sanitised, and writes go nowhere except the uploads folder. Nothing here executes anything. To remove a pack that lives in the read only packs folder, delete the file on the server; only uploads can be removed from this page.
+</footer>
+
+</div>
+
+<script>
+"use strict";
+var PACK_KEY = "promptbench.packs.v2";
+var el = function(id){ return document.getElementById(id); };
+var packs = [];
+
+function log(msg, bad){
+  var t = new Date().toTimeString().slice(0,8);
+  el("log").textContent += t + "  " + (bad ? "! " : "") + msg + "\n";
+  el("log").scrollTop = el("log").scrollHeight;
+}
+function esc(s){
+  return String(s === undefined || s === null ? "" : s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+function summarise(d){
+  if(!d || typeof d !== "object") return "";
+  var bits = [];
+  var n = function(k){ return Array.isArray(d[k]) ? d[k].length : 0; };
+  if(n("masters")) bits.push(n("masters") + " master" + (n("masters")>1?"s":""));
+  if(n("people")) bits.push(n("people") + " cast");
+  if(n("categories")){
+    var items = 0;
+    d.categories.forEach(function(c){ items += (c.items||[]).length; });
+    bits.push(items + " modules in " + n("categories") + " categor" + (n("categories")>1?"ies":"y"));
+  }
+  if(n("dials")) bits.push(n("dials") + " dials");
+  if(n("variation")) bits.push(n("variation") + " variation pools");
+  if(n("fields")) bits.push(n("fields") + " fields");
+  if(n("shared")) bits.push("shared text");
+  return bits.join(", ");
+}
+
+function render(){
+  var h = '<table><thead><tr><th>Pack</th><th>File</th><th></th></tr></thead><tbody>';
+  packs.forEach(function(p){
+    var d = p.data || {};
+    var tags = "";
+    if(d.private) tags += '<span class="tag priv">private</span>';
+    if(p.source === "uploads") tags += '<span class="tag up">uploaded</span>';
+    else tags += '<span class="tag">built in</span>';
+    if(d._error) tags += '<span class="tag broken">broken</span>';
+    h += '<tr><td><b>' + esc(d.pack || p.path) + '</b>' + tags
+      +  '<br><span style="color:var(--ink-soft);font-size:12.5px">' + esc(summarise(d)) + '</span></td>'
+      +  '<td class="path">' + esc(p.path) + '</td>'
+      +  '<td class="act">'
+      +  (p.source === "uploads"
+            ? '<button class="danger" data-rm="' + esc(p.path) + '">Remove</button>'
+            : '')
+      +  '</td></tr>';
+  });
+  h += '</tbody></table>';
+  el("list").innerHTML = packs.length ? h : '<p class="hint">No packs found.</p>';
+  var priv = packs.filter(function(p){ return p.data && p.data.private; }).length;
+  var mods = 0;
+  packs.forEach(function(p){
+    ((p.data && p.data.categories) || []).forEach(function(c){ mods += (c.items||[]).length; });
+  });
+  el("count").textContent = packs.length + " files, " + mods + " modules, " + priv + " private";
+  var note = el("privnote");
+  if(priv){
+    note.style.display = "";
+    note.innerHTML = priv + " pack" + (priv>1?"s are":" is") + " marked private and will not be served to "
+      + "the public page. Use the button at the bottom to load "
+      + (priv>1?"them":"it") + " into this browser.";
+  } else { note.style.display = "none"; }
+}
+
+function loadList(){
+  fetch("api/packs?all=1", {cache:"no-store"})
+    .then(function(r){ if(!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .then(function(list){ packs = list; render(); log("Listed " + list.length + " packs."); })
+    .catch(function(e){ log("Could not list packs: " + e.message, true); });
+}
+
+function upload(name, obj){
+  return fetch("api/upload", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ name: name, pack: obj })
+  }).then(function(r){ return r.json().then(function(j){ return {ok:r.ok, j:j}; }); });
+}
+
+function handleFiles(fileList){
+  var files = [];
+  for(var i=0;i<fileList.length;i++){ if(/\.json$/i.test(fileList[i].name)) files.push(fileList[i]); }
+  if(!files.length){ log("No JSON files in that selection.", true); return; }
+  var queue = files.slice();
+  (function next(){
+    var f = queue.shift();
+    if(!f){ loadList(); return; }
+    var r = new FileReader();
+    r.onload = function(){
+      var obj;
+      try{ obj = JSON.parse(r.result); }
+      catch(e){ log(f.name + " is not valid JSON, skipped.", true); return next(); }
+      upload(f.name, obj).then(function(res){
+        if(res.ok && res.j.ok) log("Installed " + res.j.saved + ".");
+        else log(f.name + " rejected: " + (res.j.error || "unknown"), true);
+        next();
+      }).catch(function(e){ log(f.name + " failed: " + e.message, true); next(); });
+    };
+    r.onerror = function(){ log("Could not read " + f.name, true); next(); };
+    r.readAsText(f);
+  })();
+}
+
+el("pick").addEventListener("click", function(){ el("f").click(); });
+el("pickFolder").addEventListener("click", function(){ el("fdir").click(); });
+el("f").addEventListener("change", function(e){ handleFiles(e.target.files); e.target.value=""; });
+el("fdir").addEventListener("change", function(e){ handleFiles(e.target.files); e.target.value=""; });
+el("refresh").addEventListener("click", loadList);
+
+el("list").addEventListener("click", function(e){
+  var b = e.target.closest("button[data-rm]");
+  if(!b) return;
+  var name = b.dataset.rm;
+  if(!confirm("Remove " + name + " from the server?")) return;
+  fetch("api/remove", {
+    method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({ name: name })
+  }).then(function(r){ return r.json(); })
+    .then(function(j){
+      if(j.ok) log("Removed " + j.removed + ".");
+      else log("Could not remove: " + (j.error||"unknown"), true);
+      loadList();
+    }).catch(function(e){ log("Remove failed: " + e.message, true); });
+});
+
+el("pull").addEventListener("click", function(){
+  var priv = packs.filter(function(p){ return p.data && p.data.private; });
+  if(!priv.length){ log("There are no private packs to load.", true); return; }
+  var store = [];
+  try{ store = JSON.parse(localStorage.getItem(PACK_KEY) || "[]") || []; }catch(e){ store = []; }
+  store = store.filter(function(s){ return String(s.path||"").indexOf("private:") !== 0; });
+  priv.forEach(function(p){
+    store.push({ name: (p.data.pack || p.path), path: "private:" + p.path, data: p.data });
+  });
+  try{
+    localStorage.setItem(PACK_KEY, JSON.stringify(store));
+    log("Loaded " + priv.length + " private pack" + (priv.length>1?"s":"") + " into this browser. Open the main page.");
+  }catch(e){ log("Could not save to this browser: " + e.message, true); }
+});
+
+el("forget").addEventListener("click", function(){
+  var store = [];
+  try{ store = JSON.parse(localStorage.getItem(PACK_KEY) || "[]") || []; }catch(e){ store = []; }
+  var before = store.length;
+  store = store.filter(function(s){ return String(s.path||"").indexOf("private:") !== 0; });
+  try{
+    localStorage.setItem(PACK_KEY, JSON.stringify(store));
+    log("Removed " + (before - store.length) + " private pack(s) from this browser.");
+  }catch(e){ log("Could not update this browser: " + e.message, true); }
+});
+
+["dragenter","dragover"].forEach(function(ev){
+  document.addEventListener(ev, function(e){ e.preventDefault(); document.body.classList.add("drag"); });
+});
+["dragleave","drop"].forEach(function(ev){
+  document.addEventListener(ev, function(e){ e.preventDefault(); document.body.classList.remove("drag"); });
+});
+document.addEventListener("drop", function(e){
+  if(e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) handleFiles(e.dataTransfer.files);
+});
+
+loadList();
+</script>
+</body>
+</html>

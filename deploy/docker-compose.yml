@@ -1,0 +1,56 @@
+# Prompt Bench, standalone. Does not join or touch any other Compose project.
+#
+# The main page is public. The admin page at /admin, the private packs and the
+# offline build all require Basic Auth. Credentials come from .env, never committed.
+#
+# Expose it ONE of two ways. Pick one and leave the other commented out.
+#   1. Direct port, paired with a firewall rule if you want to limit who can reach it.
+#   2. Traefik labels, if a Traefik instance already routes for this host and you
+#      want HTTPS with a hostname. This does not start its own Traefik.
+#
+# Because the main page is public, prefer Option 2 with HTTPS if a hostname exists.
+# Basic Auth over plain HTTP sends the password in reversible encoding.
+
+services:
+  prompt-bench:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: prompt-bench:local
+    container_name: prompt-bench
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    environment:
+      BENCH_USER: ${BENCH_USER:?set BENCH_USER in .env}
+      BENCH_PASS: ${BENCH_PASS:?set BENCH_PASS in .env}
+      BENCH_PORT: "8080"
+    volumes:
+      # Curated packs. Read only: edit these on the server, not through the app.
+      - ./packs:/app/packs:ro
+      # The only writable path in the container. Admin uploads land here.
+      - ./uploads:/app/uploads:rw
+
+    # ---- Option 1: direct port ----
+    ports:
+      - "8790:8080"
+
+    # ---- Option 2: Traefik (comment out ports above, uncomment below, set the host) ----
+    # networks:
+    #   - traefik
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.prompt-bench.rule=Host(`bench.example.com`)"
+    #   - "traefik.http.routers.prompt-bench.entrypoints=websecure"
+    #   - "traefik.http.routers.prompt-bench.tls.certresolver=letsencrypt"
+    #   - "traefik.http.services.prompt-bench.loadbalancer.server.port=8080"
+
+# networks:
+#   traefik:
+#     external: true
+#     name: CHANGE_ME_to_the_existing_traefik_network_name

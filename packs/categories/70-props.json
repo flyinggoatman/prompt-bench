@@ -1,0 +1,37 @@
+{
+  "pack": "Props",
+  "categories": [
+    {
+      "key": "PROPS",
+      "label": "Props",
+      "note": "Specific unglamorous objects",
+      "order": 70,
+      "items": [
+        {
+          "m": "ABC",
+          "t": "Too many mugs. Nobody knows whose is whose."
+        },
+        {
+          "m": "ABC",
+          "t": "Three unfinished tasks visible at once, all abandoned mid step."
+        },
+        {
+          "m": "ABC",
+          "t": "One good black handbag somewhere it should not be."
+        },
+        {
+          "m": "ABC",
+          "t": "A battery bank and a tangle of cable, permanently unresolved."
+        },
+        {
+          "m": "ABC",
+          "t": "{1}'s headphones on a surface rather than worn, but within reach."
+        },
+        {
+          "m": "ABC",
+          "t": "Shopping bag handles biting into somebody's fingers."
+        }
+      ]
+    }
+  ]
+}

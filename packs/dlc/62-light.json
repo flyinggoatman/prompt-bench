@@ -1,0 +1,61 @@
+{
+  "pack": "DLC: Light sources",
+  "categories": [
+    {
+      "key": "LIGHT",
+      "label": "Light",
+      "note": "Where the light comes from",
+      "order": 62,
+      "items": [
+        {
+          "m": "ABCD",
+          "t": "Flat overcast daylight from a window on the left, no hard shadows."
+        },
+        {
+          "m": "ABCD",
+          "t": "A single bare bulb overhead, shadows straight down, faces lit from above."
+        },
+        {
+          "m": "ABCD",
+          "t": "Phone screens as the only light in a dark room, three faces three colours."
+        },
+        {
+          "m": "ABCD",
+          "t": "Kitchen strip light, even and slightly green, unflattering and honest."
+        },
+        {
+          "m": "ABCD",
+          "t": "Low winter sun straight through a window, long shadows across the floor, dust in the air drawn as specks not glow."
+        },
+        {
+          "m": "ABCD",
+          "t": "Fridge light only, one face lit, the rest in silhouette."
+        },
+        {
+          "m": "ABCD",
+          "t": "Torchlight held by the wrong person, pointing at the wrong thing."
+        },
+        {
+          "m": "ABCD",
+          "t": "Streetlight through a bus window, orange but matte."
+        },
+        {
+          "m": "ABCD",
+          "t": "Backlit from a doorway, the figures dark shapes with rim edges, no glow."
+        },
+        {
+          "m": "ABCD",
+          "t": "Candle on a table, warm and small, everything beyond it falls to two tones."
+        },
+        {
+          "m": "ABCD",
+          "t": "Camera flash. Harsh, flat, red eye avoided, shadows thrown hard against the wall behind."
+        },
+        {
+          "m": "ABCD",
+          "t": "Bright shop lighting, shadowless, colours slightly too saturated."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "pack": "DLC: More framing",
+  "categories": [
+    {
+      "key": "FRAMING",
+      "items": [
+        {
+          "m": "ABD",
+          "t": "Reflected in a dark window or a switched off television, the room behind them visible."
+        },
+        {
+          "m": "ABD",
+          "t": "Through the gap in a stair banister."
+        },
+        {
+          "m": "ABD",
+          "t": "From inside a cupboard someone has just opened."
+        },
+        {
+          "m": "ABD",
+          "t": "A mirror selfie where nobody is looking at the mirror."
+        },
+        {
+          "m": "ABD",
+          "t": "Dutch tilt, the whole room leaning, as if the photographer was also falling."
+        },
+        {
+          "m": "ABD",
+          "t": "Extreme close up on hands only. Whose is whose is clear."
+        },
+        {
+          "m": "ABD",
+          "t": "From across the street, through a lit ground floor window, evening."
+        },
+        {
+          "m": "ABD",
+          "t": "Over one shoulder, the shoulder blurred, the others sharp."
+        },
+        {
+          "m": "ABD",
+          "t": "Fish eye, a small room made enormous, feet in the corners."
+        },
+        {
+          "m": "ABD",
+          "t": "Bird's eye from the light fitting, hair partings visible."
+        },
+        {
+          "m": "ABD",
+          "t": "Security camera angle, corner of the ceiling, slight fish eye, time code absent."
+        },
+        {
+          "m": "ABD",
+          "t": "Backs only. Three people and {4} watching something we cannot see."
+        }
+      ]
+    }
+  ]
+}

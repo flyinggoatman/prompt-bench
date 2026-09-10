@@ -1,0 +1,60 @@
+{
+  "pack": "Variation",
+  "variation": [
+    {
+      "id": "composition",
+      "order": 10,
+      "options": [
+        "Crop one figure hard at the frame edge.",
+        "Let one figure face away from the viewer entirely.",
+        "Put one figure noticeably closer to the camera than the others.",
+        "Place the group off centre with the empty space on one side.",
+        "Stack the figures at three clearly different heights."
+      ]
+    },
+    {
+      "id": "time",
+      "order": 20,
+      "options": [
+        "Set it early morning.",
+        "Set it late at night.",
+        "Set it in the middle of a dull afternoon.",
+        "Set it just as somebody is arriving.",
+        "Set it just as somebody is leaving."
+      ]
+    },
+    {
+      "id": "background",
+      "order": 30,
+      "options": [
+        "Add one specific unglamorous object in the background that nobody is looking at.",
+        "Leave one task visibly half finished in the background.",
+        "Include something that has clearly been knocked over.",
+        "Include a surface with too much on it.",
+        "Include a door left open."
+      ]
+    },
+    {
+      "id": "gesture",
+      "order": 40,
+      "options": [
+        "Give one character a small gesture nobody else notices.",
+        "Let two of them be mid sentence at the same time.",
+        "Have one character reaching for something outside the frame.",
+        "Have one character already turned toward a noise.",
+        "Have one character holding something for somebody else."
+      ]
+    },
+    {
+      "id": "cat",
+      "order": 50,
+      "options": [
+        "Make {4} absent and referenced only by evidence.",
+        "Put {4} somewhere they should not be.",
+        "Have {4} watching from a distance.",
+        "Leave {4} out entirely.",
+        "Have {4} mid departure."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,134 @@
+{
+  "pack": "Dials",
+  "dials": [
+    {
+      "id": "divergence",
+      "label": "Distance from the default look",
+      "lo": "Clean",
+      "hi": "Wrecked",
+      "min": 0,
+      "max": 10,
+      "value": 6,
+      "order": 10,
+      "stops": [
+        {
+          "upTo": 2,
+          "text": "Keep the surface clean and even. Minimal texture, but still visibly hand made."
+        },
+        {
+          "upTo": 4,
+          "text": "Let the tool marks show. Slight texture, line weight that varies, colour not quite meeting the line."
+        },
+        {
+          "upTo": 7,
+          "text": "Push the medium hard. Visible grain, misregistration by a millimetre or two, uneven ink coverage, paper showing through."
+        },
+        {
+          "upTo": 10,
+          "text": "Treat the original as damaged. Ink pooling and skipping, registration out by several millimetres, creased and scuffed paper, an imperfect scan."
+        }
+      ]
+    },
+    {
+      "id": "energy",
+      "label": "Energy",
+      "lo": "Still",
+      "hi": "Chaos",
+      "min": 0,
+      "max": 10,
+      "value": 5,
+      "order": 20,
+      "stops": [
+        {
+          "upTo": 2,
+          "text": "Almost nothing is moving. The interest is in stillness and attention."
+        },
+        {
+          "upTo": 4,
+          "text": "Low key. One small thing is happening and the rest is settled."
+        },
+        {
+          "upTo": 7,
+          "text": "Busy. Several things are happening at once and they are not coordinated."
+        },
+        {
+          "upTo": 10,
+          "text": "Everything at once. Limbs mid movement, objects in the air, the moment about to get worse."
+        }
+      ]
+    },
+    {
+      "id": "words",
+      "label": "Words allowed in the image",
+      "lo": "None",
+      "hi": "25",
+      "min": 0,
+      "max": 25,
+      "value": 0,
+      "order": 30,
+      "carryToFollowUp": true,
+      "stops": [
+        {
+          "upTo": 0,
+          "text": "No text anywhere in the image."
+        },
+        {
+          "upTo": 25,
+          "text": "Total text in the image: {v} words maximum, hand lettered in the same medium as the drawing. A misspelling makes the image a failure and it should be regenerated."
+        }
+      ]
+    },
+    {
+      "id": "warmth",
+      "label": "Colour temperature",
+      "lo": "Cold",
+      "hi": "Warm",
+      "min": 0,
+      "max": 10,
+      "value": 5,
+      "order": 40,
+      "stops": [
+        {
+          "upTo": 2,
+          "text": "Cool light. Grey blue and pale lemon, no amber anywhere."
+        },
+        {
+          "upTo": 4,
+          "text": "Neutral daylight, slightly cool, flat and even."
+        },
+        {
+          "upTo": 7,
+          "text": "Mild warmth without going amber. Avoid the dim brown lamplit interior."
+        },
+        {
+          "upTo": 10,
+          "text": "Warm light, but keep it clean and matte rather than golden. No glow."
+        }
+      ]
+    },
+    {
+      "id": "faces",
+      "label": "Cast weighting",
+      "lo": "Led by one",
+      "hi": "Even",
+      "min": 0,
+      "max": 10,
+      "value": 8,
+      "order": 50,
+      "stops": [
+        {
+          "upTo": 3,
+          "text": "{1} is the anchor of the composition and the others react around them."
+        },
+        {
+          "upTo": 6,
+          "text": "Two of them carry the frame and the rest are doing something at the edge of it."
+        },
+        {
+          "upTo": 10,
+          "text": "The whole cast shares the frame equally. No single lead."
+        }
+      ]
+    }
+  ]
+}

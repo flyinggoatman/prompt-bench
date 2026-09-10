@@ -1,0 +1,18 @@
+{
+  "pack": "Scenes: example add on",
+  "categories": [
+    {
+      "key": "SCENE",
+      "items": [
+        {
+          "m": "AB",
+          "t": "Somebody has brought the wrong thing back from the shop and is defending the choice."
+        },
+        {
+          "m": "AB",
+          "t": "All three looking at one small object on a table, none of them touching it."
+        }
+      ]
+    }
+  ]
+}

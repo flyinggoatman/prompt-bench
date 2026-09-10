@@ -1,0 +1,46 @@
+{
+  "pack": "DLC: More variation pools",
+  "variation": [
+    {
+      "id": "sound",
+      "order": 12,
+      "options": [
+        "Something offscreen has just made a noise and one person has reacted to it.",
+        "It is completely silent and that is the joke.",
+        "Somebody is talking and nobody is listening.",
+        "Music is playing from a phone speaker that is under something."
+      ]
+    },
+    {
+      "id": "mishap",
+      "order": 25,
+      "options": [
+        "One object is in the process of falling.",
+        "Something has spilled and has not yet been noticed.",
+        "One shoe is missing.",
+        "Something is about to be sat on.",
+        "A door has been left open and something has come in."
+      ]
+    },
+    {
+      "id": "attention",
+      "order": 35,
+      "options": [
+        "Exactly one person has noticed the viewer and is unimpressed.",
+        "Everyone is looking at the same thing, which is below the frame.",
+        "One person is looking at another who does not know.",
+        "Nobody is looking at anything in particular."
+      ]
+    },
+    {
+      "id": "surface",
+      "order": 45,
+      "options": [
+        "The original has a fold across it.",
+        "The colours are slightly out of register on one side only.",
+        "There is a fingerprint in the ink in one corner.",
+        "The paper is slightly yellowed at the edges."
+      ]
+    }
+  ]
+}

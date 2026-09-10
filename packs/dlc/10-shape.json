@@ -1,0 +1,37 @@
+{
+  "pack": "DLC: Shape",
+  "categories": [
+    {
+      "key": "SHAPE",
+      "label": "Shape",
+      "note": "Canvas proportion",
+      "order": 5,
+      "items": [
+        {
+          "m": "ABCD",
+          "t": "Square canvas."
+        },
+        {
+          "m": "ABCD",
+          "t": "Tall portrait canvas, roughly two to three."
+        },
+        {
+          "m": "ABCD",
+          "t": "Wide landscape canvas, roughly three to two."
+        },
+        {
+          "m": "ABCD",
+          "t": "Square, composed for a circular crop. Nothing important in the corners."
+        },
+        {
+          "m": "ABCD",
+          "t": "Very wide banner, roughly three to one, the action spread along it."
+        },
+        {
+          "m": "ABCD",
+          "t": "Very tall strip, roughly one to three, read top to bottom."
+        }
+      ]
+    }
+  ]
+}

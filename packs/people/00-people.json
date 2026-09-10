@@ -1,0 +1,49 @@
+{
+  "pack": "Example cast: John, Susan, Michael, Pepper",
+  "people": [
+    {
+      "id": "p1",
+      "name": "John",
+      "kind": "person",
+      "marker": "a battered canvas messenger bag, square dark-framed glasses, and a small notebook that is usually tucked under one arm or left open nearby",
+      "looks": "Man in his early thirties with short dark brown hair, a narrow face, light stubble and an alert expression. Average height and lean build. His posture is slightly folded when concentrating and much more animated when explaining an idea",
+      "wears": "Soft checked overshirts over plain T-shirts, dark jeans and well-used trainers. Practical everyday clothes with muted colours rather than anything formal or fashionable",
+      "manner": "Curious, thoughtful and easily absorbed in whatever is happening. Often notices small technical details before the bigger social picture, then becomes enthusiastic once he has worked out what is going on",
+      "likes": "old computers, maps, puzzle games, repairing small objects and collecting oddly specific facts",
+      "avoid": "formal suits, branded clothing, superhero costumes"
+    },
+    {
+      "id": "p2",
+      "name": "Susan",
+      "kind": "person",
+      "marker": "a bright reusable shopping bag, silver hoop earrings and a ceramic travel mug that seems to follow her from room to room",
+      "looks": "Woman in her late thirties with shoulder-length auburn hair, freckles and an expressive round face. Medium height and ordinary build, with open body language and quick facial reactions",
+      "wears": "Straight-leg jeans, comfortable ankle boots, colourful knitted jumpers and simple jackets. Her clothes are practical but usually contain one strong colour or pattern",
+      "manner": "Warm, decisive and dryly funny. Tends to take charge of practical problems without making a ceremony of it, and reacts to nonsense with a very visible raised eyebrow",
+      "likes": "gardening, mystery novels, cooking for friends, second-hand shops and organising trips",
+      "avoid": "ball gowns, uniforms, exaggerated glamour"
+    },
+    {
+      "id": "p3",
+      "name": "Michael",
+      "kind": "person",
+      "marker": "rolled-up sleeves, a scratched wristwatch and hands that are usually occupied with keys, a screwdriver, a folded receipt or whatever object currently needs sorting out",
+      "looks": "Tall man in his mid forties with close-cropped black hair, a broad face and an easy smile. Solid build, relaxed stance, and a habit of leaning against doorframes while listening",
+      "wears": "Plain work shirts or henleys with the sleeves pushed up, charcoal trousers or jeans and sturdy brown shoes. Everything looks chosen to survive being used rather than to make a statement",
+      "manner": "Patient, practical and quietly mischievous. Usually lets everyone else finish talking before offering the simple solution, then pretends not to notice when it works",
+      "likes": "woodworking, local history, strong coffee, fixing household things and terrible puns",
+      "avoid": "military gear, luxury accessories, flashy logos"
+    },
+    {
+      "id": "p4",
+      "name": "Pepper",
+      "kind": "animal",
+      "marker": "a small white patch under the chin, one white front paw and a long charcoal tail that curls at the tip",
+      "looks": "Short-haired charcoal-grey cat with yellow-green eyes, a compact body and slightly oversized ears",
+      "wears": "",
+      "manner": "Confident when nobody is paying attention and deeply offended when caught doing something ridiculous. Usually observes from furniture, doorways or inconveniently central patches of floor",
+      "likes": "sunny windows, cardboard boxes, unattended chairs and investigating bags",
+      "avoid": "clothing, costumes, crowns, human-like poses"
+    }
+  ]
+}

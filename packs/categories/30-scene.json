@@ -1,0 +1,69 @@
+{
+  "pack": "Scene",
+  "categories": [
+    {
+      "key": "SCENE",
+      "label": "Scene",
+      "note": "What is actually happening",
+      "order": 30,
+      "items": [
+        {
+          "m": "AB",
+          "t": "A club, far too loud. {1} is going under. {3} has already cleared a path to the exit. {2} is holding the headphones out before anyone has asked."
+        },
+        {
+          "m": "AB",
+          "t": "{1} has stepped on a squeaky floorboard and recoiled. Everyone else has stopped dead and is staring."
+        },
+        {
+          "m": "AB",
+          "t": "{1} is explaining something at length to people who are absolutely not listening. {1} has not noticed."
+        },
+        {
+          "m": "AB",
+          "t": "Everyone playing a game very badly. Nobody is winning. Somebody is blaming the controller."
+        },
+        {
+          "m": "AB",
+          "t": "Far too much shopping. The situation is deteriorating. {3} is the only reason it has not collapsed."
+        },
+        {
+          "m": "AB",
+          "t": "Deep jungle, treated with mild administrative irritation, as though it were an inconvenient shift."
+        },
+        {
+          "m": "AB",
+          "t": "Standing on an alien planet in ordinary clothes, unimpressed, one of them checking the time."
+        },
+        {
+          "m": "AB",
+          "t": "Kitchen table. Three unrelated tasks in progress, all abandoned mid step."
+        },
+        {
+          "m": "AB",
+          "t": "{2} is covered in cat hair and has made peace with it. {4} is unrepentant."
+        },
+        {
+          "m": "AB",
+          "t": "{3} is fixing a problem nobody else has registered, and has not mentioned it."
+        },
+        {
+          "m": "AB",
+          "t": "{1} is apologising for something that did not happen. Everyone else has heard this before."
+        },
+        {
+          "m": "AB",
+          "t": "Coat half on, keys in hand, leaving, delayed by one more thing."
+        },
+        {
+          "m": "AB",
+          "t": "{1}'s battery bank is plugged into somebody else's phone. Nobody remembers agreeing to this."
+        },
+        {
+          "m": "AB",
+          "t": "{4} has seen something. Nobody else has any idea what."
+        }
+      ]
+    }
+  ]
+}
