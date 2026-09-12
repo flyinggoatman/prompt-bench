@@ -1,95 +1,115 @@
 ---
 name: dlc-pack-generator
-description: Generate, validate, package, and deliver Prompt Bench DLC masters plus scalable style and genre packs in the repository's native JSON format.
+description: Generate, validate, package, and deliver Prompt Bench DLC packs using every native importable mechanic, including masters, categories, dials, variation pools, fields, people, shared blocks, and scalable style/genre sets.
 ---
 
 # Prompt Bench DLC Pack Generator
 
-Use this skill when a user asks for a new Prompt Bench DLC, expansion, master, style pack, genre pack, or a large themed set of prompt variations.
+Use this skill when a user asks for a new Prompt Bench DLC, expansion, master, category/module set, slider, Vary pool, field, cast/shared pack, style pack, genre pack, or a large themed set of prompt variations.
 
 ## Source of truth
 
 Before authoring, inspect the current Prompt Bench repository when repository access is available. At minimum read:
 
 - `README.md`, especially **Pack file format**, **DLC packs**, and **A note on writing modules**.
-- `packs/dlc/00-master-sequence.json` for a master example.
-- representative category DLC such as `packs/dlc/20-medium-painting.json` and `packs/dlc/30-scene-more.json`.
+- representative files in `packs/masters/`, `packs/categories/`, `packs/controls/`, `packs/dlc/`, and `packs/dlc2/`.
+- `packs/dlc/00-master-sequence.json` for inheritance.
+- `packs/dlc/64-conditions.json` for weather/time modules.
+- `packs/controls/10-dials.json`, `20-variation.json`, and `30-fields.json` for interactive controls.
 - the current loader/validation code in `prompt-bench.html` and `server.py` when compatibility rules may have changed.
 
-Do not assume the bundled references outrank the live repository. Read both references before authoring unfamiliar mechanics:
+Do not assume bundled references outrank the live repository. Read:
 
 - `references/pack-format.md` for compact compatibility rules.
-- `references/mechanics.md` for the complete structural recipe for every importable Prompt Bench mechanic, including time/weather modules, sliders/dials, Vary pools, fields, cast data, shared blocks, inheritance, replacement and merge semantics.
+- `references/mechanics.md` for the complete structural recipe for every importable Prompt Bench mechanic.
 
 ## Complete mechanic coverage
 
-The skill must be able to author **every importable Prompt Bench mechanic**, not only masters, style and genre. When the user requests a component, select the native structure from `references/mechanics.md` and use its exact JSON shape. Never invent an unsupported top-level key when the request maps to an existing mechanic.
+The skill must be able to author **every importable Prompt Bench mechanic**, not only masters, style, and genre. Use the native structure from `references/mechanics.md`; never invent an unsupported top-level key when the request maps to an existing mechanic.
 
-Before delivery, check whether the request needs any of: `private`, `shared`, `masters`, `people`, `categories`, `dials`, `variation`, or `fields`, plus category `replace`, master `inherits`, name tokens, `{v}` value substitution, `carryToFollowUp`, `attachTo`, `splitList`, or `limit`.
+Before delivery, consider all recognised top-level mechanics: `pack`, `private`, `shared`, `masters`, `people`, `categories`, `dials`, `variation`, and `fields`.
 
-Time-of-day is deliberately documented in two forms: selectable time/weather belongs in the existing `CONDITIONS` category; random time changes for the Vary button belong in a `variation` pool. Sliders always use `dials`.
+Also handle their modifiers and behaviours: category `replace`, master `inherits`, compact master tags `m`, cast tokens `{1}` to `{5}`, `{v}` value substitution, `carryToFollowUp`, `attachTo`, `splitList`, `limit`, `rows`, `default`, category deduplication, and merge precedence.
+
+Time-of-day has two distinct forms:
+
+- selectable weather/time modules belong in the existing `CONDITIONS` category;
+- random time changes used by **Vary** belong in a `variation` pool.
+
+Sliders always use `dials`.
 
 ## What to create
 
-Translate the user's request into a self-contained DLC bundle. A bundle may contain any native Prompt Bench mechanic. For the common themed-DLC workflow it may include:
+Translate the user's request into a self-contained DLC bundle. A bundle may contain any native Prompt Bench mechanic. Common files include:
 
-- a new master, in `00-master-<theme>.json`;
-- a style category pack, in `20-style-<theme>.json`;
-- a genre category pack, in `30-genre-<theme>.json`;
-- existing or new category modules such as `CONDITIONS`, `LIGHT`, `POSE`, `PROPS`, or another appropriate category;
-- dials/sliders, variation pools, free-text fields, shared blocks, or cast entries when requested.
+- a new master, e.g. `00-master-<theme>.json`;
+- style modules as the normal `STYLE` category, order 22;
+- genre modules as the normal `GENRE` category, order 28;
+- existing/new category modules such as `CONDITIONS`, `LIGHT`, `POSE`, `PROPS`, or another appropriate category;
+- dials/sliders;
+- Vary/variation pools;
+- free-text fields;
+- shared prompt blocks;
+- people/cast entries, normally private when they describe real people.
 
-Style and genre are ordinary Prompt Bench categories, not new top-level JSON keys. Use category key `STYLE`, label `Style`, order `22`; and category key `GENRE`, label `Genre`, order `28`, unless the current repository defines a newer convention.
+Style and genre are ordinary Prompt Bench categories, not special top-level JSON keys.
 
-If a new master is requested, default style and genre items to that master only. If there is no new master, default them to `"*"` unless the user names specific master IDs. Keep new master IDs to one character. Prefer the first unused ID after the repository's existing IDs.
+If a new master is requested, default its generated style/genre items to that master only. If there is no new master, default them to `"*"` unless the user names target master IDs. Keep new master IDs to one character and avoid collisions.
 
-Do not modify existing Prompt Bench pack files merely to make a generated DLC work. Generated DLC should be additive unless the user explicitly requests replacement behaviour.
+Do not modify existing Prompt Bench pack files merely to make generated DLC work. Generated DLC should be additive unless the user explicitly requests replacement behaviour.
 
 ## Scalable counts
 
 Treat requested counts as exact requirements. If the user asks for 100 styles and 100 genres, create exactly 100 distinct style entries and exactly 100 distinct genre entries.
 
-For large sets, author in batches while maintaining a coverage plan so the final list is genuinely varied. Vary dimensions such as period, material, production method, line/shape language, palette logic, lighting, composition, narrative conventions, setting, social context, technology, and tone where appropriate. Do not inflate counts with synonyms or tiny sentence rewrites.
+For large sets, author in batches with a coverage plan. Vary meaningful dimensions such as period, material, production method, line/shape language, palette logic, lighting, composition, narrative conventions, setting, social context, technology, and tone. Do not inflate counts with synonyms or tiny rewrites.
 
-Every module should be a usable positive instruction. Prefer concrete image-making or scene-making cues over labels such as "very retro" or "more fantasy".
+Every module should be a usable positive instruction. Prefer concrete image-making or scene-making cues over vague labels.
 
 ## Build workflow
 
-1. Create a temporary authoring spec using `scripts/dlc_pack_tool.py init <spec.json>` or write the equivalent JSON yourself.
-2. Set `theme` and, if useful, `slug`.
-3. Add `master` or set it to `null`. Use `"id": "AUTO"` when a new master ID should be selected from the current repo.
-4. Put authored style entries under `style.items` and genre entries under `genre.items`. Set each block's `count` to the exact user-requested total.
-5. Build with:
+For the master/style/genre shortcut:
+
+1. Create a temporary authoring spec with `scripts/dlc_pack_tool.py init <spec.json>` or write equivalent JSON.
+2. Set `theme` and optional `slug`.
+3. Add `master` or set it to `null`. Use `"id": "AUTO"` when the repo should determine the next unused master ID.
+4. Put style entries under `style.items` and genre entries under `genre.items`, with exact `count` values.
+5. Build:
 
    `python skills/dlc-pack-generator/scripts/dlc_pack_tool.py build <spec.json> <output-dir> --clean`
 
-6. Validate the finished output again with:
+For every other mechanic, author native JSON directly from `references/mechanics.md`.
 
-   `python skills/dlc-pack-generator/scripts/dlc_pack_tool.py validate <output-dir>`
+Then run **both** validators:
 
-The builder automatically splits very large style/genre categories into numbered files when necessary to stay below Prompt Bench's 512 KB per-file server limit.
+`python skills/dlc-pack-generator/scripts/dlc_pack_tool.py validate <output-dir>`
 
-For mechanics other than the master/style/genre authoring shortcut, create native JSON directly using `references/mechanics.md`, then run the same validator over the finished files. The validator covers all recognised Prompt Bench mechanic structures.
+`python skills/dlc-pack-generator/scripts/validate_mechanics.py <output-dir>`
+
+The first checks general Prompt Bench compatibility and cross-file category duplicates. The strict mechanics validator checks field-level structure for every recognised mechanic, including shared blocks, masters, people, categories, dials, variation pools, fields, and top-level privacy metadata.
+
+The builder automatically splits very large style/genre categories into numbered files to stay below Prompt Bench's 512 KB per-file server limit. Apply the same size rule to manually authored mechanic packs.
 
 ## Validation requirements
 
 Do not deliver or upload a bundle unless validation passes. Also inspect the finished content semantically:
 
 - requested counts match exactly;
-- no exact duplicate module text exists within the generated category;
-- every master ID is compatible with Prompt Bench's compact `m` tags;
-- generated modules target the intended master(s);
-- files are valid UTF-8 JSON objects using recognised Prompt Bench keys;
+- no exact duplicate module text exists where Prompt Bench would merge it;
+- every master ID and `m` tag targets the intended master(s);
 - every requested mechanic follows its field-level structure in `references/mechanics.md`;
+- dial stops are ordered and cover the slider range;
+- variation pools and fields behave as the user intended;
+- files are valid UTF-8 JSON objects using recognised Prompt Bench keys;
 - no generated file exceeds 512 KB;
 - no unrelated repository file was changed;
-- no private cast/person data was copied into a public pack unless the user explicitly requested it.
+- no private cast/person data was copied into a public pack unless explicitly requested.
 
-If validation fails, fix the bundle and rerun validation. Do not hand the user a knowingly broken set.
+If validation fails, fix the bundle and rerun validation. Do not deliver a knowingly broken set.
 
 ## Ready-to-commit output
 
-The final output directory itself is the ready-to-commit file set. Keep it clean: only the Prompt Bench pack JSON files required by the request. Do not add a manifest JSON that the Prompt Bench loader could mistake for a pack.
+The final output directory itself is the ready-to-commit file set. Keep it clean: only Prompt Bench pack JSON files required by the request. Do not add a manifest JSON that the Prompt Bench loader could mistake for a pack.
 
 If the user wants the files added to the main Prompt Bench repo, place only the generated pack files in the requested DLC location and avoid unrelated edits.
 
@@ -97,13 +117,13 @@ If the user wants the files added to the main Prompt Bench repo, place only the 
 
 After generation and validation, deliver the bundle in this order:
 
-1. **Preferred:** if a connected GitHub tool can write to `https://github.com/flyinggoatman/prompt-bench-packs`, upload the generated bundle there without asking for another destination. Use a clear folder named from the theme/slug and preserve the complete generated file set.
-2. If that repository is unavailable or not writable, ask the user where the bundle should be uploaded and suggest suitable destinations that are actually available through their connected tools, such as another writable GitHub repository or connected cloud storage.
-3. If no suitable connector is currently connected, explain which compatible connector could perform the upload and let the user choose whether to connect it.
-4. If the user does not want to use a connector, create a complete `.zip` containing the validated file set and provide the download link so they can upload it themselves.
+1. **Preferred:** if a connected GitHub tool can write to `https://github.com/flyinggoatman/prompt-bench-packs`, upload the generated bundle there without asking for another destination. Use a clear theme/slug folder and preserve the complete generated file set.
+2. If that repository is unavailable or not writable, ask where the bundle should be uploaded and suggest suitable destinations that are actually available through connected tools, such as another writable GitHub repository or connected cloud storage.
+3. If no suitable connector is connected, explain which compatible connector could perform the upload and let the user choose whether to connect it.
+4. If the user does not want to use a connector, create a complete `.zip` containing the validated file set and provide a download link so they can upload it themselves.
 
 Never claim an upload succeeded unless the destination action actually succeeded.
 
 ## Completion report
 
-Keep the final report short. State the theme, master ID if created, exact style/genre counts or other generated mechanic counts, validation result, destination, and the files or repository location. If a fallback ZIP was used, link the ZIP directly.
+Keep the final report short. State the theme, master ID if created, exact generated counts, mechanic types included, validation result, destination, and the repository location or fallback ZIP.
