@@ -1,6 +1,6 @@
 # Prompt Bench DLC format notes
 
-These notes are a compact operating reference for the skill. The repository README and runtime code remain the source of truth.
+These notes are a compact operating reference for the skill. The repository README and runtime code remain the source of truth. For field-by-field JSON structures and examples for every importable mechanic, also read `mechanics.md`.
 
 ## Recognised top-level keys
 
@@ -14,9 +14,15 @@ A master is an object with `id`, `name`, `blurb`, and `body`; `inherits` is opti
 
 ## Categories
 
-A category has `key`, optional `label`, `note`, `order`, and `items`. Each item is `{ "m": "...", "t": "..." }`. If the same category key appears in multiple packs, items are merged. Exact duplicate `t` text is deduplicated and the master tags are merged, so duplicate text can silently reduce a requested variation count.
+A category has `key`, optional `label`, `note`, `order`, `replace`, and `items`. Each item is `{ "m": "...", "t": "..." }`. If the same category key appears in multiple packs, items are merged. Exact duplicate `t` text is deduplicated and the master tags are merged, so duplicate text can silently reduce a requested variation count.
 
 Avoid `"replace": true` for generated DLC unless the user explicitly asks to wipe an existing category.
+
+## Controls and other mechanics
+
+Prompt Bench also imports `shared` prompt blocks, `people`, `dials`/sliders, `variation` pools used by Vary, and free-text `fields`. Their complete structures, modifiers, merge behaviour and examples are defined in `mechanics.md`.
+
+Selectable time/weather belongs in the existing `CONDITIONS` category (order 64). Random time changes belong in a `variation` pool. Sliders belong in `dials`.
 
 ## File behaviour
 
