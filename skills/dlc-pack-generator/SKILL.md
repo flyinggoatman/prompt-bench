@@ -16,15 +16,28 @@ Before authoring, inspect the current Prompt Bench repository when repository ac
 - representative category DLC such as `packs/dlc/20-medium-painting.json` and `packs/dlc/30-scene-more.json`.
 - the current loader/validation code in `prompt-bench.html` and `server.py` when compatibility rules may have changed.
 
-Do not assume this reference file outranks the live repository. See `references/pack-format.md` for the current compact rules.
+Do not assume the bundled references outrank the live repository. Read both references before authoring unfamiliar mechanics:
+
+- `references/pack-format.md` for compact compatibility rules.
+- `references/mechanics.md` for the complete structural recipe for every importable Prompt Bench mechanic, including time/weather modules, sliders/dials, Vary pools, fields, cast data, shared blocks, inheritance, replacement and merge semantics.
+
+## Complete mechanic coverage
+
+The skill must be able to author **every importable Prompt Bench mechanic**, not only masters, style and genre. When the user requests a component, select the native structure from `references/mechanics.md` and use its exact JSON shape. Never invent an unsupported top-level key when the request maps to an existing mechanic.
+
+Before delivery, check whether the request needs any of: `private`, `shared`, `masters`, `people`, `categories`, `dials`, `variation`, or `fields`, plus category `replace`, master `inherits`, name tokens, `{v}` value substitution, `carryToFollowUp`, `attachTo`, `splitList`, or `limit`.
+
+Time-of-day is deliberately documented in two forms: selectable time/weather belongs in the existing `CONDITIONS` category; random time changes for the Vary button belong in a `variation` pool. Sliders always use `dials`.
 
 ## What to create
 
-Translate the user's request into a self-contained DLC bundle. A bundle may contain any combination of:
+Translate the user's request into a self-contained DLC bundle. A bundle may contain any native Prompt Bench mechanic. For the common themed-DLC workflow it may include:
 
 - a new master, in `00-master-<theme>.json`;
 - a style category pack, in `20-style-<theme>.json`;
-- a genre category pack, in `30-genre-<theme>.json`.
+- a genre category pack, in `30-genre-<theme>.json`;
+- existing or new category modules such as `CONDITIONS`, `LIGHT`, `POSE`, `PROPS`, or another appropriate category;
+- dials/sliders, variation pools, free-text fields, shared blocks, or cast entries when requested.
 
 Style and genre are ordinary Prompt Bench categories, not new top-level JSON keys. Use category key `STYLE`, label `Style`, order `22`; and category key `GENRE`, label `Genre`, order `28`, unless the current repository defines a newer convention.
 
@@ -56,6 +69,8 @@ Every module should be a usable positive instruction. Prefer concrete image-maki
 
 The builder automatically splits very large style/genre categories into numbered files when necessary to stay below Prompt Bench's 512 KB per-file server limit.
 
+For mechanics other than the master/style/genre authoring shortcut, create native JSON directly using `references/mechanics.md`, then run the same validator over the finished files. The validator covers all recognised Prompt Bench mechanic structures.
+
 ## Validation requirements
 
 Do not deliver or upload a bundle unless validation passes. Also inspect the finished content semantically:
@@ -65,6 +80,7 @@ Do not deliver or upload a bundle unless validation passes. Also inspect the fin
 - every master ID is compatible with Prompt Bench's compact `m` tags;
 - generated modules target the intended master(s);
 - files are valid UTF-8 JSON objects using recognised Prompt Bench keys;
+- every requested mechanic follows its field-level structure in `references/mechanics.md`;
 - no generated file exceeds 512 KB;
 - no unrelated repository file was changed;
 - no private cast/person data was copied into a public pack unless the user explicitly requested it.
@@ -90,4 +106,4 @@ Never claim an upload succeeded unless the destination action actually succeeded
 
 ## Completion report
 
-Keep the final report short. State the theme, master ID if created, exact style/genre counts, validation result, destination, and the files or repository location. If a fallback ZIP was used, link the ZIP directly.
+Keep the final report short. State the theme, master ID if created, exact style/genre counts or other generated mechanic counts, validation result, destination, and the files or repository location. If a fallback ZIP was used, link the ZIP directly.
