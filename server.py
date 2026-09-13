@@ -111,6 +111,25 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def serve_app(self):
+        # Keep optional DLC runtime mechanics separate from the monolithic HTML.
+        path = os.path.join(ROOT, "prompt-bench.html")
+        try:
+            with open(path, "rb") as fh:
+                body = fh.read()
+        except OSError:
+            return self.send_error(404)
+        tag = b'<script src="/dynamic-sliders.js"></script>\n'
+        marker = b"</body>"
+        if marker in body and tag not in body:
+            body = body.replace(marker, tag + marker, 1)
+        self.send_response(200)
+        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("Cache-Control", "no-store")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
     def do_HEAD(self):
         path = urllib.parse.urlparse(self.path).path
         if path.startswith("/admin") and not self.authorised():
@@ -146,8 +165,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             self.path = "/admin.html"
             return super().do_GET()
 
-        if path == "/":
-            self.path = "/prompt-bench.html"
+        if path in ("/", "/prompt-bench.html"):
+            return self.serve_app()
         elif path == "/prompt-bench-offline.html":
             # The offline build has the cast baked in. Never serve it publicly.
             if not self.authorised():
