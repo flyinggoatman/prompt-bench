@@ -63,7 +63,7 @@
 
   function loadOfficialCatalogue(){
     if(location.protocol === "file:" || typeof fetch !== "function"){
-      note("Official DLC import is available in the served Chrome build, not when the HTML file is opened directly.");
+      note("Official DLC import is available in the served web build, not when the HTML file is opened directly.");
       return;
     }
     var sel = el("officialSelect"), install = el("installOfficial");
