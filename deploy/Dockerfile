@@ -4,7 +4,7 @@ FROM python:3.12-alpine
 RUN addgroup -S bench && adduser -S -G bench -H -s /sbin/nologin bench
 
 WORKDIR /app
-COPY --chown=bench:bench prompt-bench.html admin.html server.py dynamic-sliders.js README.md /app/
+COPY --chown=bench:bench prompt-bench.html admin.html server.py dynamic-sliders.js official-packs.js README.md /app/
 COPY --chown=bench:bench prompt-bench-offline.html /app/
 COPY --chown=bench:bench packs /app/packs
 COPY --chown=bench:bench uploads /app/uploads

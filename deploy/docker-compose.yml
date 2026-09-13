@@ -30,6 +30,7 @@ services:
       BENCH_USER: ${BENCH_USER:?set BENCH_USER in .env}
       BENCH_PASS: ${BENCH_PASS:?set BENCH_PASS in .env}
       BENCH_PORT: "8080"
+      GITHUB_PACKS_TOKEN: ${GITHUB_PACKS_TOKEN:-}
     volumes:
       # Curated packs. Read only: edit these on the server, not through the app.
       - ./packs:/app/packs:ro
