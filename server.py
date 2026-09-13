@@ -4,6 +4,7 @@
 # Public, no authentication:
 #   GET  /                 the app
 #   GET  /api/packs        every pack NOT marked private
+#   GET  /api/official-packs  catalogue/install data from the official DLC repo
 #   GET  /healthz
 #
 # Authenticated with HTTP Basic (BENCH_USER / BENCH_PASS):
@@ -24,6 +25,9 @@ import posixpath
 import re
 import sys
 import urllib.parse
+import urllib.error
+import urllib.request
+import time
 
 ROOT = os.path.abspath(os.path.dirname(__file__))
 PACKS = os.path.join(ROOT, "packs")
@@ -33,6 +37,20 @@ USER = os.environ.get("BENCH_USER", "")
 PASS = os.environ.get("BENCH_PASS", "")
 MAX_UPLOAD = 512 * 1024
 SAFE = re.compile(r"[^A-Za-z0-9._-]")
+
+# Official DLC import is deliberately locked to one repository and one branch.
+# The browser never receives GITHUB_PACKS_TOKEN and cannot choose another URL.
+OFFICIAL_REPO = "flyinggoatman/prompt-bench-packs"
+OFFICIAL_REF = "main"
+OFFICIAL_MANIFEST = "index.json"
+GITHUB_PACKS_TOKEN = os.environ.get("GITHUB_PACKS_TOKEN", "").strip()
+OFFICIAL_MANIFEST_MAX = 128 * 1024
+OFFICIAL_FILE_MAX = 512 * 1024
+OFFICIAL_TOTAL_MAX = 2 * 1024 * 1024
+OFFICIAL_MAX_FILES = 64
+OFFICIAL_CACHE_SECONDS = 60
+OFFICIAL_CACHE = {"at": 0.0, "manifest": None}
+PACK_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$")
 
 if not USER or not PASS:
     sys.stderr.write("BENCH_USER and BENCH_PASS must both be set. Refusing to start.\n")
@@ -80,6 +98,150 @@ def safe_upload_path(name):
     return os.path.join(UPLOADS, name)
 
 
+class OfficialPackError(Exception):
+    def __init__(self, message, code=502):
+        super().__init__(message)
+        self.code = code
+
+
+def safe_official_path(path, pack_id=None):
+    path = str(path or "").strip().replace("\\", "/")
+    if not path or path.startswith("/") or not path.lower().endswith(".json"):
+        return None
+    parts = path.split("/")
+    if any(not part or part in (".", "..") or part.startswith(".") for part in parts):
+        return None
+    if pack_id and (len(parts) < 2 or parts[0] != pack_id):
+        return None
+    return path
+
+
+def github_content(path, max_bytes):
+    quoted = urllib.parse.quote(path, safe="/")
+    url = "https://api.github.com/repos/%s/contents/%s?ref=%s" % (
+        OFFICIAL_REPO, quoted, urllib.parse.quote(OFFICIAL_REF, safe="")
+    )
+    headers = {
+        "Accept": "application/vnd.github+json",
+        "User-Agent": "Prompt-Bench-Official-DLC/1",
+        "X-GitHub-Api-Version": "2022-11-28",
+    }
+    if GITHUB_PACKS_TOKEN:
+        headers["Authorization"] = "Bearer " + GITHUB_PACKS_TOKEN
+    req = urllib.request.Request(url, headers=headers, method="GET")
+    try:
+        with urllib.request.urlopen(req, timeout=8) as res:
+            raw = res.read(max_bytes * 2 + 16384)
+    except urllib.error.HTTPError as exc:
+        if exc.code in (401, 403, 404):
+            raise OfficialPackError(
+                "Official DLC repository is unavailable. Configure a read-only GITHUB_PACKS_TOKEN for the Prompt Bench packs repository.",
+                503,
+            )
+        raise OfficialPackError("GitHub returned HTTP %d while reading official DLC." % exc.code)
+    except (urllib.error.URLError, TimeoutError) as exc:
+        raise OfficialPackError("Could not reach GitHub for official DLC: %s" % exc.reason if hasattr(exc, "reason") else str(exc), 503)
+    try:
+        meta = json.loads(raw.decode("utf-8"))
+        if not isinstance(meta, dict) or meta.get("type") != "file":
+            raise ValueError("not a file")
+        if meta.get("encoding") != "base64" or not isinstance(meta.get("content"), str):
+            raise ValueError("unexpected GitHub response")
+        decoded = base64.b64decode(meta["content"].encode("ascii"), validate=False)
+    except Exception as exc:
+        raise OfficialPackError("GitHub returned invalid official DLC data: %s" % exc)
+    if len(decoded) > max_bytes:
+        raise OfficialPackError("Official DLC file %s is larger than the allowed limit." % path, 413)
+    return decoded
+
+
+def load_official_manifest():
+    now = time.monotonic()
+    cached = OFFICIAL_CACHE.get("manifest")
+    if cached is not None and now - OFFICIAL_CACHE.get("at", 0.0) < OFFICIAL_CACHE_SECONDS:
+        return cached
+    try:
+        raw = github_content(OFFICIAL_MANIFEST, OFFICIAL_MANIFEST_MAX)
+        doc = json.loads(raw.decode("utf-8"))
+    except OfficialPackError:
+        raise
+    except Exception as exc:
+        raise OfficialPackError("Official DLC catalogue is not valid JSON: %s" % exc)
+    if not isinstance(doc, dict) or doc.get("schema") != 1 or not isinstance(doc.get("packs"), list):
+        raise OfficialPackError("Official DLC catalogue has an unsupported format.")
+    clean = {"schema": 1, "repository": OFFICIAL_REPO, "ref": OFFICIAL_REF, "packs": []}
+    seen = set()
+    for item in doc["packs"]:
+        if not isinstance(item, dict):
+            raise OfficialPackError("Official DLC catalogue contains a malformed pack entry.")
+        pack_id = str(item.get("id") or "").strip()
+        name = str(item.get("name") or "").strip()
+        version = str(item.get("version") or "").strip()
+        description = str(item.get("description") or "").strip()
+        files = item.get("files")
+        if not PACK_ID.match(pack_id) or pack_id in seen or not name:
+            raise OfficialPackError("Official DLC catalogue contains an invalid or duplicate pack id.")
+        if not isinstance(files, list) or not files or len(files) > OFFICIAL_MAX_FILES:
+            raise OfficialPackError("Official DLC pack %s has an invalid file list." % pack_id)
+        safe_files = []
+        for path in files:
+            safe_path = safe_official_path(path, pack_id)
+            if not safe_path:
+                raise OfficialPackError("Official DLC pack %s contains an unsafe file path." % pack_id)
+            safe_files.append(safe_path)
+        seen.add(pack_id)
+        clean["packs"].append({
+            "id": pack_id, "name": name, "version": version,
+            "description": description, "files": safe_files,
+        })
+    OFFICIAL_CACHE["at"] = now
+    OFFICIAL_CACHE["manifest"] = clean
+    return clean
+
+
+def official_catalogue_public():
+    manifest = load_official_manifest()
+    return {
+        "ok": True, "repository": manifest["repository"], "ref": manifest["ref"],
+        "packs": [
+            {"id": p["id"], "name": p["name"], "version": p["version"],
+             "description": p["description"], "fileCount": len(p["files"])}
+            for p in manifest["packs"]
+        ],
+    }
+
+
+def official_pack_payload(pack_id):
+    manifest = load_official_manifest()
+    target = None
+    for item in manifest["packs"]:
+        if item["id"] == pack_id:
+            target = item
+            break
+    if target is None:
+        raise OfficialPackError("No such official DLC pack.", 404)
+    files = []
+    total = 0
+    known = ("pack", "shared", "masters", "people", "categories", "dials", "variation", "fields")
+    for path in target["files"]:
+        raw = github_content(path, OFFICIAL_FILE_MAX)
+        total += len(raw)
+        if total > OFFICIAL_TOTAL_MAX:
+            raise OfficialPackError("Official DLC pack is larger than the allowed combined limit.", 413)
+        try:
+            data = json.loads(raw.decode("utf-8"))
+        except Exception as exc:
+            raise OfficialPackError("Official DLC file %s is not valid JSON: %s" % (path, exc))
+        if not isinstance(data, dict) or data.get("private") or not any(k in data for k in known):
+            raise OfficialPackError("Official DLC file %s is not a public Prompt Bench pack." % path)
+        files.append({"path": path, "data": data})
+    return {
+        "ok": True, "repository": OFFICIAL_REPO, "ref": OFFICIAL_REF,
+        "id": target["id"], "name": target["name"], "version": target["version"],
+        "description": target["description"], "files": files,
+    }
+
+
 class Handler(http.server.SimpleHTTPRequestHandler):
     server_version = "PromptBench/2"
 
@@ -119,10 +281,13 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 body = fh.read()
         except OSError:
             return self.send_error(404)
-        tag = b'<script src="/dynamic-sliders.js"></script>\n'
+        tags = (
+            b'<script src="/dynamic-sliders.js"></script>\n'
+            b'<script src="/official-packs.js"></script>\n'
+        )
         marker = b"</body>"
-        if marker in body and tag not in body:
-            body = body.replace(marker, tag + marker, 1)
+        if marker in body and b'/official-packs.js' not in body:
+            body = body.replace(marker, tags + marker, 1)
         self.send_response(200)
         self.send_header("Content-Type", "text/html; charset=utf-8")
         self.send_header("Cache-Control", "no-store")
@@ -158,6 +323,17 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             else:
                 packs = [p for p in packs if not is_private(p)]
             return self.json_out(packs)
+
+        if path == "/api/official-packs":
+            try:
+                pack_id = (query.get("id") or [""])[0].strip()
+                if pack_id:
+                    if not PACK_ID.match(pack_id):
+                        return self.json_out({"ok": False, "error": "invalid official pack id"}, 400)
+                    return self.json_out(official_pack_payload(pack_id))
+                return self.json_out(official_catalogue_public())
+            except OfficialPackError as exc:
+                return self.json_out({"ok": False, "error": str(exc)}, exc.code)
 
         if path in ("/admin", "/admin/", "/admin.html"):
             if not self.authorised():
