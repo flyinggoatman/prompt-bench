@@ -1,0 +1,71 @@
+{
+  "pack": "DLC: More framing",
+  "categories": [
+    {
+      "key": "FRAMING",
+      "items": [
+        {
+          "m": "ABD",
+          "t": "Reflected in a dark window or a switched off television, the room behind them visible."
+        },
+        {
+          "m": "ABD",
+          "t": "Through the gap in a stair banister."
+        },
+        {
+          "m": "ABD",
+          "t": "From inside a cupboard someone has just opened."
+        },
+        {
+          "m": "ABD",
+          "t": "A mirror selfie where nobody is looking at the mirror."
+        },
+        {
+          "m": "ABD",
+          "t": "Dutch tilt, the whole room leaning, as if the photographer was also falling."
+        },
+        {
+          "m": "ABD",
+          "t": "Extreme close up on hands only. Whose is whose is clear.",
+          "needs": 2,
+          "alt": {
+            "1": "Extreme close up on one pair of hands only, and what they are doing."
+          }
+        },
+        {
+          "m": "ABD",
+          "t": "From across the street, through a lit ground floor window, evening."
+        },
+        {
+          "m": "ABD",
+          "t": "Over one shoulder, the shoulder blurred, the others sharp.",
+          "needs": 2,
+          "alt": {
+            "1": "Over one shoulder, the shoulder blurred, what they are looking at sharp."
+          }
+        },
+        {
+          "m": "ABD",
+          "t": "Fish eye, a small room made enormous, feet in the corners."
+        },
+        {
+          "m": "ABD",
+          "t": "Bird's eye from the light fitting, hair partings visible."
+        },
+        {
+          "m": "ABD",
+          "t": "Security camera angle, corner of the ceiling, slight fish eye, time code absent."
+        },
+        {
+          "m": "ABD",
+          "t": "Backs only. The rest of them and {4}, all watching something we cannot see.",
+          "alt": {
+            "1": "Backs only. {1} alone at the window, watching something we cannot see.",
+            "2": "Backs only. {1} and {2} shoulder to shoulder, watching something we cannot see.",
+            "3": "Backs only. The three of them in a row, watching something we cannot see."
+          }
+        }
+      ]
+    }
+  ]
+}

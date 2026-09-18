@@ -1,0 +1,111 @@
+{
+  "pack": "Scene",
+  "categories": [
+    {
+      "key": "SCENE",
+      "label": "Scene",
+      "note": "What is actually happening",
+      "order": 30,
+      "items": [
+        {
+          "m": "AB",
+          "t": "A club, far too loud. {1} is going under. {3} has already cleared a path to the exit. {2} is holding the headphones out before anyone has asked.",
+          "alt": {
+            "2": "A club, far too loud. {1} is going under. {2} is holding the headphones out before anyone has asked.",
+            "1": "A club, far too loud. {1} is going under and has already worked out where the exit is."
+          }
+        },
+        {
+          "m": "AB",
+          "t": "{1} has stepped on a squeaky floorboard and recoiled. Everyone else has stopped dead and is staring.",
+          "needs": 2,
+          "alt": {
+            "1": "{1} has stepped on a squeaky floorboard and recoiled, frozen mid step in an empty room."
+          }
+        },
+        {
+          "m": "AB",
+          "t": "{1} is explaining something at length to people who are absolutely not listening. {1} has not noticed."
+        },
+        {
+          "m": "AB",
+          "t": "Everyone playing a game very badly. Nobody is winning. Somebody is blaming the controller.",
+          "needs": 2,
+          "alt": {
+            "1": "Playing a game very badly and losing to it. The controller is being blamed."
+          }
+        },
+        {
+          "m": "AB",
+          "t": "Far too much shopping. The situation is deteriorating. {3} is the only reason it has not collapsed.",
+          "alt": {
+            "2": "Far too much shopping. The situation is deteriorating. {2} is the only reason it has not collapsed.",
+            "1": "Far too much shopping, all of it on {1}. The situation is deteriorating and there is nobody to hand any of it to."
+          }
+        },
+        {
+          "m": "AB",
+          "t": "Deep jungle, treated with mild administrative irritation, as though it were an inconvenient shift."
+        },
+        {
+          "m": "AB",
+          "t": "Standing on an alien planet in ordinary clothes, unimpressed, one of them checking the time.",
+          "needs": 2,
+          "alt": {
+            "1": "Standing on an alien planet in ordinary clothes, unimpressed, checking the time."
+          }
+        },
+        {
+          "m": "AB",
+          "t": "Kitchen table. Three unrelated tasks in progress, all abandoned mid step."
+        },
+        {
+          "m": "AB",
+          "t": "{2} is covered in cat hair and has made peace with it. {4} is unrepentant.",
+          "alt": {
+            "3": "{2} is covered in cat hair and has made peace with it. {3} finds this funnier than it is.",
+            "2": "{2} is covered in cat hair and has made peace with it. {1} has stopped pointing it out.",
+            "1": "{1} is covered in animal hair and has made peace with it. Whatever is responsible is elsewhere."
+          }
+        },
+        {
+          "m": "AB",
+          "t": "{3} is fixing a problem nobody else has registered, and has not mentioned it.",
+          "alt": {
+            "2": "{2} is fixing a problem nobody else has registered, and has not mentioned it.",
+            "1": "{1} is fixing a problem nobody asked about, and will not be mentioning it."
+          }
+        },
+        {
+          "m": "AB",
+          "t": "{1} is apologising for something that did not happen. Everyone else has heard this before.",
+          "needs": 2,
+          "alt": {
+            "1": "{1} is apologising to an empty room for something that did not happen."
+          }
+        },
+        {
+          "m": "AB",
+          "t": "Coat half on, keys in hand, leaving, delayed by one more thing."
+        },
+        {
+          "m": "AB",
+          "t": "{1}'s battery bank is plugged into somebody else's phone. Nobody remembers agreeing to this.",
+          "needs": 2,
+          "alt": {
+            "1": "{1}'s battery bank is powering a phone across the room, cable at full stretch. Nobody remembers agreeing to this."
+          }
+        },
+        {
+          "m": "AB",
+          "t": "{4} has seen something. Nobody else has any idea what.",
+          "alt": {
+            "3": "{3} has seen something. The other two have no idea what.",
+            "2": "{2} has seen something. {1} has no idea what.",
+            "1": "{1} has seen something off frame and has gone completely still."
+          }
+        }
+      ]
+    }
+  ]
+}

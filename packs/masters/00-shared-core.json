@@ -1,0 +1,14 @@
+{
+  "pack": "Shared core",
+  "shared": [
+    {
+      "id": "core",
+      "label": "Core",
+      "blocks": [
+        "JOKE RULE\nThe humour targets what people do, never what they lack. No trait appears as a meter, a label, a diagnosis or a warning. Nobody is called useless, difficult or a burden, including as a joke. Nobody is the butt of the joke twice in one image. Everyone is visibly competent at something. No visual joke touches skin colour, ethnicity, gender, body shape or disability.",
+        "CONSTRAINTS\nObvious illustration only. No photorealism and no semi-realistic faces. No 3D or clay render, no plastic shading, no airbrushed skin.\nNo glossy gradients, no glow, no bloom, no lens flare, no sparkles, no floating particles, no neon signage.\nNo stat bars, health bars, progress meters, percentages, HUD panels, floating interface, sticky notes or whiteboards. Nothing measures a person.\nNo real brands, logos, wordmarks, streaming services, franchise iconography, book covers, console shapes, remote controls or televisions. Invent generic equivalents where needed.\nNo costumes, weapons, armour, hoods or fantasy gear.\nNo flat corporate vector figures with tiny heads and blank faces.\nNo sepia, no oil painting, no Victorian or earlier painterly treatment.",
+        "CRAFT\nVary the line weight. Let colour sit slightly off the line. Leave visible tool marks. Compose off centre with uneven negative space. At most one person is amused at a time. At most one person looks toward the viewer, and preferably none. Render as though scanned from a physical original, including the imperfections of that process."
+      ]
+    }
+  ]
+}

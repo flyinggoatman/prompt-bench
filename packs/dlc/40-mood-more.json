@@ -1,0 +1,66 @@
+{
+  "pack": "DLC: More moods",
+  "categories": [
+    {
+      "key": "MOOD",
+      "items": [
+        {
+          "m": "ABD",
+          "t": "Held breath. Something is about to happen and everyone knows it.",
+          "needs": 2,
+          "alt": {
+            "1": "Held breath. Something is about to happen and they know it."
+          }
+        },
+        {
+          "m": "ABD",
+          "t": "Fond exasperation. This again, but not really minding."
+        },
+        {
+          "m": "ABD",
+          "t": "Quiet triumph nobody is allowed to mention."
+        },
+        {
+          "m": "ABD",
+          "t": "The giggles. Something not funny has become very funny."
+        },
+        {
+          "m": "ABD",
+          "t": "Bracing. Bad news is coming through the door and everyone has already moved to positions.",
+          "needs": 2,
+          "alt": {
+            "1": "Bracing. Bad news is coming through the door and they have already moved into position."
+          }
+        },
+        {
+          "m": "ABD",
+          "t": "Deflation. It did not work. Nobody is saying so."
+        },
+        {
+          "m": "ABD",
+          "t": "Getting away with it. Guilty faces, no witnesses, one witness."
+        },
+        {
+          "m": "ABD",
+          "t": "Rain on the window contentment."
+        },
+        {
+          "m": "ABD",
+          "t": "Mild panic conducted at a whisper."
+        },
+        {
+          "m": "ABD",
+          "t": "Reunion. Somebody has been away three days and it is being treated as three years."
+        },
+        {
+          "m": "ABD",
+          "t": "Sulking, with an audience, for effect."
+        },
+        {
+          "m": "ABD",
+          "t": "Delighted by something very small."
+        }
+      ]
+    }
+  ]
+}

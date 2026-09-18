@@ -1,0 +1,74 @@
+{
+  "pack": "DLC: More palettes",
+  "categories": [
+    {
+      "key": "PALETTE",
+      "items": [
+        {
+          "m": "ABCD",
+          "t": "Ultramarine, warm white, one scarlet mark."
+        },
+        {
+          "m": "ABCD",
+          "t": "Sage, plum, buttermilk, charcoal for line only."
+        },
+        {
+          "m": "ABCD",
+          "t": "Cobalt and orange, nothing else, greys mixed from the two."
+        },
+        {
+          "m": "ABCD",
+          "t": "Dusty pink, forest green, cream, a single black."
+        },
+        {
+          "m": "ABCD",
+          "t": "Lemon, sky blue, coral, all pale, one deep navy for weight."
+        },
+        {
+          "m": "ABCD",
+          "t": "Ochre, olive, brick, chalk. Autumn without amber."
+        },
+        {
+          "m": "ABCD",
+          "t": "Ice blue, lilac, off white. Winter morning indoors."
+        },
+        {
+          "m": "ABCD",
+          "t": "Magenta and yellow only, overprinting to red where they cross."
+        },
+        {
+          "m": "ABCD",
+          "t": "Terracotta, teal, sand, ink."
+        },
+        {
+          "m": "ABCD",
+          "t": "Bottle green, mustard, cream, chocolate brown line."
+        },
+        {
+          "m": "ABCD",
+          "t": "Three greys and one violent tangerine."
+        },
+        {
+          "m": "ABCD",
+          "t": "Paper white ground, black line, and one colour that changes from image to image."
+        },
+        {
+          "m": "ABCD",
+          "t": "Faded seaside. Bleached turquoise, coral gone pink, sun yellow, driftwood grey."
+        },
+        {
+          "m": "ABCD",
+          "t": "Cherry, cream, bottle green. Diner colours without the chrome."
+        },
+        {
+          "m": "ABCD",
+          "t": "Lavender, moss, apricot, deep blue shadow."
+        },
+        {
+          "m": "ABCD",
+          "t": "Duotone. One dark ink, one bright ink, the paper as the third colour."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "pack": "DLC2: Shapes",
+  "categories": [
+    {
+      "key": "SHAPE",
+      "label": "Shape",
+      "note": "Canvas proportion",
+      "order": 5,
+      "items": [
+        {
+          "m": "ABCD",
+          "t": "Circular canvas, the composition curving to fill it."
+        },
+        {
+          "m": "ABCD",
+          "t": "Oval, portrait orientation, like an old locket."
+        },
+        {
+          "m": "ABCD",
+          "t": "Wide cinema proportion, roughly twenty one to nine."
+        },
+        {
+          "m": "ABCD",
+          "t": "Four to five, the proportion of a printed photograph."
+        },
+        {
+          "m": "ABCD",
+          "t": "A perfect square with a hand drawn border inside it, the image bleeding past the border in one place."
+        },
+        {
+          "m": "ABCD",
+          "t": "Postcard proportion, landscape, with a thin white margin all round."
+        },
+        {
+          "m": "ABCD",
+          "t": "Postage stamp proportion, small and upright, with a perforated edge."
+        },
+        {
+          "m": "ABCD",
+          "t": "A tall narrow banner, roughly one to four, read top to bottom."
+        },
+        {
+          "m": "ABCD",
+          "t": "Double page spread proportion with a visible gutter down the middle."
+        },
+        {
+          "m": "ABCD",
+          "t": "An irregular torn shape, as though cut roughly from a larger sheet."
+        },
+        {
+          "m": "ABCD",
+          "t": "Arched top, flat bottom, like a window."
+        },
+        {
+          "m": "ABCD",
+          "t": "A horizontal strip only as tall as it needs to be, cropped hard top and bottom."
+        },
+        {
+          "m": "ABCD",
+          "t": "Book cover proportion with a spine edge implied on the left."
+        },
+        {
+          "m": "ABCD",
+          "t": "Badge proportion. A circle inside a square with the corners doing nothing."
+        }
+      ]
+    }
+  ]
+}

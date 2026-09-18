@@ -1,0 +1,74 @@
+{
+  "pack": "Persona: Accessories",
+  "bench": "persona",
+  "categories": [
+    {
+      "key": "ACCESSORIES",
+      "label": "Accessories",
+      "note": "Jewellery, eyewear and worn objects",
+      "order": 180,
+      "items": [
+        {
+          "m": "*",
+          "t": "Round wire glasses."
+        },
+        {
+          "m": "*",
+          "t": "Heavy framed glasses."
+        },
+        {
+          "m": "*",
+          "t": "Sunglasses pushed up into the hair."
+        },
+        {
+          "m": "*",
+          "t": "Small gold hoop earrings."
+        },
+        {
+          "m": "*",
+          "t": "A single stud earring."
+        },
+        {
+          "m": "*",
+          "t": "Several earrings in one ear."
+        },
+        {
+          "m": "*",
+          "t": "A nose ring."
+        },
+        {
+          "m": "*",
+          "t": "A chain at the neck, tucked in."
+        },
+        {
+          "m": "*",
+          "t": "A pendant worn outside the clothes."
+        },
+        {
+          "m": "*",
+          "t": "Rings on several fingers."
+        },
+        {
+          "m": "*",
+          "t": "A worn leather watch."
+        },
+        {
+          "m": "*",
+          "t": "A knitted hat."
+        },
+        {
+          "m": "*",
+          "t": "A cap with a soft brim."
+        },
+        {
+          "m": "*",
+          "t": "A scarf wound twice."
+        },
+        {
+          "m": "*",
+          "t": "Headphones around the neck."
+        }
+      ]
+    }
+  ]
+}

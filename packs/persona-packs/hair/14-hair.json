@@ -1,0 +1,94 @@
+{
+  "pack": "Persona: Hair",
+  "bench": "persona",
+  "categories": [
+    {
+      "key": "HAIR",
+      "label": "Hair",
+      "note": "Length, texture, style and colour",
+      "order": 140,
+      "items": [
+        {
+          "m": "*",
+          "t": "Tightly coiled hair worn short."
+        },
+        {
+          "m": "*",
+          "t": "Tightly coiled hair worn in a high shape."
+        },
+        {
+          "m": "*",
+          "t": "Locs gathered back."
+        },
+        {
+          "m": "*",
+          "t": "Braids to the shoulder."
+        },
+        {
+          "m": "*",
+          "t": "Wavy hair to the jaw."
+        },
+        {
+          "m": "*",
+          "t": "Straight hair to the shoulders."
+        },
+        {
+          "m": "*",
+          "t": "Long straight hair past the shoulder blades."
+        },
+        {
+          "m": "*",
+          "t": "A close crop, almost to the scalp."
+        },
+        {
+          "m": "*",
+          "t": "A shaved head."
+        },
+        {
+          "m": "*",
+          "t": "Fine hair that will not sit flat."
+        },
+        {
+          "m": "*",
+          "t": "Thick hair pushed back from the brow."
+        },
+        {
+          "m": "*",
+          "t": "Black hair."
+        },
+        {
+          "m": "*",
+          "t": "Dark brown hair."
+        },
+        {
+          "m": "*",
+          "t": "Auburn hair."
+        },
+        {
+          "m": "*",
+          "t": "Copper hair."
+        },
+        {
+          "m": "*",
+          "t": "Ash blonde hair."
+        },
+        {
+          "m": "*",
+          "t": "Grey at the temples."
+        },
+        {
+          "m": "*",
+          "t": "Fully grey hair."
+        },
+        {
+          "m": "*",
+          "t": "White hair."
+        },
+        {
+          "m": "*",
+          "t": "Hair dyed a colour that does not occur naturally, grown out at the roots."
+        }
+      ]
+    }
+  ]
+}

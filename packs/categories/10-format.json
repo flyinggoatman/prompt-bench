@@ -1,0 +1,130 @@
+{
+  "pack": "Format",
+  "categories": [
+    {
+      "key": "FORMAT",
+      "label": "Format",
+      "note": "What kind of object it is",
+      "order": 10,
+      "items": [
+        {
+          "m": "A",
+          "t": "Mock film poster. Overlapping hero cluster, largest figure lower centre, the others fanned around, {4} in a bottom corner.",
+          "alt": {
+            "1": "Mock film poster. One figure lower centre, filling the space, the title fanned around them.",
+            "2": "Mock film poster. {1} lower centre and largest, {2} angled behind them, title across the bottom.",
+            "3": "Mock film poster. Overlapping hero cluster, {1} lower centre and largest, {2} and {3} fanned around them."
+          }
+        },
+        {
+          "m": "A",
+          "t": "Mock gig poster. Three inks, bold flat shapes, a short hand lettered line of dates for extremely boring venues."
+        },
+        {
+          "m": "A",
+          "t": "Mock magazine cover. All {N} of them mid laugh, a masthead, no more than two cover lines.",
+          "needs": 3,
+          "alt": {
+            "1": "Mock magazine cover. Mid laugh at something off the page, a masthead, no more than two cover lines.",
+            "2": "Mock magazine cover. Both of them mid laugh, a masthead, no more than two cover lines."
+          }
+        },
+        {
+          "m": "A",
+          "t": "Mock album cover. Square, figure dense, all {N} of them crammed onto one small sofa.",
+          "needs": 3,
+          "alt": {
+            "1": "Mock album cover. Square, figure dense, one figure taking up an entire sofa.",
+            "2": "Mock album cover. Square, figure dense, both of them crammed onto one small sofa."
+          }
+        },
+        {
+          "m": "A",
+          "t": "Mock recruitment poster for the care team. All {N} of them mid task in a kitchen, doing {N} unrelated things.",
+          "needs": 3,
+          "alt": {
+            "1": "Mock recruitment poster for the care team. One person mid task in a kitchen with three unrelated jobs visibly on the go.",
+            "2": "Mock recruitment poster for the care team. Both of them mid task in a kitchen doing two unrelated things."
+          }
+        },
+        {
+          "m": "A",
+          "t": "Mock public information notice. Deadpan official layout, entirely unhinged content, all {N} of them demonstrating the wrong procedure.",
+          "needs": 3,
+          "alt": {
+            "1": "Mock public information notice. Deadpan official layout, entirely unhinged content, one person demonstrating the wrong procedure in numbered steps.",
+            "2": "Mock public information notice. Deadpan official layout, entirely unhinged content, both of them demonstrating the wrong procedure."
+          }
+        },
+        {
+          "m": "A",
+          "t": "Mock cereal box front. Bold flat shapes, invented brand name, ridiculous product claims, {4} as an unauthorised endorsement.",
+          "alt": {
+            "1": "Mock cereal box front. Bold flat shapes, invented brand name, ridiculous product claims, {1} endorsing it without having been asked.",
+            "2": "Mock cereal box front. Bold flat shapes, invented brand name, ridiculous product claims, {2} endorsing it enthusiastically and without permission.",
+            "3": "Mock cereal box front. Bold flat shapes, invented brand name, ridiculous product claims, {3} as an unauthorised endorsement."
+          }
+        },
+        {
+          "m": "A",
+          "t": "Mock board game box lid. All {N} of them gathered around a chaotic tabletop, invented game title.",
+          "needs": 3,
+          "alt": {
+            "1": "Mock board game box lid. One player and three empty chairs around a chaotic tabletop, invented game title.",
+            "2": "Mock board game box lid. Both of them leaning over a chaotic tabletop, invented game title."
+          }
+        },
+        {
+          "m": "A",
+          "t": "Mock instruction diagram. Line art only, an exploded view of a normal Tuesday, numbered steps, one step going obviously wrong."
+        },
+        {
+          "m": "A",
+          "t": "Mock expedition photograph. Ordinary clothes, absurd location, treated as a routine shift, hand lettered banner."
+        },
+        {
+          "m": "AB",
+          "t": "Single comic splash panel. One moment, ink outlines, flat colour."
+        },
+        {
+          "m": "AC",
+          "t": "Four panel strip laid out on one canvas as a single composition, same cast throughout."
+        },
+        {
+          "m": "C",
+          "t": "Character sheet, four by four cells on one canvas, each cell a different pose and expression, plain background."
+        },
+        {
+          "m": "C",
+          "t": "Flat lay from directly overhead, objects arranged in a neat ninety degree grid, one cluster of belongings per member of the cast.",
+          "needs": 2,
+          "alt": {
+            "1": "Flat lay from directly overhead, objects arranged in a neat ninety degree grid, every cluster belonging to the same person."
+          }
+        },
+        {
+          "m": "C",
+          "t": "Circular group avatar. Head and shoulders, all {N} of them squeezed in, overlapping at different heights, plain background, everything safe inside a centred circle.",
+          "needs": 3,
+          "alt": {
+            "1": "Circular avatar. Head and shoulders, one figure centred and cropped by the circle, plain background, everything safe inside it.",
+            "2": "Circular avatar. Head and shoulders, both of them squeezed in and overlapping at different heights, plain background, everything safe inside a centred circle."
+          }
+        },
+        {
+          "m": "C",
+          "t": "Four character cards sharing one frame design and colour scheme, each showing one character in a characteristic pose, a name banner only, the lower area filled with a small illustrated prop."
+        },
+        {
+          "m": "C",
+          "t": "Mock natural history plate. All {N} of them presented as specimens of the domestic sofa habitat, plain hand lettered name tags only.",
+          "needs": 3,
+          "alt": {
+            "1": "Mock natural history plate. One specimen of the domestic sofa habitat shown from three angles, plain hand lettered name tags only.",
+            "2": "Mock natural history plate. Both of them presented as specimens of the domestic sofa habitat, plain hand lettered name tags only."
+          }
+        }
+      ]
+    }
+  ]
+}

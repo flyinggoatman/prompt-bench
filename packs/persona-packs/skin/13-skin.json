@@ -1,0 +1,62 @@
+{
+  "pack": "Persona: Skin",
+  "bench": "persona",
+  "categories": [
+    {
+      "key": "SKIN",
+      "label": "Skin",
+      "note": "Tone, undertone and surface",
+      "order": 130,
+      "items": [
+        {
+          "m": "*",
+          "t": "Deep brown skin with a warm undertone."
+        },
+        {
+          "m": "*",
+          "t": "Deep brown skin with a cool undertone."
+        },
+        {
+          "m": "*",
+          "t": "Rich brown skin, even in tone."
+        },
+        {
+          "m": "*",
+          "t": "Mid brown skin with a golden undertone."
+        },
+        {
+          "m": "*",
+          "t": "Olive skin."
+        },
+        {
+          "m": "*",
+          "t": "Light tan skin that takes the sun."
+        },
+        {
+          "m": "*",
+          "t": "Fair skin with a pink undertone."
+        },
+        {
+          "m": "*",
+          "t": "Very fair skin that stays pale."
+        },
+        {
+          "m": "*",
+          "t": "Freckles across the nose and cheeks."
+        },
+        {
+          "m": "*",
+          "t": "A birthmark on one cheek, drawn plainly."
+        },
+        {
+          "m": "*",
+          "t": "Visible sun damage across the cheekbones."
+        },
+        {
+          "m": "*",
+          "t": "A scar through one eyebrow, long healed."
+        }
+      ]
+    }
+  ]
+}

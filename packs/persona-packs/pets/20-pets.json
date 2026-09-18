@@ -1,0 +1,50 @@
+{
+  "pack": "Persona: Companion",
+  "bench": "persona",
+  "categories": [
+    {
+      "key": "PETS",
+      "label": "Companion",
+      "note": "An animal with them",
+      "order": 200,
+      "items": [
+        {
+          "m": "*",
+          "t": "A short haired cat, unimpressed."
+        },
+        {
+          "m": "*",
+          "t": "A long haired cat, shedding on everything."
+        },
+        {
+          "m": "*",
+          "t": "A small terrier, alert."
+        },
+        {
+          "m": "*",
+          "t": "A large old dog, leaning."
+        },
+        {
+          "m": "*",
+          "t": "A lurcher, all legs."
+        },
+        {
+          "m": "*",
+          "t": "A parrot on the shoulder, watching the viewer."
+        },
+        {
+          "m": "*",
+          "t": "A rabbit held against the chest."
+        },
+        {
+          "m": "*",
+          "t": "A snake around one forearm, calm."
+        },
+        {
+          "m": "*",
+          "t": "No companion animal."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "pack": "Palette",
+  "categories": [
+    {
+      "key": "PALETTE",
+      "label": "Palette",
+      "note": "Named colours, not moods",
+      "order": 60,
+      "items": [
+        {
+          "m": "ABC",
+          "t": "Oatmeal, tea brown, soft brick, one acid green accent."
+        },
+        {
+          "m": "ABC",
+          "t": "Grey blue, pale lemon light, one hot pink."
+        },
+        {
+          "m": "ABC",
+          "t": "Mint, off white, mustard, deep teal shadow."
+        },
+        {
+          "m": "ABC",
+          "t": "Four saturated flats and nothing else. No gradient anywhere."
+        },
+        {
+          "m": "ABC",
+          "t": "Fluorescent pink and teal only, overprinting to a third colour where they cross."
+        },
+        {
+          "m": "ABC",
+          "t": "Cream, rust, sage, chalk white."
+        }
+      ]
+    }
+  ]
+}

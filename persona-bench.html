@@ -1,0 +1,3076 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#F4F3EF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1116" media="(prefers-color-scheme: dark)">
+<title>Persona Bench</title>
+<style>
+/* ---------------- tokens ---------------- */
+:root{
+  --bg:#F4F3EF; --bg-tint:rgba(222,33,104,.05); --bg-tint-2:rgba(14,118,108,.05);
+  --surface:#FFFFFF; --surface-2:#FAF9F6; --surface-3:#F0EEE9;
+  --text:#15181F; --text-soft:#5A6170; --text-faint:#888E9B;
+  --line:#E5E2DB; --line-strong:#D3CFC6;
+  --accent:#DE2168; --accent-hover:#C11A58; --accent-soft:#FCE8F0; --on-accent:#FFFFFF;
+  --teal:#0E766C; --teal-soft:#E2F2F0;
+  --danger:#B23C1B; --danger-soft:#FBEBE4;
+  --ring:rgba(222,33,104,.32);
+  --shadow-1:0 1px 2px rgba(18,20,28,.05), 0 1px 1px rgba(18,20,28,.04);
+  --shadow-2:0 6px 16px -6px rgba(18,20,28,.14), 0 2px 5px -3px rgba(18,20,28,.08);
+  --shadow-3:0 22px 44px -18px rgba(18,20,28,.28);
+  --r-xs:6px; --r-sm:10px; --r-md:14px; --r-lg:18px; --r-xl:26px; --r-pill:999px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  --topbar:58px;
+  color-scheme:light;
+}
+:root[data-theme=dark]{
+  --bg:#0F1116; --bg-tint:rgba(255,92,151,.07); --bg-tint-2:rgba(63,207,192,.06);
+  --surface:#171A21; --surface-2:#1C2029; --surface-3:#242935;
+  --text:#E9EBF0; --text-soft:#A3AAB8; --text-faint:#79808E;
+  --line:#272C36; --line-strong:#3A404E;
+  --accent:#FF5C97; --accent-hover:#FF7AAB; --accent-soft:rgba(255,92,151,.14); --on-accent:#1A0710;
+  --teal:#45CFC0; --teal-soft:rgba(69,207,192,.13);
+  --danger:#F08159; --danger-soft:rgba(240,129,89,.14);
+  --ring:rgba(255,92,151,.4);
+  --shadow-1:0 1px 2px rgba(0,0,0,.4);
+  --shadow-2:0 8px 20px -8px rgba(0,0,0,.6), 0 2px 6px -3px rgba(0,0,0,.5);
+  --shadow-3:0 24px 48px -20px rgba(0,0,0,.75);
+  color-scheme:dark;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme=light]){
+    --bg:#0F1116; --bg-tint:rgba(255,92,151,.07); --bg-tint-2:rgba(63,207,192,.06);
+    --surface:#171A21; --surface-2:#1C2029; --surface-3:#242935;
+    --text:#E9EBF0; --text-soft:#A3AAB8; --text-faint:#79808E;
+    --line:#272C36; --line-strong:#3A404E;
+    --accent:#FF5C97; --accent-hover:#FF7AAB; --accent-soft:rgba(255,92,151,.14); --on-accent:#1A0710;
+    --teal:#45CFC0; --teal-soft:rgba(69,207,192,.13);
+    --danger:#F08159; --danger-soft:rgba(240,129,89,.14);
+    --ring:rgba(255,92,151,.4);
+    --shadow-1:0 1px 2px rgba(0,0,0,.4);
+    --shadow-2:0 8px 20px -8px rgba(0,0,0,.6), 0 2px 6px -3px rgba(0,0,0,.5);
+    --shadow-3:0 24px 48px -20px rgba(0,0,0,.75);
+    color-scheme:dark;
+  }
+}
+
+/* ---------------- base ---------------- */
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:
+    radial-gradient(70ch 40ch at 12% -8%, var(--bg-tint), transparent 70%),
+    radial-gradient(60ch 40ch at 98% 4%, var(--bg-tint-2), transparent 70%),
+    var(--bg);
+  background-attachment:fixed;
+  color:var(--text);
+  font:400 15.5px/1.55 var(--font);
+  -webkit-text-size-adjust:100%;
+  -webkit-font-smoothing:antialiased;
+  padding-bottom:calc(88px + env(safe-area-inset-bottom));
+}
+h1,h2,h3{margin:0;letter-spacing:-.015em;line-height:1.2}
+p{margin:0}
+a{color:var(--accent)}
+img{max-width:100%}
+[hidden]{display:none!important}
+::selection{background:var(--accent-soft);color:var(--text)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:var(--r-xs)}
+.skip{position:absolute;left:8px;top:-60px;z-index:60;background:var(--surface);color:var(--text);
+  padding:10px 14px;border-radius:var(--r-sm);box-shadow:var(--shadow-2);transition:top .15s}
+.skip:focus{top:8px}
+
+/* ---------------- top bar ---------------- */
+.topbar{position:sticky;top:0;z-index:40;background:var(--bg);background:color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter:saturate(180%) blur(14px);-webkit-backdrop-filter:saturate(180%) blur(14px);
+  border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top)}
+.topbar-in{max-width:1180px;margin:0 auto;height:var(--topbar);padding:0 20px;
+  display:flex;align-items:center;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand-mark{width:30px;height:30px;border-radius:9px;flex:0 0 auto;
+  background:linear-gradient(140deg,var(--accent),var(--teal));box-shadow:var(--shadow-1);
+  position:relative}
+.brand-mark::after{content:"";position:absolute;inset:9px;border-radius:3px;
+  background:var(--surface);opacity:.92}
+.brand-text{display:flex;flex-direction:column;min-width:0}
+.brand-text strong{font-size:15px;font-weight:650;letter-spacing:-.02em;line-height:1.15}
+.brand-text small{font-size:11.5px;color:var(--text-faint);line-height:1.3}
+.brand-text strong,.brand-text small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar-actions{margin-left:auto;display:flex;align-items:center;gap:8px}
+.icon-btn{width:36px;height:36px;padding:0;display:inline-flex;align-items:center;justify-content:center;
+  border-radius:var(--r-pill);border:1px solid var(--line);background:var(--surface);color:var(--text-soft);
+  cursor:pointer;transition:background .15s,color .15s,border-color .15s,transform .1s}
+.icon-btn:hover{color:var(--text);border-color:var(--line-strong);background:var(--surface-2)}
+.icon-btn:active{transform:scale(.94)}
+.icon-btn svg{width:17px;height:17px}
+/* the icon shows the theme the button switches TO */
+.icon-btn .i-sun{display:none}
+.icon-btn .i-moon{display:block}
+:root[data-theme=dark] .icon-btn .i-sun{display:block}
+:root[data-theme=dark] .icon-btn .i-moon{display:none}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme=light]) .icon-btn .i-sun{display:block}
+  :root:not([data-theme=light]) .icon-btn .i-moon{display:none}
+}
+
+/* ---------------- the other bench ---------------- */
+.benchlink{text-decoration:none;font-weight:600;gap:6px}
+.benchlink::before{content:"";width:14px;height:14px;border-radius:5px;flex:0 0 auto;
+  background:linear-gradient(140deg,var(--bench-mark-a),var(--bench-mark-b))}
+@media (max-width:560px){.benchlink{display:none}}
+
+/* Each bench keeps the same shapes and a different colour, so it is plain at a
+   glance which one is open. */
+:root{--bench-mark-a:#6D4AFF; --bench-mark-b:#F0A23E}
+:root[data-bench=persona]{
+  --accent:#5B3BD6; --accent-hover:#4A2FB5; --accent-soft:#EDE9FD; --on-accent:#FFFFFF;
+  --ring:rgba(91,59,214,.3);
+  --teal:#B85A12; --teal-soft:#FBEEE0;
+  --bg-tint:rgba(91,59,214,.06); --bg-tint-2:rgba(240,162,62,.06);
+  --bench-mark-a:#DE2168; --bench-mark-b:#0E766C;
+}
+:root[data-bench=persona][data-theme=dark],
+:root[data-bench=persona]:not([data-theme=light]){
+  --accent:#A78BFA; --accent-hover:#BFA6FF; --accent-soft:rgba(167,139,250,.16); --on-accent:#140A2E;
+  --ring:rgba(167,139,250,.4);
+  --teal:#F0A23E; --teal-soft:rgba(240,162,62,.14);
+}
+:root[data-bench=persona] .brand-mark{background:linear-gradient(140deg,var(--accent),#F0A23E)}
+
+/* ---------------- shell ---------------- */
+.shell{max-width:1180px;margin:0 auto;padding:22px 20px 0;
+  display:grid;grid-template-columns:minmax(0,1fr);gap:22px}
+.col{min-width:0;display:flex;flex-direction:column;gap:16px}
+.side{min-width:0;display:flex;flex-direction:column;gap:14px}
+
+/* ---------------- hero ---------------- */
+.hero{padding:4px 2px 2px}
+.hero h1{font-size:clamp(26px,4.6vw,34px);font-weight:680;letter-spacing:-.03em}
+.hero p{margin-top:8px;color:var(--text-soft);font-size:15px;max-width:60ch}
+.steps{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.step{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:550;
+  color:var(--text-soft);text-decoration:none;background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r-pill);padding:5px 12px 5px 5px;transition:border-color .15s,color .15s,box-shadow .15s}
+.step:hover{color:var(--text);border-color:var(--line-strong);box-shadow:var(--shadow-1)}
+.step b{width:19px;height:19px;border-radius:var(--r-pill);background:var(--accent-soft);color:var(--accent);
+  display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+
+/* ---------------- cards ---------------- */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:18px;box-shadow:var(--shadow-1);scroll-margin-top:calc(var(--topbar) + 16px)}
+.card-head{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.card-head h2{font-size:16.5px;font-weight:650}
+.card-head .badge{margin-left:auto}
+.badge{display:inline-block;font-size:11.5px;font-weight:600;letter-spacing:.01em;
+  color:var(--text-soft);background:var(--surface-3);border-radius:var(--r-pill);
+  padding:3px 9px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.badge:empty{display:none}
+.badge.on{background:var(--accent-soft);color:var(--accent)}
+.hint{color:var(--text-soft);font-size:13.5px;max-width:64ch;margin:0 0 14px}
+.hint:last-child{margin-bottom:0}
+
+/* ---------------- buttons ---------------- */
+.btn{font:600 14px/1 var(--font);padding:11px 15px;border-radius:var(--r-sm);
+  border:1px solid var(--line);background:var(--surface);color:var(--text);cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;white-space:nowrap;
+  transition:background .15s,border-color .15s,color .15s,box-shadow .15s,transform .1s}
+.btn:hover{background:var(--surface-2);border-color:var(--line-strong)}
+.btn:active{transform:translateY(1px)}
+.btn svg{width:15px;height:15px;flex:0 0 auto}
+.btn-primary{background:var(--text);color:var(--surface);border-color:var(--text)}
+.btn-primary:hover{background:var(--text);border-color:var(--text);opacity:.88}
+.btn-accent{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn-accent:hover{background:var(--accent-hover);border-color:var(--accent-hover);color:var(--on-accent)}
+.btn-ghost{background:transparent;border-color:transparent;color:var(--text-soft);padding:8px 10px}
+.btn-ghost:hover{background:var(--surface-3);border-color:transparent;color:var(--text)}
+.btn-danger{color:var(--danger);border-color:var(--line)}
+.btn-danger:hover{background:var(--danger-soft);border-color:var(--danger)}
+.btn-sm{font-size:13px;padding:8px 11px;border-radius:var(--r-xs)}
+.btn-row{display:flex;flex-wrap:wrap;gap:8px}
+.hiddenfile{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+
+/* ---------------- packs ---------------- */
+.packlist{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.packlist:empty{display:none}
+.packlist span{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:550;
+  color:var(--text-soft);background:var(--surface-2);border:1px solid var(--line);
+  border-radius:var(--r-pill);padding:4px 11px}
+.packlist span::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);flex:0 0 auto}
+.packlist span.built::before{background:var(--text-faint)}
+
+/* ---------------- segmented ---------------- */
+.segment{display:inline-flex;gap:2px;padding:3px;background:var(--surface-3);
+  border-radius:var(--r-sm);border:1px solid var(--line);width:100%}
+.segment button{flex:1;font:600 14px/1 var(--font);padding:9px 0;border:0;border-radius:calc(var(--r-sm) - 3px);
+  background:transparent;color:var(--text-soft);cursor:pointer;font-variant-numeric:tabular-nums;
+  transition:background .15s,color .15s,box-shadow .15s}
+.segment button:hover{color:var(--text)}
+.segment button[aria-pressed=true]{background:var(--surface);color:var(--text);box-shadow:var(--shadow-1)}
+:root[data-theme=dark] .segment button[aria-pressed=true]{background:var(--line-strong)}
+
+/* ---------------- cast ---------------- */
+.person{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-md);
+  padding:14px;margin-bottom:12px}
+.person:last-child{margin-bottom:0}
+.person .top{display:flex;gap:14px;align-items:flex-start}
+.slot{flex:0 0 76px;width:76px;height:76px;border-radius:var(--r-md);border:1.5px dashed var(--line-strong);
+  background:var(--surface);display:flex;align-items:center;justify-content:center;cursor:pointer;
+  overflow:hidden;font-size:11px;font-weight:550;color:var(--text-faint);text-align:center;padding:6px;
+  line-height:1.3;transition:border-color .15s,color .15s}
+.slot:hover{border-color:var(--accent);color:var(--accent)}
+.slot img{width:100%;height:100%;object-fit:cover;display:block}
+.slot.filled{border-style:solid;border-color:var(--line)}
+.person .who{flex:1;min-width:0}
+.person input[type=text]{width:100%;background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r-sm);color:var(--text);font:620 16px/1.3 var(--font);padding:10px 12px;
+  transition:border-color .15s,box-shadow .15s}
+.person input[type=text]::placeholder{font-weight:400;color:var(--text-faint)}
+.kind{display:inline-flex;gap:2px;margin-top:8px;padding:3px;background:var(--surface-3);
+  border:1px solid var(--line);border-radius:var(--r-pill)}
+.kind label{display:inline-flex;align-items:center;gap:0;cursor:pointer;font-size:12.5px;font-weight:550;
+  color:var(--text-soft);padding:5px 13px;border-radius:var(--r-pill);transition:background .15s,color .15s}
+.kind label:has(input:checked){background:var(--surface);color:var(--text);box-shadow:var(--shadow-1)}
+:root[data-theme=dark] .kind label:has(input:checked){background:var(--line-strong)}
+.kind input{position:absolute;opacity:0;width:0;height:0}
+.kind label:focus-within{outline:2px solid var(--accent);outline-offset:1px}
+.fields-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;margin-top:12px}
+@media (min-width:600px){.fields-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.f label{display:block;font-size:12px;font-weight:650;margin-bottom:4px;letter-spacing:.005em}
+.f label em{display:block;font-weight:400;font-style:normal;color:var(--text-faint);font-size:11.5px;
+  margin-top:1px;line-height:1.35}
+textarea,input[type=text]{font-family:var(--font)}
+.person textarea{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);
+  color:var(--text);font:400 13.5px/1.5 var(--font);padding:9px 11px;resize:vertical;min-height:54px;
+  transition:border-color .15s,box-shadow .15s}
+textarea:focus,input[type=text]:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+.rowbtn{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.desc{border-top:1px solid var(--line);margin-top:14px;padding-top:12px}
+.desc textarea{min-height:86px;font-family:var(--mono);font-size:12.5px;line-height:1.55}
+
+/* ---------------- cast rules ---------------- */
+.castrules{display:grid;gap:8px;margin:0 0 16px}
+.tick{display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-size:13.5px;font-weight:600;
+  background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-md);padding:10px 12px;
+  transition:border-color .15s,background .15s}
+.tick:has(input:checked){border-color:var(--teal);background:var(--teal-soft)}
+.tick input{margin:1px 0 0;width:17px;height:17px;accent-color:var(--teal);flex:0 0 auto;cursor:pointer}
+.tick em{display:block;font-style:normal;font-weight:400;font-size:12px;color:var(--text-soft);
+  margin-top:3px;line-height:1.45}
+
+/* ---------------- masters ---------------- */
+.master-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:10px}
+.master{position:relative;display:block;background:var(--surface-2);border:1.5px solid var(--line);
+  border-radius:var(--r-md);padding:14px 40px 14px 15px;cursor:pointer;
+  transition:border-color .15s,background .15s,box-shadow .15s,transform .1s}
+.master:hover{border-color:var(--line-strong);transform:translateY(-1px);box-shadow:var(--shadow-2)}
+.master:has(input:checked){border-color:var(--accent);background:var(--surface)}
+.master input{position:absolute;opacity:0;pointer-events:none}
+.master b{display:block;font-size:15.5px;font-weight:640;margin-bottom:3px}
+.master span{display:block;font-size:12.5px;line-height:1.45;color:var(--text-soft)}
+.master::after{content:"";position:absolute;top:14px;right:14px;width:18px;height:18px;border-radius:50%;
+  border:1.5px solid var(--line-strong);transition:background .15s,border-color .15s}
+.master:has(input:checked)::after{background:var(--accent);border-color:var(--accent);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 8.5l3 3 6-6'/%3E%3C/svg%3E");
+  background-size:13px;background-position:center;background-repeat:no-repeat}
+.master:focus-within{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ---------------- module groups ---------------- */
+.group{border:1px solid var(--line);border-radius:var(--r-md);background:var(--surface-2);
+  margin-bottom:8px;overflow:hidden}
+.group:last-child{margin-bottom:0}
+.group[open]{background:var(--surface);box-shadow:var(--shadow-1)}
+.group summary{list-style:none;cursor:pointer;padding:13px 15px;display:flex;align-items:center;gap:10px}
+.group summary::-webkit-details-marker{display:none}
+.group summary:hover{background:var(--surface-3)}
+.group[open] summary{border-bottom:1px solid var(--line)}
+.caret{width:14px;height:14px;flex:0 0 auto;color:var(--text-faint);transition:transform .2s}
+.group[open] .caret{transform:rotate(90deg);color:var(--accent)}
+.g-label{font-size:14.5px;font-weight:640}
+.g-note{font-size:12px;color:var(--text-faint);min-width:0;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap}
+.group .count{margin-left:auto;flex:0 0 auto}
+.group-body{padding:6px 10px 10px}
+.mod{display:flex;gap:10px;padding:8px 10px;align-items:flex-start;cursor:pointer;line-height:1.45;
+  border-radius:var(--r-sm);transition:background .12s}
+.mod:hover{background:var(--surface-3)}
+.mod:has(input:checked){background:var(--accent-soft)}
+.mod input{margin:2px 0 0;width:17px;height:17px;accent-color:var(--accent);flex:0 0 auto;cursor:pointer}
+.mod .num{font-variant-numeric:tabular-nums;color:var(--text-faint);font-size:12px;min-width:2.2em;
+  flex:0 0 auto;padding-top:2px}
+.mod .txt{font-size:13.5px}
+.mod input:checked ~ .txt{font-weight:600}
+.mod input:checked ~ .num{color:var(--accent)}
+
+/* ---------------- module toolbar and search ---------------- */
+.toolbar{display:flex;gap:8px;align-items:center;margin-bottom:12px}
+.search{position:relative;flex:1;min-width:0;display:flex;align-items:center}
+.search .s-icon{position:absolute;left:11px;width:15px;height:15px;color:var(--text-faint);pointer-events:none}
+.search input{width:100%;font:400 14px/1.2 var(--font);padding:10px 34px 10px 33px;
+  border:1px solid var(--line);border-radius:var(--r-sm);background:var(--surface-2);color:var(--text);
+  transition:border-color .15s,box-shadow .15s,background .15s}
+.search input:focus{outline:none;background:var(--surface);border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+.search input::-webkit-search-cancel-button{-webkit-appearance:none;appearance:none}
+.search-clear{position:absolute;right:5px;width:26px;height:26px;border:0;border-radius:var(--r-pill);
+  background:transparent;color:var(--text-faint);cursor:pointer;display:flex;align-items:center;
+  justify-content:center;font-size:17px;line-height:1;transition:background .15s,color .15s}
+.search-clear:hover{background:var(--surface-3);color:var(--text)}
+mark{background:var(--accent-soft);color:inherit;border-radius:3px;padding:0 1px;
+  box-shadow:inset 0 -1px 0 var(--accent)}
+.filternote{font-size:12.5px;color:var(--text-faint);margin:0 0 10px}
+.filternote:empty{display:none}
+
+/* ---------------- selected modules ---------------- */
+.picked{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px;align-items:center}
+.picked:empty{display:none}
+.chip{display:inline-flex;align-items:center;gap:5px;max-width:100%;font-size:12.5px;font-weight:550;
+  background:var(--accent-soft);color:var(--accent);border-radius:var(--r-pill);padding:4px 5px 4px 11px}
+.chip .chip-t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:24ch}
+.chip button{width:19px;height:19px;flex:0 0 auto;border:0;border-radius:50%;background:transparent;
+  color:inherit;cursor:pointer;font-size:14px;line-height:1;display:flex;align-items:center;
+  justify-content:center;transition:background .15s,color .15s}
+.chip button:hover{background:var(--accent);color:var(--on-accent)}
+.picked #clearpicks{margin-left:auto}
+
+/* ---------------- saved setups ---------------- */
+.saverow{display:flex;gap:8px;margin-bottom:14px}
+.saverow input{flex:1;min-width:0;font:400 14px/1.2 var(--font);padding:10px 12px;
+  border:1px solid var(--line);border-radius:var(--r-sm);background:var(--surface-2);color:var(--text);
+  transition:border-color .15s,box-shadow .15s,background .15s}
+.saverow input:focus{outline:none;background:var(--surface);border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+.setup{display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--line);
+  border-radius:var(--r-md);background:var(--surface-2);margin-bottom:8px}
+.setup:last-child{margin-bottom:0}
+.setup .who{flex:1;min-width:0}
+.setup b{display:block;font-size:13.5px;font-weight:640;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.setup small{display:block;font-size:11.5px;color:var(--text-faint);margin-top:1px}
+.setup .btn{flex:0 0 auto}
+
+/* ---------------- keyboard hint ---------------- */
+.kbd-hint{font-size:11.5px;color:var(--text-faint);text-align:center;margin:2px 0 0}
+kbd{font:600 10.5px/1 var(--mono);background:var(--surface-3);border:1px solid var(--line);
+  border-bottom-width:2px;border-radius:5px;padding:3px 5px;color:var(--text-soft);display:inline-block}
+@media (max-width:1039px){.kbd-hint{display:none}}
+
+/* ---------------- dials ---------------- */
+.dial{padding:14px 0;border-bottom:1px solid var(--line)}
+.dial:first-child{padding-top:0}
+.dial:last-child{border-bottom:0;padding-bottom:0}
+.dial .row{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
+.dial label{font-size:14px;font-weight:620}
+.dial output{font-size:12.5px;line-height:1.4;color:var(--accent);text-align:right;max-width:30ch}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;margin:12px 0 0;height:20px;
+  background:transparent;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:var(--r-pill);background:var(--surface-3);
+  border:1px solid var(--line)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;
+  margin-top:-8px;border-radius:50%;background:var(--accent);border:3px solid var(--surface);
+  box-shadow:var(--shadow-2);transition:transform .1s}
+input[type=range]:active::-webkit-slider-thumb{transform:scale(1.12)}
+input[type=range]::-moz-range-track{height:6px;border-radius:var(--r-pill);background:var(--surface-3);
+  border:1px solid var(--line)}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--accent);
+  border:3px solid var(--surface);box-shadow:var(--shadow-2)}
+input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 4px var(--ring)}
+input[type=range]:focus-visible::-moz-range-thumb{box-shadow:0 0 0 4px var(--ring)}
+.ends{display:flex;justify-content:space-between;font-size:11.5px;color:var(--text-faint);margin-top:2px}
+
+/* ---------------- text fields ---------------- */
+.textfield{padding:16px 0;border-bottom:1px solid var(--line)}
+.textfield:first-child{padding-top:0}
+.textfield:last-child{border-bottom:0;padding-bottom:0}
+.textfield h3{font-size:14px;font-weight:640;margin-bottom:4px}
+.textfield .hint{margin-bottom:10px}
+.textfield textarea{width:100%;background:var(--surface-2);border:1px solid var(--line);
+  border-radius:var(--r-sm);color:var(--text);font:400 13.5px/1.55 var(--font);padding:11px 12px;
+  resize:vertical;min-height:72px;transition:border-color .15s,box-shadow .15s,background .15s}
+.textfield textarea:focus{background:var(--surface)}
+
+/* ---------------- follow-up switch ---------------- */
+.switch{display:flex;gap:14px;align-items:flex-start;cursor:pointer;padding:16px;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);
+  box-shadow:var(--shadow-1);transition:border-color .15s,background .15s}
+.switch:has(input:checked){border-color:var(--teal);background:var(--teal-soft)}
+.switch input{-webkit-appearance:none;appearance:none;flex:0 0 auto;width:42px;height:24px;margin:1px 0 0;
+  border-radius:var(--r-pill);background:var(--line-strong);border:0;cursor:pointer;position:relative;
+  transition:background .2s}
+.switch input::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;
+  background:#fff;box-shadow:var(--shadow-1);transition:transform .2s}
+.switch input:checked{background:var(--teal)}
+.switch input:checked::after{transform:translateX(18px)}
+.switch .txt{font-size:14px;font-weight:600}
+.switch .txt small{display:block;color:var(--text-soft);font-size:12.5px;font-weight:400;margin-top:3px;
+  line-height:1.45}
+
+.askrow{display:grid;grid-template-columns:auto 1fr auto;gap:10px 12px;align-items:center;
+  padding:14px 16px;background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r-lg);box-shadow:var(--shadow-1)}
+.askrow label{font-size:14px;font-weight:600}
+.askrow input[type=range]{width:100%;accent-color:var(--teal);margin:0}
+.askrow output{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;min-width:1.5em;text-align:right}
+.askrow small{grid-column:1 / -1;color:var(--text-soft);font-size:12.5px;line-height:1.45}
+.askrow[hidden]{display:none!important}
+@media (max-width:520px){
+  .askrow{grid-template-columns:1fr auto}
+  .askrow input[type=range]{grid-column:1 / -1}
+}
+
+.warn{font-size:12.5px;line-height:1.5;color:var(--text);background:var(--danger-soft);
+  border:1px solid var(--danger);border-radius:var(--r-md);padding:11px 13px;margin:0}
+.warn:empty{display:none}
+
+/* ---------------- result ---------------- */
+.result{padding:0;overflow:hidden;display:flex;flex-direction:column}
+.result .card-head{padding:11px 10px 11px 17px;margin:0;border-bottom:1px solid var(--line);background:var(--surface-2)}
+.result .card-head .badge{margin-left:0}
+.result .card-head #copyPublic{margin-left:auto}
+#out{white-space:pre-wrap;word-break:break-word;font:400 12.5px/1.6 var(--mono);
+  padding:16px 17px;margin:0;max-height:min(58vh,560px);overflow:auto;background:var(--surface)}
+#out:empty{display:none}
+.out-empty{display:none;padding:34px 20px;text-align:center;color:var(--text-faint);font-size:13px}
+#out:empty ~ .out-empty{display:block}
+.out-empty svg{width:26px;height:26px;margin-bottom:8px;opacity:.5}
+.meta{font-size:12px;color:var(--text-soft);padding:11px 17px;border-top:1px solid var(--line);
+  background:var(--surface-2);font-variant-numeric:tabular-nums;line-height:1.5}
+.meta:empty{display:none}
+
+/* ---------------- action bar ---------------- */
+.actionbar{position:fixed;left:0;right:0;bottom:0;z-index:35;display:flex;gap:8px;
+  padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+  background:var(--bg);background:color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter:saturate(180%) blur(14px);-webkit-backdrop-filter:saturate(180%) blur(14px);
+  border-top:1px solid var(--line)}
+.actionbar .btn{flex:1;padding:13px 14px;font-size:14.5px}
+.actionbar #shuffle{flex:0 0 auto}
+
+/* ---------------- footnote ---------------- */
+.footnote{font-size:12.5px;line-height:1.6;color:var(--text-soft)}
+.footnote p{max-width:74ch}
+.footnote strong{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--text-faint);margin-bottom:6px}
+
+/* ---------------- layouts ----------------
+   One page, five arrangements of the same cards. Everything below is layout
+   only: no layout hides a control, and switching is reversible at any time. */
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+  clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.layoutpick select{font:600 13px/1 var(--font);padding:8px 26px 8px 10px;border-radius:var(--r-sm);
+  border:1px solid var(--line);background:var(--surface);color:var(--text-soft);cursor:pointer;
+  appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23888E9B' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M4 6.5L8 10.5 12 6.5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 7px center;background-size:12px}
+.layoutpick select:hover{color:var(--text);border-color:var(--line-strong)}
+@media (max-width:520px){.layoutpick{display:none}}
+
+/* the rail and the step bar are built only when a layout wants them */
+.stagerail{display:none}
+.stagebar{display:none}
+
+/* On a narrow screen the rail cannot be a column, so it becomes a scrolling
+   strip of the same buttons. A layout that hides sections must always offer a
+   way back to them. */
+@media (max-width:1039px){
+  :root[data-layout=workbench] .stagerail{display:flex;gap:6px;overflow-x:auto;
+    padding:0 0 10px;margin:0}
+  :root[data-layout=workbench] .stagerail button{flex:0 0 auto;border:1px solid var(--line);
+    background:var(--surface);border-radius:var(--r-pill);padding:8px 13px}
+  :root[data-layout=workbench] .stagerail button[aria-current=true]{border-color:var(--accent);
+    background:var(--accent-soft);color:var(--accent)}
+  :root[data-layout=workbench] .stagerail .tail{margin-left:6px}
+}
+
+/* ---- workbench: a rail on the left, one stage at a time ---- */
+:root[data-layout=workbench] .shell{max-width:1320px}
+@media (min-width:1040px){
+  :root[data-layout=workbench] .shell{grid-template-columns:210px minmax(0,1fr) 380px;gap:20px}
+  :root[data-layout=workbench] .stagerail{display:flex;flex-direction:column;gap:2px;
+    position:sticky;top:calc(var(--topbar) + 22px);align-self:start}
+}
+:root[data-layout=workbench] .stagerail button,
+:root[data-layout=guided] .stagebar button{font:600 13px/1.2 var(--font);text-align:left;cursor:pointer}
+.stagerail button{display:flex;align-items:center;gap:9px;border:0;background:transparent;
+  color:var(--text-soft);padding:10px 11px;border-radius:var(--r-sm)}
+.stagerail button:hover{background:var(--surface-3);color:var(--text)}
+.stagerail button[aria-current=true]{background:var(--surface);color:var(--text);box-shadow:var(--shadow-1)}
+.stagerail .tail{margin-left:auto;font-size:11.5px;font-weight:650;color:var(--text-faint);
+  font-variant-numeric:tabular-nums}
+.stagerail button[aria-current=true] .tail{color:var(--accent)}
+
+/* ---- guided: a step bar across the top, one step at a time ---- */
+:root[data-layout=guided] .shell{max-width:820px;grid-template-columns:minmax(0,1fr)}
+:root[data-layout=guided] .side{position:static;max-height:none}
+.stagebar{gap:6px;padding:0 0 4px;overflow-x:auto}
+:root[data-layout=guided] .stagebar{display:flex}
+.stagebar button{flex:1 0 auto;min-width:78px;display:flex;flex-direction:column;gap:6px;
+  border:0;background:transparent;padding:0;color:var(--text-faint)}
+.stagebar .bar{height:4px;border-radius:99px;background:var(--line-strong)}
+.stagebar button[data-state=done] .bar{background:var(--teal)}
+.stagebar button[aria-current=true] .bar{background:var(--accent)}
+.stagebar button[aria-current=true]{color:var(--accent)}
+.stepnav{display:flex;gap:8px;align-items:center;margin-top:4px}
+.stepnav .grow{margin-left:auto;display:flex;gap:8px}
+:root:not([data-layout=guided]) .stepnav{display:none}
+
+/* ---- library: the modules take the page, everything else folds away ---- */
+:root[data-layout=library] .shell{max-width:1440px}
+:root[data-layout=library] #sec-modules .group[open] .group-body{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px;align-items:start}
+:root[data-layout=library] #sec-modules .mod{border:1.5px solid var(--line);border-radius:var(--r-md);
+  background:var(--surface);padding:11px 12px;align-items:flex-start}
+:root[data-layout=library] #sec-modules .mod:has(input:checked){border-color:var(--accent)}
+:root[data-layout=library] #sec-modules .mod:hover{box-shadow:var(--shadow-2);background:var(--surface)}
+
+/* ---- composer: the prompt is the page, the controls sit beside it ---- */
+@media (min-width:1040px){
+  :root[data-layout=composer] .shell{max-width:1400px;grid-template-columns:400px minmax(0,1fr);gap:22px}
+  :root[data-layout=composer] .col{order:1}
+  :root[data-layout=composer] .side{order:2;position:sticky;top:calc(var(--topbar) + 22px)}
+  :root[data-layout=composer] #out{max-height:calc(100vh - var(--topbar) - 200px);font-size:13px}
+}
+:root[data-layout=composer] .live-badge{display:inline-flex}
+.live-badge{display:none;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.04em;
+  text-transform:uppercase;color:var(--teal);background:var(--teal-soft);border-radius:var(--r-pill);
+  padding:3px 9px;margin-left:8px}
+.live-badge span{width:6px;height:6px;border-radius:50%;background:var(--teal)}
+
+/* ---------------- drag state ---------------- */
+body.drag::after{content:"Drop pack files to load them";position:fixed;inset:10px;z-index:50;
+  border:2px dashed var(--accent);border-radius:var(--r-xl);background:var(--bg);background:color-mix(in srgb, var(--bg) 78%, transparent);
+  display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:650;color:var(--accent);
+  pointer-events:none}
+
+/* ---------------- desktop ---------------- */
+@media (min-width:1040px){
+  .shell{grid-template-columns:minmax(0,1fr) 384px;gap:26px;padding-bottom:40px}
+  body{padding-bottom:0}
+  .side{position:sticky;top:calc(var(--topbar) + 22px);align-self:start;max-height:calc(100vh - var(--topbar) - 44px)}
+  .actionbar{position:static;padding:0;border:0;background:none;backdrop-filter:none;
+    -webkit-backdrop-filter:none}
+  .actionbar .btn{box-shadow:var(--shadow-1)}
+  #out{max-height:calc(100vh - var(--topbar) - 260px)}
+}
+@media (max-width:1039px){
+  .side{margin-top:6px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;
+    transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-text">
+        <strong id="benchName">Prompt Bench</strong>
+        <small id="benchTagline">Runs entirely on this device</small>
+      </span>
+    </div>
+    <div class="topbar-actions">
+      <label class="layoutpick" title="How this page is laid out">
+        <span class="sr-only">Layout</span>
+        <select id="layout" aria-label="Layout">
+          <option value="classic">Classic</option>
+          <option value="workbench">Workbench</option>
+          <option value="composer">Composer</option>
+          <option value="library">Library</option>
+          <option value="guided">Guided</option>
+        </select>
+      </label>
+      <a class="btn btn-sm benchlink" id="benchSwitch" href="persona-bench.html">Persona Bench</a>
+      <button type="button" class="icon-btn" id="theme" aria-label="Switch between light and dark" title="Switch between light and dark">
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.6 12h2.2M19.2 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></svg>
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.4A8.6 8.6 0 0 1 9.6 3.5a8.6 8.6 0 1 0 10.9 10.9Z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="shell" id="main">
+
+<nav class="stagerail" id="stagerail" aria-label="Sections"></nav>
+
+<div class="col">
+  <nav class="stagebar" id="stagebar" aria-label="Steps"></nav>
+
+  <section class="hero">
+    <h1>Assemble an image prompt</h1>
+    <p>Set up your cast, pick one master prompt, tick the modules, press Assemble. Everything runs on this page. No photo and nothing you type ever leaves the device.</p>
+    <nav class="steps" aria-label="Sections">
+      <a class="step" href="#sec-cast"><b>1</b> Cast</a>
+      <a class="step" href="#sec-master"><b>2</b> Master prompt</a>
+      <a class="step" href="#sec-modules"><b>3</b> Modules</a>
+      <a class="step" href="#sec-dials"><b>4</b> Dials</a>
+    </nav>
+  </section>
+
+  <section class="card" id="sec-packs">
+    <div class="card-head">
+      <h2>Packs</h2>
+      <span class="badge" id="packcount"></span>
+    </div>
+    <p class="hint">Load a folder of JSON pack files to add or replace anything below. Loaded packs are kept on this device, so you only need to load again after you edit a file. You can also drag files onto this page.</p>
+    <div class="btn-row">
+      <button type="button" class="btn btn-sm" id="loadFolder">Load folder</button>
+      <button type="button" class="btn btn-sm" id="loadFiles">Load files</button>
+      <button type="button" class="btn btn-sm" id="exportPack">Export</button>
+      <button type="button" class="btn btn-sm btn-danger" id="clearPacks">Clear</button>
+      <button type="button" class="btn btn-sm btn-accent" id="reloadPacks" hidden>Reload packs</button>
+    </div>
+    <input type="file" id="fFolder" class="hiddenfile" webkitdirectory directory multiple>
+    <input type="file" id="fFiles" class="hiddenfile" multiple accept=".json,application/json">
+    <div class="packlist" id="packlist"></div>
+  </section>
+
+  <section class="card" id="sec-cast">
+    <div class="card-head">
+      <h2>Cast</h2>
+      <span class="badge" id="castnote"></span>
+    </div>
+    <p class="hint">How many characters recur across your images. Photos are only ever shown here, as a reminder of which slot is which. Attach the real photos to your message in the AI itself.</p>
+    <div class="segment" id="counter" role="group" aria-label="Number of cast slots"></div>
+    <div class="btn-row" id="castActions" style="margin:12px 0 12px">
+      <button type="button" class="btn btn-sm" id="blankCast">Empty every slot</button>
+    </div>
+    <div class="castrules">
+      <label class="tick"><input type="checkbox" id="strangers">
+        <span>Other people may appear
+          <em>Unnamed background figures: a queue, people at other tables. Off means everybody in the image is from your cast.</em>
+        </span></label>
+      <label class="tick"><input type="checkbox" id="castOpen">
+        <span>Ask about more characters
+          <em>Off means the prompt states your cast is the whole cast. On invites whoever runs it to add more.</em>
+        </span></label>
+    </div>
+    <div id="people"></div>
+  </section>
+
+  <section class="card" id="sec-master">
+    <div class="card-head">
+      <h2>Master prompt</h2>
+      <span class="badge">pick one</span>
+    </div>
+    <p class="hint">These are not compatible with each other. Each one tells the model what kind of object it is making.</p>
+    <div id="masters" class="master-grid"></div>
+  </section>
+
+  <section class="card" id="sec-modules">
+    <div class="card-head">
+      <h2>Modules</h2>
+      <span class="badge" id="modcount">0 selected</span>
+    </div>
+    <p class="hint">Stack as many as you like. They plug into the master without changing it. Modules that do not suit your chosen master are hidden.</p>
+    <div class="toolbar">
+      <div class="search">
+        <svg class="s-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>
+        <input type="search" id="modsearch" placeholder="Search modules" aria-label="Search modules" autocomplete="off" spellcheck="false">
+        <button type="button" class="search-clear" id="modsearchclear" aria-label="Clear search" hidden>&times;</button>
+      </div>
+      <button type="button" class="btn btn-sm" id="toggleGroups">Expand all</button>
+    </div>
+    <p class="filternote" id="filternote"></p>
+    <div class="picked" id="picked"></div>
+    <div id="groups"></div>
+  </section>
+
+  <section class="card" id="sec-dials">
+    <div class="card-head">
+      <h2>Dials</h2>
+    </div>
+    <p class="hint">These do not print numbers into the prompt. Each position emits different wording.</p>
+    <div id="dials"></div>
+  </section>
+
+  <section class="card" id="sec-text">
+    <div id="fields"></div>
+  </section>
+
+  <section class="card" id="sec-setups">
+    <div class="card-head">
+      <h2>Saved setups</h2>
+      <span class="badge" id="setupcount"></span>
+    </div>
+    <p class="hint">Keep a combination you liked: the master, the ticked modules, the dials and the text boxes. Setups are stored on this device only, and never include your cast or photos. Modules are remembered by their wording rather than their number, so a setup still loads correctly after you add or remove packs.</p>
+    <div class="saverow">
+      <input type="text" id="setupname" placeholder="Name this setup" maxlength="60" autocomplete="off">
+      <button type="button" class="btn btn-sm btn-primary" id="setupsave">Save</button>
+      <button type="button" class="btn btn-sm" id="copylink"
+        title="A link that opens this page with the same master, modules, dials and text. It carries no cast and no photos.">Copy link</button>
+    </div>
+    <div id="setuplist"></div>
+  </section>
+
+  <section id="sec-modes">
+  <label class="switch">
+    <input type="checkbox" id="followup">
+    <span class="txt">Follow-up mode
+      <small>Assembles a short edit instruction instead of the whole prompt. Use when the last image was close and you want to change one thing without resetting it.</small>
+    </span>
+  </label>
+
+  <div class="askrow" id="mediumRow">
+    <label for="mediumHold">Reference against medium</label>
+    <input type="range" id="mediumHold" min="0" max="10" step="1">
+    <output id="mediumOut"></output>
+    <small id="mediumHint"></small>
+  </div>
+
+  <label class="switch">
+    <input type="checkbox" id="askQuestions">
+    <span class="txt">Ask me questions before drawing
+      <small>Puts an instruction at the top of the prompt to interview you first, using the platform's own tick boxes and choice buttons where it has them. Off means the opposite, stated plainly: ask nothing, decide anything the brief leaves open, and draw. Nothing in between, because a model given the choice tends to ask one polite question and guess the rest.</small>
+    </span>
+  </label>
+
+  <div class="askrow" id="askRow">
+    <label for="askCount">How many questions</label>
+    <input type="range" id="askCount" min="1" max="8" step="1">
+    <output id="askCountOut"></output>
+    <small id="askHint"></small>
+  </div>
+
+  <label class="switch">
+    <input type="checkbox" id="discipline">
+    <span class="txt">Extra care with anatomy and continuity
+      <small>Adds a block to the end of the prompt setting out what correct bodies, object counts and continuity look like. Worth turning on when a model has been giving people an extra limb, drawing two of something that exists once, or letting details drift between panels. Every line is written as what the picture shows rather than as something to avoid, because naming a mistake tends to summon it.</small>
+    </span>
+  </label>
+
+  <p class="warn" id="discwarn"></p>
+  </section>
+
+  <div class="stepnav">
+    <button type="button" class="btn btn-sm" id="stepBack">Back</button>
+    <span class="grow">
+      <button type="button" class="btn btn-sm btn-ghost" id="stepSkip">Skip</button>
+      <button type="button" class="btn btn-sm btn-primary" id="stepNext">Next</button>
+    </span>
+  </div>
+
+  <section class="card footnote">
+    <strong>Working notes</strong>
+    <p>Generate one image at a time. Reject anything with a spelling error rather than accepting it, since a rerun usually fixes it. Rejected images stay in the conversation and influence the next one, so when a detail sticks, edit your earlier message to branch rather than replying again. After roughly five images in one chat, start a fresh one and re-attach the reference photos.</p>
+  </section>
+
+</div>
+
+<aside class="side" id="sec-output">
+  <section class="card result">
+    <div class="card-head">
+      <h2>Result</h2>
+      <span class="live-badge"><span aria-hidden="true"></span> Live</span>
+      <span class="badge" id="outkind"></span>
+      <button type="button" class="btn btn-sm btn-ghost" id="copyPublic"
+        title="A version anyone can paste into another AI. It carries the master, modules and dials, and asks whoever runs it for their own cast.">Copy shareable</button>
+    </div>
+    <div id="out" aria-live="polite"></div>
+    <div class="out-empty">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5h16M4 12h11M4 18.5h7"/></svg>
+      <div>Press Assemble to build the prompt.</div>
+    </div>
+    <p class="meta" id="meta"></p>
+  </section>
+  <div class="actionbar">
+    <button type="button" class="btn btn-primary" id="build">Assemble</button>
+    <button type="button" class="btn" id="copy"><span class="btn-label">Copy</span></button>
+    <button type="button" class="btn btn-accent" id="shuffle" title="New variation seed">Vary</button>
+  </div>
+  <p class="kbd-hint"><kbd id="kbdmod">Ctrl</kbd> <kbd>Enter</kbd> assemble &nbsp;&middot;&nbsp; <kbd>/</kbd> search modules</p>
+</aside>
+
+</main>
+
+<script>
+"use strict";
+
+var BUILT_IN = {"pack": "Persona built in", "bench": "persona", "shared": [{"id": "personacore", "label": "Persona craft", "blocks": ["LIKENESS\nThe person is drawn as a specific individual rather than a type. Whatever identifies them survives the style: keep the features, the colouring and the signature detail consistent, and let the drawing be stylised without becoming generic.", "DIGNITY\nThe portrait is on the subject's side. Age, weight, marks, disability and difference are drawn accurately and without commentary, as ordinary facts about a person. Nothing about them is made a joke, a warning or a symbol.", "CRAFT\nOne clear light. Edges that describe form. Colour that stays where the drawing puts it. Leave the marks of the tool visible. Render as though made by hand rather than generated."]}], "masters": [{"id": "P", "name": "Portrait", "order": 10, "blurb": "One person, drawn close. The face carries the picture and everything else supports it.", "body": "ROLE\nYou are drawing one portrait of {cast}. A single person fills the frame and the picture is about who they are rather than what is happening.\n\nWHAT CARRIES IT\nThe likeness is carried by the features, the bearing and the one detail that is always present. The background exists to sit behind them and never competes for attention. Nothing is posed for a camera that is being acknowledged."}, {"id": "V", "name": "Avatar", "order": 20, "blurb": "A small round or square badge. Head and shoulders, readable at the size of a thumbnail.", "body": "ROLE\nYou are making a single avatar of {cast}: head and shoulders, centred, designed to stay legible when it is shown small.\n\nWHAT CARRIES IT\nOne clear silhouette, strong separation from the background, and the one detail that identifies them surviving at thumbnail size. Everything safe inside a centred circle. No text."}, {"id": "S", "name": "Persona sheet", "order": 30, "blurb": "Several views of the same person on one canvas. For establishing somebody before drawing them elsewhere.", "body": "ROLE\nYou are making one canvas holding several views of {cast}: front, three quarter and profile, with two or three expressions, treated as a single composition so that the face, colouring and proportions stay identical throughout.\n\nWHAT CARRIES IT\nConsistency. Every view is plainly the same person. Keep the background plain and the spacing even so the views read as a set.", "castOk": true}, {"id": "F", "name": "Full figure", "order": 40, "blurb": "Head to foot, standing. What they wear, carry and stand like.", "body": "ROLE\nYou are drawing {cast} head to foot, standing, with enough room around them to read the whole figure.\n\nWHAT CARRIES IT\nProportion, posture and clothing. The figure is shown clearly rather than dramatically lit or heavily cropped, and whatever they always carry is visible."}], "categories": [{"key": "SPECIES", "label": "Kind", "note": "Human, or something else entirely", "order": 100, "items": [{"m": "*", "t": "An ordinary human being."}, {"m": "*", "t": "A human with one clearly non human feature, drawn matter of factly."}, {"m": "*", "t": "An elf: taller, finer boned, long ears, otherwise unremarkable."}, {"m": "*", "t": "A dwarf: shorter, broader, heavy brow, strong hands."}, {"m": "*", "t": "An orc: heavy jaw, thick neck, tusks that sit naturally in the mouth."}, {"m": "*", "t": "A beast folk: a recognisable animal head on a human frame, drawn as a person rather than a costume."}, {"m": "*", "t": "An android: seams at the joints, matte surfaces, a face that still expresses."}]}, {"key": "FACE", "label": "Face", "note": "Head shape and features", "order": 110, "items": [{"m": "*", "t": "A round face, soft jaw, full cheeks."}, {"m": "*", "t": "An oval face, even proportions, a gentle chin."}, {"m": "*", "t": "A square face, wide jaw, flat cheekbones."}, {"m": "*", "t": "A heart shaped face, wide brow, narrow chin."}, {"m": "*", "t": "A long narrow face, high cheekbones, hollow cheeks."}, {"m": "*", "t": "A broad flat brow and a short nose."}, {"m": "*", "t": "A strong aquiline nose and a pronounced bridge."}, {"m": "*", "t": "A wide mouth with full lips."}, {"m": "*", "t": "A small mouth with a thin upper lip."}, {"m": "*", "t": "Ears that sit close to the head."}, {"m": "*", "t": "Ears that stand away from the head."}]}, {"key": "EYES", "label": "Eyes", "note": "Colour, shape and gaze", "order": 120, "items": [{"m": "*", "t": "Dark brown eyes."}, {"m": "*", "t": "Light brown eyes with a warm ring near the pupil."}, {"m": "*", "t": "Hazel eyes."}, {"m": "*", "t": "Green eyes."}, {"m": "*", "t": "Grey blue eyes."}, {"m": "*", "t": "Deep blue eyes."}, {"m": "*", "t": "Amber eyes."}, {"m": "*", "t": "Two eyes of different colours, drawn as an ordinary fact about them."}, {"m": "*", "t": "Almond shaped eyes."}, {"m": "*", "t": "Round wide set eyes."}, {"m": "*", "t": "Hooded eyes with a heavy lid."}, {"m": "*", "t": "Eyes with a downward outer corner, which softens the expression."}, {"m": "*", "t": "A direct gaze meeting the viewer."}, {"m": "*", "t": "A gaze just past the viewer, thinking about something else."}]}, {"key": "SKIN", "label": "Skin", "note": "Tone, undertone and surface", "order": 130, "items": [{"m": "*", "t": "Deep brown skin with a warm undertone."}, {"m": "*", "t": "Deep brown skin with a cool undertone."}, {"m": "*", "t": "Rich brown skin, even in tone."}, {"m": "*", "t": "Mid brown skin with a golden undertone."}, {"m": "*", "t": "Olive skin."}, {"m": "*", "t": "Light tan skin that takes the sun."}, {"m": "*", "t": "Fair skin with a pink undertone."}, {"m": "*", "t": "Very fair skin that stays pale."}, {"m": "*", "t": "Freckles across the nose and cheeks."}, {"m": "*", "t": "A birthmark on one cheek, drawn plainly."}, {"m": "*", "t": "Visible sun damage across the cheekbones."}, {"m": "*", "t": "A scar through one eyebrow, long healed."}]}, {"key": "HAIR", "label": "Hair", "note": "Length, texture, style and colour", "order": 140, "items": [{"m": "*", "t": "Tightly coiled hair worn short."}, {"m": "*", "t": "Tightly coiled hair worn in a high shape."}, {"m": "*", "t": "Locs gathered back."}, {"m": "*", "t": "Braids to the shoulder."}, {"m": "*", "t": "Wavy hair to the jaw."}, {"m": "*", "t": "Straight hair to the shoulders."}, {"m": "*", "t": "Long straight hair past the shoulder blades."}, {"m": "*", "t": "A close crop, almost to the scalp."}, {"m": "*", "t": "A shaved head."}, {"m": "*", "t": "Fine hair that will not sit flat."}, {"m": "*", "t": "Thick hair pushed back from the brow."}, {"m": "*", "t": "Black hair."}, {"m": "*", "t": "Dark brown hair."}, {"m": "*", "t": "Auburn hair."}, {"m": "*", "t": "Copper hair."}, {"m": "*", "t": "Ash blonde hair."}, {"m": "*", "t": "Grey at the temples."}, {"m": "*", "t": "Fully grey hair."}, {"m": "*", "t": "White hair."}, {"m": "*", "t": "Hair dyed a colour that does not occur naturally, grown out at the roots."}]}, {"key": "FACIALHAIR", "label": "Facial hair", "note": "Beard, moustache and stubble", "order": 150, "items": [{"m": "*", "t": "Clean shaven."}, {"m": "*", "t": "A day or two of stubble."}, {"m": "*", "t": "A short trimmed beard."}, {"m": "*", "t": "A full beard, neatly kept."}, {"m": "*", "t": "A long beard, untrimmed."}, {"m": "*", "t": "A moustache alone."}, {"m": "*", "t": "A goatee."}, {"m": "*", "t": "Sideburns worn long."}, {"m": "*", "t": "A beard going grey before the hair does."}]}, {"key": "BODY", "label": "Build", "note": "Proportion, height and posture", "order": 160, "items": [{"m": "*", "t": "A slight build."}, {"m": "*", "t": "A lean build."}, {"m": "*", "t": "An average build."}, {"m": "*", "t": "A solid build."}, {"m": "*", "t": "A heavy build, carried comfortably."}, {"m": "*", "t": "A broad shouldered build."}, {"m": "*", "t": "Noticeably tall in the frame."}, {"m": "*", "t": "Noticeably short in the frame."}, {"m": "*", "t": "A straight upright posture."}, {"m": "*", "t": "A relaxed slouch."}, {"m": "*", "t": "Weight on one hip."}, {"m": "*", "t": "Shoulders slightly forward, as somebody who works at a desk."}]}, {"key": "CLOTHING", "label": "Clothing", "note": "Garments, layers and condition", "order": 170, "items": [{"m": "*", "t": "A plain shirt, sleeves rolled."}, {"m": "*", "t": "A knitted jumper, well worn."}, {"m": "*", "t": "A jacket over a t shirt."}, {"m": "*", "t": "Workwear, with the marks of the work on it."}, {"m": "*", "t": "A long coat, open."}, {"m": "*", "t": "A tailored suit, softly cut."}, {"m": "*", "t": "Layers that do not match, chosen for warmth."}, {"m": "*", "t": "Loose comfortable clothes at home."}, {"m": "*", "t": "Traditional dress, drawn respectfully and specifically."}, {"m": "*", "t": "Clothes a size too big."}, {"m": "*", "t": "Clothes carefully pressed."}]}, {"key": "ACCESSORIES", "label": "Accessories", "note": "Jewellery, eyewear and worn objects", "order": 180, "items": [{"m": "*", "t": "Round wire glasses."}, {"m": "*", "t": "Heavy framed glasses."}, {"m": "*", "t": "Sunglasses pushed up into the hair."}, {"m": "*", "t": "Small gold hoop earrings."}, {"m": "*", "t": "A single stud earring."}, {"m": "*", "t": "Several earrings in one ear."}, {"m": "*", "t": "A nose ring."}, {"m": "*", "t": "A chain at the neck, tucked in."}, {"m": "*", "t": "A pendant worn outside the clothes."}, {"m": "*", "t": "Rings on several fingers."}, {"m": "*", "t": "A worn leather watch."}, {"m": "*", "t": "A knitted hat."}, {"m": "*", "t": "A cap with a soft brim."}, {"m": "*", "t": "A scarf wound twice."}, {"m": "*", "t": "Headphones around the neck."}]}, {"key": "ICONIC", "label": "Signature object", "note": "The one thing that belongs to them", "order": 190, "items": [{"m": "*", "t": "A battered notebook, always within reach."}, {"m": "*", "t": "A camera on a strap."}, {"m": "*", "t": "A mug that is clearly theirs."}, {"m": "*", "t": "A toolbag, set down but close."}, {"m": "*", "t": "A musical instrument, carried rather than played."}, {"m": "*", "t": "A walking stick, used easily."}, {"m": "*", "t": "A tablet under one arm."}, {"m": "*", "t": "A bundle of keys on a long lanyard."}, {"m": "*", "t": "A plant in a pot, carried like a pet."}, {"m": "*", "t": "An old radio, repaired more than once."}]}, {"key": "PETS", "label": "Companion", "note": "An animal with them", "order": 200, "items": [{"m": "*", "t": "A short haired cat, unimpressed."}, {"m": "*", "t": "A long haired cat, shedding on everything."}, {"m": "*", "t": "A small terrier, alert."}, {"m": "*", "t": "A large old dog, leaning."}, {"m": "*", "t": "A lurcher, all legs."}, {"m": "*", "t": "A parrot on the shoulder, watching the viewer."}, {"m": "*", "t": "A rabbit held against the chest."}, {"m": "*", "t": "A snake around one forearm, calm."}, {"m": "*", "t": "No companion animal."}]}, {"key": "MOUNTS", "label": "Mount", "note": "Something they ride", "order": 210, "items": [{"m": "*", "t": "A working horse, standing still."}, {"m": "*", "t": "A tall horse, mid step."}, {"m": "*", "t": "A pony, stocky and patient."}, {"m": "*", "t": "A unicorn, drawn as a real animal rather than a decoration."}, {"m": "*", "t": "A large wolf, saddled."}, {"m": "*", "t": "A mechanical mount, worn and practical."}, {"m": "*", "t": "No mount."}]}, {"key": "CROP", "label": "Crop", "note": "How close the frame sits", "order": 220, "items": [{"m": "*", "t": "Head and shoulders, centred."}, {"m": "*", "t": "A tight crop on the face, hair cut by the frame."}, {"m": "*", "t": "Bust, to the middle of the chest."}, {"m": "*", "t": "Half length, to the waist."}, {"m": "*", "t": "Three quarter length, to the knee."}, {"m": "*", "t": "Full length, head to foot."}, {"m": "*", "t": "Off centre, with space on the side they are looking towards.", "castOk": true}]}, {"key": "EXPRESSION", "label": "Expression", "note": "What the face is doing", "order": 230, "items": [{"m": "*", "t": "A neutral face, at rest."}, {"m": "*", "t": "The beginning of a smile."}, {"m": "*", "t": "A broad open laugh."}, {"m": "*", "t": "A closed mouth smile that reaches the eyes."}, {"m": "*", "t": "Mid sentence."}, {"m": "*", "t": "Listening carefully."}, {"m": "*", "t": "Unimpressed."}, {"m": "*", "t": "Tired, and not hiding it."}, {"m": "*", "t": "Concentrating on something out of frame."}, {"m": "*", "t": "Caught off guard."}]}, {"key": "SETTING", "label": "Setting", "note": "What sits behind them, at this distance", "order": 240, "items": [{"m": "*", "t": "A plain studio backdrop in one colour."}, {"m": "*", "t": "A textured paper backdrop, lit unevenly."}, {"m": "*", "t": "A window behind them, the room dark by comparison."}, {"m": "*", "t": "A kitchen, close enough to read one or two objects."}, {"m": "*", "t": "A workshop, tools softly out of focus."}, {"m": "*", "t": "A bookshelf, titles unreadable."}, {"m": "*", "t": "A street at night, lights thrown out of focus."}, {"m": "*", "t": "A field, horizon low."}, {"m": "*", "t": "A vehicle interior, seen from the passenger seat."}, {"m": "*", "t": "Nothing behind them at all: flat colour."}]}, {"key": "WEATHER", "label": "Conditions", "note": "What the air is doing", "order": 250, "items": [{"m": "*", "t": "Still air, nothing moving."}, {"m": "*", "t": "A light wind lifting the hair."}, {"m": "*", "t": "Rain on the skin, recently arrived."}, {"m": "*", "t": "Snow settling on the shoulders."}, {"m": "*", "t": "Heat haze, and the shine that comes with it."}, {"m": "*", "t": "Fog, softening everything behind them."}, {"m": "*", "t": "Strong sun, hard shadows."}, {"m": "*", "t": "Overcast, flat even light."}]}], "dials": [{"id": "skinage", "label": "Skin age", "lo": "Young", "hi": "Weathered", "min": 0, "max": 10, "value": 4, "order": 10, "stops": [{"upTo": 2, "text": "Young skin. Even surface, no lines at rest."}, {"upTo": 5, "text": "Skin in its thirties. The first lines show only in expression."}, {"upTo": 8, "text": "Skin in its fifties. Settled lines around the eyes and mouth, looser at the jaw."}, {"upTo": 10, "text": "Long weathered skin. Deep lines, sun and wind in the surface, the texture of a life outdoors."}]}, {"id": "blemish", "label": "Skin imperfections", "lo": "Clear", "hi": "Lived in", "min": 0, "max": 10, "value": 3, "order": 20, "stops": [{"upTo": 2, "text": "Clear skin, drawn simply."}, {"upTo": 5, "text": "A few marks: a spot or two, faint freckles, an old scar."}, {"upTo": 8, "text": "Visible texture: pores, blemishes, uneven colour, a healed scar or two."}, {"upTo": 10, "text": "Everything the skin has been through is visible, drawn without judgement."}]}, {"id": "beard", "label": "Beard length", "lo": "Shaved", "hi": "Long", "min": 0, "max": 10, "value": 0, "order": 30, "stops": [{"upTo": 0, "text": "Clean shaven."}, {"upTo": 3, "text": "Stubble, a few days old."}, {"upTo": 6, "text": "A short beard, close to the jaw."}, {"upTo": 8, "text": "A full beard reaching the collarbone."}, {"upTo": 10, "text": "A long beard well past the chest."}]}, {"id": "hairlength", "label": "Hair length", "lo": "Shaved", "hi": "Long", "min": 0, "max": 10, "value": 5, "order": 40, "stops": [{"upTo": 1, "text": "Shaved to the scalp."}, {"upTo": 3, "text": "A short crop."}, {"upTo": 6, "text": "Hair to the jaw."}, {"upTo": 8, "text": "Hair past the shoulders."}, {"upTo": 10, "text": "Hair to the waist."}]}, {"id": "likeness", "label": "Likeness to caricature", "lo": "True", "hi": "Caricature", "min": 0, "max": 10, "value": 3, "order": 50, "stops": [{"upTo": 2, "text": "Proportions stay true. The drawing is stylised, the face is not exaggerated."}, {"upTo": 5, "text": "Gentle exaggeration. The features that identify them are a little stronger."}, {"upTo": 8, "text": "Clear caricature. Distinctive features pushed, the rest simplified."}, {"upTo": 10, "text": "Full caricature. Two or three features carry the whole likeness."}]}, {"id": "feeling", "label": "Expression strength", "lo": "Still", "hi": "Vivid", "min": 0, "max": 10, "value": 4, "order": 60, "stops": [{"upTo": 2, "text": "A still face. Whatever they feel stays behind the eyes."}, {"upTo": 5, "text": "A readable expression, held lightly."}, {"upTo": 8, "text": "A strong expression involving the whole face."}, {"upTo": 10, "text": "The expression is the picture. Everything else supports it."}]}, {"id": "backdrop", "label": "Background presence", "lo": "Plain", "hi": "Full scene", "min": 0, "max": 10, "value": 3, "order": 70, "stops": [{"upTo": 2, "text": "A plain background in one colour or tone."}, {"upTo": 5, "text": "A suggestion of a place: two or three shapes, nothing detailed."}, {"upTo": 8, "text": "A readable setting behind them, still clearly secondary to the face."}, {"upTo": 10, "text": "A full scene, with the person placed in it rather than in front of it."}]}, {"id": "depth", "label": "Depth of field", "lo": "All sharp", "hi": "Face only", "min": 0, "max": 10, "value": 5, "order": 80, "stops": [{"upTo": 2, "text": "Everything is equally sharp, front to back."}, {"upTo": 5, "text": "The background softens a little behind the shoulders."}, {"upTo": 8, "text": "The background falls away into soft shapes. The face stays sharp."}, {"upTo": 10, "text": "Only the eyes and the near side of the face are sharp. Everything else dissolves."}]}, {"id": "softness", "label": "Light softness", "lo": "Hard", "hi": "Soft", "min": 0, "max": 10, "value": 6, "order": 90, "stops": [{"upTo": 2, "text": "Hard light. Edges of shadow are crisp, contrast is high."}, {"upTo": 5, "text": "Directional light with a defined but not sharp shadow edge."}, {"upTo": 8, "text": "Soft light wrapping the face, shadows fading gradually."}, {"upTo": 10, "text": "Enveloping light with almost no visible shadow edge."}]}, {"id": "saturation", "label": "Colour saturation", "lo": "Muted", "hi": "Vivid", "min": 0, "max": 10, "value": 5, "order": 100, "stops": [{"upTo": 2, "text": "Nearly colourless. A restricted palette close to grey."}, {"upTo": 5, "text": "Muted colour, nothing pure."}, {"upTo": 8, "text": "Full colour, still matte and hand made."}, {"upTo": 10, "text": "Saturated colour, pushed to the edge of the palette."}]}, {"id": "wear", "label": "Wear and weathering", "lo": "New", "hi": "Worn", "min": 0, "max": 10, "value": 5, "order": 110, "stops": [{"upTo": 2, "text": "Clothes and objects look new and well kept."}, {"upTo": 5, "text": "Everything shows ordinary use."}, {"upTo": 8, "text": "Clothes are softened, seams shine, objects are scuffed and mended."}, {"upTo": 10, "text": "Everything is worn nearly through, repaired more than once, and kept anyway."}]}, {"id": "jewellery", "label": "Jewellery density", "lo": "None", "hi": "Loaded", "min": 0, "max": 10, "value": 2, "order": 120, "stops": [{"upTo": 1, "text": "No jewellery at all."}, {"upTo": 4, "text": "One or two small pieces, worn every day."}, {"upTo": 7, "text": "Several pieces that plainly belong together."}, {"upTo": 10, "text": "Heavily adorned, and every piece looks earned rather than bought."}]}], "fields": [{"id": "who", "order": 5, "label": "Who this is", "hint": "One or two lines about the person behind the face. It is what stops a portrait being a mannequin.", "placeholder": "A ferry engineer of twenty years who would rather be fixing something than talking.", "section": "WHO THIS IS", "wrap": "{v}", "rows": 3}, {"id": "presents", "order": 10, "label": "How they present", "hint": "Male, female, non binary, or however they would put it themselves. Left empty, it is decided from everything else.", "placeholder": "Non binary, and comfortable being read either way.", "section": "HOW THEY PRESENT", "wrap": "{v}", "rows": 2}, {"id": "signature", "order": 20, "label": "Signature object, in detail", "hint": "If the object in their possession matters, describe it here and it will be drawn with care.", "placeholder": "A brass pocket compass, the glass crazed, worn smooth on one side.", "section": "SIGNATURE OBJECT", "wrap": "{v}", "rows": 2}, {"id": "extras", "order": 30, "label": "Your own additions", "hint": "Anything else this particular image needs.", "placeholder": "Caught mid laugh at something off to the left.", "section": "ALSO", "wrap": "{v}", "carryToFollowUp": true}, {"id": "avoid", "order": 40, "label": "Things to keep out", "hint": "Use sparingly. Naming a thing puts the word in the prompt either way. Three items maximum.", "placeholder": "For example: hats, sunglasses", "attachTo": "personacore", "splitList": true, "limit": 3, "wrap": "Also keep out: {v}."}], "castFields": [{"key": "looks", "label": "Likeness", "hint": "The face and build in your own words. Everything else can come from the modules below.", "line": "{v}.", "order": 10, "promptOrder": 10}, {"key": "marker", "label": "Signature detail", "hint": "The one thing always present, and the thing that makes them recognisable.", "line": "Always present: {v}.", "order": 20, "promptOrder": 20}, {"key": "wears", "label": "Clothing notes", "hint": "What they reach for, rather than one fixed outfit.", "line": "{v}.", "order": 30, "promptOrder": 30, "outfitRule": true}, {"key": "manner", "label": "Bearing", "hint": "How they hold themselves, and what their face does at rest.", "line": "{v}.", "order": 40, "promptOrder": 40}, {"key": "likes", "drop": true}, {"key": "avoid", "label": "Never drawn with", "hint": "Specific to this persona. Keep it short.", "line": "Never draw {name} with {v}.", "order": 60, "promptOrder": 60}], "wording": {"castSizeOne": "This image has exactly one subject: {cast}. Nobody else appears in it.", "castSizeExact": "This image has exactly {N} subject{s}: {cast}. Nobody else appears in it.", "thisImageHeading": "THIS PERSONA", "castHeading": "THE PERSON", "castWithoutPhotos": "Draw this person from the description below. They are a specific individual rather than a type, drawn as clearly stylised illustration, never photorealistic.", "noPhotoOne": "No reference photograph is attached, and none is needed. {names} is built from the description above: the features, the colouring and the signature detail are the likeness. Do not ask for a photograph. Keep the result consistent if they are drawn again.", "noPhotoMany": "No reference photographs are attached, and none are needed. {names} are built from the descriptions above: the features, the colouring and the signature detail are the likeness. Do not ask for photographs. Keep each of them consistent if drawn again.", "castAnyone": "one person, yours to invent from the brief"}, "settings": {"maxCast": 1, "requirePhoto": false}};
+/* ---------------- bench profile ----------------
+   Which bench this copy of the page is. One engine serves both, and the build
+   script swaps this object and the pack blob above to produce the other one.
+   Everything bench-specific is named here rather than scattered through the
+   code: the name on the page, the storage it owns, the sibling bench it links
+   to, and which packs belong to it. */
+var PROFILE = {
+  bench: "persona",
+  name: "Persona Bench",
+  tagline: "Portraits and avatars, on this device",
+  heading: "Build a persona",
+  sibling: { href: "prompt-bench.html", label: "Prompt Bench" },
+  keyPrefix: "personabench",
+  /* Packs under this path segment belong to the other bench. */
+  otherPath: "packs",
+  /* The persona bench borrows the categories that decide how a picture is made
+     and leaves behind the ones that decide what is happening in it: a medium or
+     a palette travels, a scene or a gag does not. */
+  borrow: ["MEDIUM", "FINISH", "PALETTE", "LIGHT", "SHAPE", "FORMAT", "STRUCTURE"],
+  copy: {
+    intro: "Describe one person, pick a master prompt, tick the features, press Assemble. Everything runs on this page. No photo and nothing you type ever leaves the device.",
+    castHeading: "The person",
+    castHint: "One subject per image. A photo is only ever shown here, as a reminder of who this is. Attach the real photo to your message in the AI itself.",
+    castStep: "The person",
+    castStage: "Person"
+  }
+};  /* bench-profile */
+
+var PACK_KEY = PROFILE.keyPrefix + ".packs.v2";
+var STATE_KEY = PROFILE.keyPrefix + ".state.v2";
+var THEME_KEY = PROFILE.keyPrefix + ".theme.v1";
+var SETUP_KEY = PROFILE.keyPrefix + ".setups.v1";
+var MAX_CAST = 5;
+
+/* ---------------- build capabilities ----------------
+   What this copy of the page is allowed to do. The private source declares
+   the private only capabilities; the publishing workflow rewrites this one
+   object for the public build and deletes the code each removed capability
+   lives in, so a private capability cannot reach the public page by being
+   left switched on. Ask can(), never the channel name. */
+var BUILD = { channel: "public", capabilities: {} };  /* build-capabilities */
+function can(name){
+  return !!(BUILD && BUILD.capabilities && BUILD.capabilities[name] === true);
+}
+
+var el = function(id){ return document.getElementById(id); };
+var seed = Math.floor(Math.random()*1000)+1;
+var loadedPacks = [];
+var serverPacks = [];
+var MODEL = null;
+var setups = [];
+/* The remembered cast baseline belongs to the private cast restore
+   capability. The core reads it only through this handle, which stays null
+   when the capability is absent. */
+var privateCastRestore = null;
+var state = { on:{}, dials:{}, fields:{}, cast:[], castCount:null, master:null,
+              discipline:false, followup:false, strangers:false, castOpen:false,
+              askQuestions:true, askCount:4, mediumHold:8 };
+
+/* ---------------- theme ---------------- */
+function systemDark(){
+  return !!(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+}
+function applyTheme(t){
+  if(t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+  else document.documentElement.removeAttribute("data-theme");
+}
+function currentTheme(){
+  var t = document.documentElement.getAttribute("data-theme");
+  return t || (systemDark() ? "dark" : "light");
+}
+(function(){
+  var stored = null;
+  try{ stored = localStorage.getItem(THEME_KEY); }catch(e){}
+  applyTheme(stored);
+})();
+
+/* ------------------------------------------------------------------
+   THE ENGINE begins here. The functions listed in .github/build-engine.py
+   are pure: they read the merged model and the state object and return
+   strings, and they never touch the page. That script lifts them verbatim
+   into tools/bench-engine.js, so the same assembler runs in the browser, in
+   a test and in the agent interface. Anything that reads the document, or
+   that only the interface needs, stays out of that list.
+   ------------------------------------------------------------------ */
+
+/* Everything the assembled prompt says that is not module, dial or field text.
+   A pack overrides any of these by key, so no wording below is fixed. */
+var BUILT_IN_WORDING = {
+  castHeading: "CAST",
+  castWithPhotos: "Reference photographs are attached for identity only. Read them to learn who these people are and what makes each of them recognisable. Do not read them for how to draw. Every face in this image is built in the style set out above, by the same hand and with the same marks as the room around it, and is never copied, traced or rendered from the photograph. Identify each character by their signifiers rather than by exact facial likeness. A photographic or half photographic face in a drawn scene is wrong even when the likeness is perfect, and a good likeness is no reason to keep one.",
+  castWithoutPhotos: "Identify each character by their signifiers. Every face is built in the style set out above, by the same hand and with the same marks as the room around it.",
+  askHeading: "BEFORE YOU DRAW",
+  askOn: "Interview me first. Ask {q} question{qs} before you draw anything, in one interaction, using this platform's own interactive controls where it has them: single choice where the options exclude each other, multi select where several can apply, free text where a fact cannot safely be guessed. Prefer asking to assuming. Any detail that would change the picture and is not settled below is worth a question, and the {q} question{qs} should be the ones that change it most. Ask them all at once, phrased to be read on a phone, wait for the answers, and treat what comes back as decided. Do not ask fewer than {q} and do not run a second questionnaire afterwards.",
+  askOff: "Ask nothing. Do not offer questions, options, a questionnaire or a check that you have understood. Anything this brief does not settle is yours to decide, so decide it and keep going. Draw the image in your first reply.",
+  mediumNoReference: "No reference photograph is attached, so the medium decides everything. Faces are made the same way, and to the same standard, as everything else in the frame.",
+  mediumAbsolute: "The medium is absolute. The reference is read for identity only and never for rendering: nothing of the photograph's surface, lighting, focus or grain reaches the drawing. A face is built from the same marks as the wall behind it.",
+  mediumLeads: "The medium leads. Take the likeness from the reference and take everything about how it is made from the medium above. Where the two disagree, the medium wins.",
+  mediumEven: "An even hold. Follow the reference for proportion and the set of the features, and the medium for surface, colour and mark making. Neither wins outright, and the face still belongs to the same drawing as the room around it.",
+  mediumReferenceLeads: "The reference leads. Follow the photograph closely for proportion, detail and the way light falls on the face, and let the medium show mainly in surface, colour and the visible marks of the tool. This is still a picture made by hand rather than a photograph.",
+  mediumReferenceGoverns: "The reference governs the face. Follow the photograph closely, modelling and detail included, and keep only as much of the medium as survives that. Everything else in the frame stays fully in the medium, and the two must read as one picture rather than a face pasted into a drawing.",
+  styleHeading: "HOW THIS IS DRAWN",
+  styleRule: "That is the style of the whole picture, decided before anybody in it is described. Everything below says what to draw, never how: no part of it changes the style above, and nothing in it is rendered more literally than anything else. People are drawn to exactly the same standard as the objects beside them.",
+  outfitRule: "Outfits change in every image within these descriptions. Never repeat an exact outfit.",
+  missingPhotoOne: "No reference photo is provided for {names}. Before you draw anything, ask me for a photo of them and for one recognisable marker to identify them by. Do not invent an appearance.",
+  missingPhotoMany: "No reference photo is provided for {names}. Before you draw anything, ask me for a photo of each of them and for one recognisable marker to identify them by. Do not invent an appearance.",
+  noPhotoOne: "No reference photograph is attached, and none is needed. Build {names} from the description above. Keep the result consistent if they are drawn again.",
+  noPhotoMany: "No reference photographs are attached, and none are needed. Build {names} from the descriptions above. Keep each of them consistent if they are drawn again.",
+  castAnyone: "somebody",
+  publicUploadOffer: " Offer image upload where a reference picture would change the result and none has been supplied.",
+  publicLaterImages: " If reference images arrive afterwards and something is still open, ask again once at that point, in the same way.",
+  publicPhotoOwner: " If a reference photo is attached, say who it is of.",
+  descriptionOpen: "{NAME}.",
+  listTwo: "{a} and {b}",
+  listMany: "{list} and {last}",
+  castSizeExact: "This image has exactly {N} character{s}: {cast}. The cast described below is the complete list.",
+  castSizeOne: "This image has exactly one character: {cast}. The cast described below is the complete list.",
+  castSizeNone: "No specific characters are established for this image. Whoever appears is yours to decide from the brief below.",
+  castSizeOpen: "This image starts with {N} character{s}: {cast}. Ask whether anybody else should appear, and offer a way to say nobody else.",
+  strangersNone: "Everybody visible in the image belongs to the cast above.",
+  strangersAllowed: "Other figures may appear as unnamed background presence: passers by, a queue, people at other tables. They stay strangers, drawn generically, never named, never described as characters and never somebody to ask about.",
+  photosOne: "One reference photograph is attached. It is of {names}.",
+  photosSomeOfOne: "{count} reference photographs are attached. They are all of {names}, from different angles and occasions.",
+  photosMany: "{count} reference photographs are attached, covering {names}.",
+  photosComplete: "Those are the complete reference set for this image. Any other image in this conversation belongs to other work and is unrelated to this prompt.",
+  thisImageHeading: "THIS IMAGE",
+  moduleLine: "{LABEL}: {v}",
+  dialsHeading: "DIALS",
+  variationHeading: "VARIATION",
+  defaultSection: "ALSO",
+  followUpOpen: "Keep the previous image exactly as it is: same characters, same style, same palette, same composition. Change only the following.",
+  followUpItem: "- {v}",
+  followUpClose: "Do not redraw anything else. Do not change anyone's face, clothing or position unless listed above.",
+  disciplineHeading: "GETTING THE DETAILS RIGHT",
+  publicContext: "FILLING IN FROM WHAT YOU ALREADY KNOW\nUse the conversation you are already in. Anything the person has said, asked for or attached earlier is yours to use, and a detail you can reasonably take from it is better filled in than asked about. Where a creative choice is yours to make and nobody has asked to make it themselves, make it.\n\nFacts about people are different. Fill in what the conversation genuinely supports, then show the person what you have filled in as a short readable list and ask, in one question, whether you have it right. Offer them a way to confirm and a way to say something is wrong. Ask this once, and wait for the answer before generating anything.\n\nIf they confirm, carry on, and let what they confirmed shape whatever you ask next rather than asking the same thing again in another form. If they say something is wrong, ask about that part in ordinary conversation in the same thread, change only the part they corrected, and keep everything they confirmed. A detail nobody has supplied, and that the conversation does not support, stays a question or stays a placeholder rather than becoming an invention.",
+  publicCastIntro: "Replace everything inside square brackets. Leave a line as it is and I will ask you about it, or choose it myself if you would rather not decide.",
+  publicCastWhoPerson: "{id} is a person.",
+  publicCastWhoAnimal: "{id} is an animal.",
+  publicCastName: "Name: [optional. Leave this out and I will keep calling them {id}.]",
+  publicCastField: "{label}: [{hint}]",
+  publicCastRepeat: "Add {next}, and any others, in the same shape. An animal has no clothing line.{photoOwner}",
+  publicCastComplete: "That is the whole cast. An animal has no clothing line.{photoOwner} Everybody in the image is listed above, so treat the list as finished and fill in the brackets rather than adding anybody.",
+  publicCharactersOpen: "You do not know in advance how many characters there will be. Ask who else should appear and offer a way to say nobody else. If several are described at once, split them into sequential identifiers yourself, so two named people and one unnamed animal become Person_2 and Person_3 carrying their names and Person_4 with no name. Adding a character is your own bookkeeping, not something the interface does.",
+  publicWhenToAsk: "WHEN TO ASK\nRun that single interaction in your first reply, using the platform's own controls, before generating anything.{laterImages} Where the brief already answers everything, generate and say nothing.",
+  publicAskHowMany: "One of those questions is how many characters the image has. Offer it as a single choice with a way to say only the one described below, and treat the answer as settled for the rest of the conversation.",
+  publicIntro: "HOW TO RUN THIS PROMPT\nBefore generating anything, decide whether information essential to the image is genuinely missing. If the brief below is already enough, or the person tells you to decide, make the image and do not interview them.\n\nWhen you do need something, ask for it using this platform's own native interactive input or questionnaire controls if it has any: single choice for options that exclude each other, multi select where several answers can apply, free text for facts that cannot safely be guessed, visual selection only where the platform supplies real previews.{uploadOffer} Use only controls this platform actually provides, and never invent previews, asset names or capabilities it does not have. Allow a custom answer alongside the suggested ones where that helps. If there are no native controls at all, ask the same questions in ordinary conversation.\n\nPut everything you already know you need into a single interaction of {q} short question{qs}, phrased to be read on a phone. Do not ask fewer, and do not run one questionnaire after another. Where a later question genuinely depends on an earlier answer, ask that one as an ordinary conversational follow up instead. Never ask for anything already supplied, and never show internal tool names, schemas or raw answer data to the person. Wait for the answers before generating, and treat what comes back as authoritative.",
+  publicCharacters: "WHO IS IN THE IMAGE\nEveryone in the image, whether a person or an animal, has a stable identifier: Person_1, Person_2, Person_3 and so on. Person_1 is the main subject. The word Person is only a label; Person_2 may perfectly well be a dog, a cat or a horse.\n\nA name is optional. When a name is given, attach it to the identifier rather than replacing it, so Person_1 keeps that label and carries the name as well. Never invent a name for somebody who was not given one; an unnamed character simply stays Person_3.\n\nThe cast section below is a blank form. Every square bracket is a placeholder to replace. Whoever is running this can fill them in directly, or leave them alone and be asked. Treat anything still in square brackets as unanswered: ask about it, or decide it yourself if they have said you should. Never draw a character from a placeholder as though it were a description.\n\nCollect only what changes the picture. Do not make anyone fill in fields the image does not need, and do not ask again for anything already supplied."
+};
+
+/* Common image-model failures, each written as the correct state rather than
+   as a ban. An image model has no true negative field: naming the mistake puts
+   the word in the prompt and can summon it, so every line says what the
+   finished picture shows.
+
+   Each default is subordinate to what the prompt, the character description or
+   a reference establishes. A rule that asserted two arms outright would have a
+   model quietly "correct" an established limb difference, prosthesis or
+   deliberate asymmetry, and a rule that asserted one of every object would
+   fight a module that asks for too many mugs. The default applies where
+   nothing else is established, and never overrides what is.
+
+   A pack can re-word, re-order, add or drop any of them by id. */
+var BUILT_IN_DISCIPLINE = [
+  { id:"count", order:10, text:"Count the picture before finishing it. The number of people, the anatomy of each one and the number of every named object match what this prompt, the character descriptions and any reference material establish." },
+  { id:"limbs", order:20, text:"Each human figure has the anatomy their description or reference establishes. Where nothing else is established, that is one head on one neck, two arms and two legs, each arm beginning at a shoulder and each leg beginning at a hip, and each limb staying joined to one person along its whole length. Where a limb difference, an amputation, a prosthesis or another physical difference is established, that is what the picture shows, accurately and consistently." },
+  { id:"hands", order:30, text:"Each hand follows the anatomy established for that character. Where an ordinary hand is intended, that is four fingers and one thumb arranged naturally. A hand holding something closes around it in a grip that works, so it is plain what is held and which hand holds it." },
+  { id:"face", order:40, text:"Each face keeps the features its description or reference establishes. Where an ordinary human face is intended, that is two eyes level with one another, one nose, one mouth and two ears set coherently on the head. Teeth that show suit the character, the expression and the angle." },
+  { id:"pairs", order:50, text:"Paired things stay true to their established design: the two shoes of one pair match each other, sleeves belong to their garment, a pair of glasses keeps its lenses, one set of headphones keeps its earpieces. Asymmetry that the prompt or a reference establishes is deliberate and stays." },
+  { id:"singular", order:60, text:"Each object appears in the number this prompt establishes. One of something stays one identifiable object throughout, and where several are called for they stay that many, each keeping its own identity. Track who holds or owns each one and where it sits, so a phone, a mug, a bag, a set of keys, a pair of glasses, headphones or a cable remains the same object wherever it appears in the scene." },
+  { id:"attached", order:70, text:"Straps, cables, handles and the like follow paths that work. A strap follows the body and the thing it carries, a cable runs between the two ends it connects, a handle stays joined to whatever it lifts, and every visible attachment point meets the object it belongs to." },
+  { id:"separate", order:80, text:"Every person and every object keeps a coherent form of its own. Where forms overlap, depth and occlusion make plain which is in front and which continues behind. Clothing stays on its wearer, hair stays on its character, and each thing stays distinguishable from the others and from the background." },
+  { id:"contact", order:90, text:"Anything resting on or held up by something meets it in a way that works. Objects on a table make contact with the tabletop, feet meet the ground as the pose requires, a seated body is carried by its seat, and weight is borne by whatever sits underneath it." },
+  { id:"fits", order:92, text:"Everything occupies a space that could hold it. A case, box, vehicle, doorway, seat, frame or enclosure is drawn large enough for whatever is shown inside it, with room at the edges, and anything shown inside one is small enough to be there. Where somebody or something is larger than the space the prompt names, they are drawn beside it, behind it, leaning over it or reaching into it, whichever the scene supports. Where the prompt, a character description or a reference establishes a deliberate impossibility, that is what the picture shows." },
+  { id:"proportion", order:94, text:"Sizes agree with one another inside the frame. People, furniture, doorways, vehicles, animals, plants and handheld objects keep the relative sizes they would really have, so a mug reads as a mug against a hand, a bench as a bench against a person, and a room as a room against the people standing in it. Where a description or reference establishes something unusually large or small, it keeps that established size wherever it appears." },
+  { id:"light", order:100, text:"Lighting stays consistent with the light sources the image establishes. Each visible shadow agrees with the position, direction and quality of the light that casts it, and where several sources are established their combined effect stays coherent." },
+  { id:"sameness", order:110, text:"Across panels, cells, frames or views, each character keeps the identity, anatomy, face, hair, build, clothing and established physical differences they began with, and each recurring object keeps its design and colour, until the story changes one of them." },
+  { id:"persistence", order:120, text:"Across those panels the established number, scale, orientation, depth and relative position of people and objects all hold. When the viewpoint changes they are drawn from the new viewpoint with those same relationships intact." },
+  { id:"consequence", order:130, text:"Changes between panels follow events in the story. An object nobody has touched keeps the state and the place it had. Something set down stays where it was put, something picked up travels with whoever carries it, something dropped lies where it fell, and a deliberate change persists from the moment it happens." }
+];
+
+var BUILT_IN_SETTINGS = { maxCast: 5, variationPools: 3, requirePhoto: true,
+                          styleFirst: ["MEDIUM", "FINISH", "PALETTE", "LIGHT"],
+                          minQuestions: 1, maxQuestions: 8, defaultQuestions: 4,
+                          defaultMediumHold: 8 };
+
+/* order is the order of the boxes on the page, promptOrder the order of the
+   sentences in the prompt. They deliberately differ. */
+var BUILT_IN_CAST_FIELDS = [
+  { key:"marker", label:"Signifier", hint:"The one thing always present. This is what makes them recognisable, not their face.",
+    line:"Constant in every image: {v}.", order:10, promptOrder:40 },
+  { key:"looks", label:"Appearance", hint:"Build, hair, age, how they carry themselves.",
+    line:"{v}.", order:20, promptOrder:10 },
+  { key:"wears", label:"Clothing", hint:"What they actually reach for, not one fixed outfit.",
+    line:"{v}.", order:30, promptOrder:20, outfitRule:true },
+  { key:"manner", label:"Manner", hint:"How they behave around the others.",
+    line:"{v}.", order:40, promptOrder:30 },
+  { key:"likes", label:"Interests", hint:"Shown as objects in the scene, never as a label.",
+    line:"Interested in {v}, which may show up as objects in the scene rather than as a label.", order:50, promptOrder:50 },
+  { key:"avoid", label:"Never draw them with", hint:"Specific to this character. Keep it short.",
+    line:"Never draw {name} with {v}.", order:60, promptOrder:60 }
+];
+
+/* {v}, {name}, {NAME}, {names}, {LABEL} and friends. An unknown token is left
+   alone so cast tokens like {1} still reach fill() untouched. */
+function tpl(s, map){
+  return String(s === undefined || s === null ? "" : s).replace(/\{(\w+)\}/g, function(whole, k){
+    return Object.prototype.hasOwnProperty.call(map, k) ? map[k] : whole;
+  });
+}
+
+function say(key, map){
+  var w = (MODEL && MODEL.wording) || BUILT_IN_WORDING;
+  var s = w[key] === undefined ? BUILT_IN_WORDING[key] : w[key];
+  var m = photoClauses(), k;
+  if(map){ for(k in map){ if(Object.prototype.hasOwnProperty.call(map, k)) m[k] = map[k]; } }
+  return fill(tpl(s, m));
+}
+
+function castFieldList(byPrompt){
+  var list = ((MODEL && MODEL.castFields) || BUILT_IN_CAST_FIELDS).slice();
+  list.sort(function(a, b){
+    var k = byPrompt ? "promptOrder" : "order";
+    var ao = a[k] === undefined ? (a.order === undefined ? 999 : a.order) : a[k];
+    var bo = b[k] === undefined ? (b.order === undefined ? 999 : b.order) : b[k];
+    return ao - bo;
+  });
+  return list;
+}
+
+/* ---------------- storage ---------------- */
+function savePacks(){ try{ localStorage.setItem(PACK_KEY, JSON.stringify(loadedPacks)); }catch(e){} }
+function saveState(){
+  try{ localStorage.setItem(STATE_KEY, JSON.stringify(state)); }
+  catch(e){
+    try{
+      var lean = JSON.parse(JSON.stringify(state));
+      lean.cast.forEach(function(p){ p.photo = ""; });
+      localStorage.setItem(STATE_KEY, JSON.stringify(lean));
+      note("Saved, but the photos were too large to keep. They will clear when you reload.");
+    }catch(e2){}
+  }
+}
+/* The cast can arrive from the built in set, the server, or a pack loaded
+   into this browser. Whichever supplied it, the merged model is the first
+   place to look; a private build can also fall back to a remembered
+   baseline, which is what keeps Restore working after packs are cleared. */
+function castSourceList(){
+  if(MODEL && MODEL.people && MODEL.people.length) return MODEL.people;
+  return privateCastRestore ? privateCastRestore.baseline() : [];
+}
+
+function loadStored(){
+  try{ var a = localStorage.getItem(PACK_KEY); if(a) loadedPacks = JSON.parse(a) || []; }catch(e){}
+  try{ var b = localStorage.getItem(STATE_KEY); if(b){
+    var s = JSON.parse(b);
+    if(s && typeof s === "object"){
+      state.on = s.on || {}; state.dials = s.dials || {}; state.fields = s.fields || {};
+      state.cast = s.cast || []; state.castCount = (s.castCount === undefined ? null : s.castCount);
+      state.discipline = !!s.discipline;
+      state.followup = !!s.followup;
+      state.strangers = !!s.strangers;
+      state.askQuestions = (s.askQuestions === undefined) ? true : !!s.askQuestions;
+      state.askCount = (s.askCount === undefined) ? BUILT_IN_SETTINGS.defaultQuestions : s.askCount;
+      state.mediumHold = (s.mediumHold === undefined) ? BUILT_IN_SETTINGS.defaultMediumHold : s.mediumHold;
+      state.castOpen = !!s.castOpen;
+      if(s.master) _masterId = s.master;
+    }
+  }}catch(e){}
+}
+
+/* ---------------- merge ---------------- */
+function mergeById(list, incoming, key){
+  incoming.forEach(function(item){
+    var found = -1;
+    for(var i=0;i<list.length;i++){ if(list[i][key] === item[key]){ found = i; break; } }
+    if(found > -1){
+      var merged = {}, k;
+      for(k in list[found]) merged[k] = list[found][k];
+      for(k in item) merged[k] = item[k];
+      list[found] = merged;
+    } else { list.push(item); }
+  });
+}
+
+function mergeCategories(list, incoming){
+  incoming.forEach(function(inc){
+    var found = null;
+    for(var i=0;i<list.length;i++){ if(list[i].key === inc.key){ found = list[i]; break; } }
+    if(!found){
+      found = { key:inc.key, label:inc.label || inc.key, note:inc.note || "",
+                order:(inc.order === undefined ? 999 : inc.order), items:[] };
+      list.push(found);
+    }
+    if(inc.label !== undefined) found.label = inc.label;
+    if(inc.note !== undefined) found.note = inc.note;
+    if(inc.order !== undefined) found.order = inc.order;
+    if(inc.replace) found.items = [];
+    (inc.items || []).forEach(function(it){
+      var dup = null, k;
+      for(var j=0;j<found.items.length;j++){ if(found.items[j].t === it.t){ dup = found.items[j]; break; } }
+      if(dup){
+        String(it.m || "").split("").forEach(function(ch){ if(dup.m.indexOf(ch) < 0) dup.m += ch; });
+        /* A later pack may add settings to a module it did not write, so
+           everything except the wording and the master list is carried over. */
+        for(k in it) if(k !== "m" && k !== "t") dup[k] = it[k];
+      } else {
+        /* Copy the whole item rather than the wording alone: needs, alt,
+           strangers and anything a future pack format adds all travel with it. */
+        var copy = {};
+        for(k in it) copy[k] = it[k];
+        copy.m = it.m || "ABC";
+        copy.t = it.t;
+        found.items.push(copy);
+      }
+    });
+  });
+}
+
+/* A pack says which bench it is for, or its path does. The declaration wins,
+   so a pack can be shared deliberately rather than by accident of where it
+   sits. */
+function packBench(p){
+  if(p.bench) return p.bench;
+  var d = p.data || {};
+  if(d.bench === "main" || d.bench === "persona" || d.bench === "both") return d.bench;
+  var path = String(p.path || "").replace(/\\/g, "/");
+  return path.indexOf("persona-packs/") > -1 ? "persona" : "main";
+}
+
+/* What this bench takes from a pack. Its own packs arrive whole. The other
+   bench's packs arrive as nothing, unless this bench has a borrow list, in
+   which case only the named categories cross over: a look may be shared, a
+   scene or a story may not. */
+function scopePack(p){
+  var mine = PROFILE.bench, theirs = packBench(p);
+  if(theirs === mine || theirs === "both") return p;
+  if(!PROFILE.borrow || !PROFILE.borrow.length) return null;
+  var d = p.data || {}, keep = [];
+  (d.categories || []).forEach(function(c){
+    if(PROFILE.borrow.indexOf(c.key) > -1) keep.push(c);
+  });
+  if(!keep.length) return null;
+  return { name: p.name, path: p.path, borrowed: true,
+           data: { pack: d.pack, private: d.private, categories: keep } };
+}
+
+function allPacks(){
+  var raw = [{ name:"Built in", path:"built-in", data:BUILT_IN, bench:PROFILE.bench }]
+              .concat(serverPacks, loadedPacks);
+  var out = [];
+  raw.forEach(function(p){
+    var scoped = scopePack(p);
+    if(scoped) out.push(scoped);
+  });
+  return out;
+}
+
+/* Packs this bench ignored, so the Packs card can say so rather than leaving
+   somebody wondering where their file went. */
+function foreignPacks(){
+  return [].concat(serverPacks, loadedPacks).filter(function(p){ return !scopePack(p); });
+}
+
+/* A pack marked private is the author's own material. The server refuses to
+   serve it and the publishing workflow strips it, so the shareable prompt
+   honours the same flag: it is built from a model with those packs left out
+   entirely, rather than from the merged one. */
+function publicPacks(){
+  return allPacks().filter(function(p){ return !(p.data && p.data.private); });
+}
+
+function buildModel(){
+  MODEL = modelFrom(allPacks());
+  MAX_CAST = MODEL.settings.maxCast;
+}
+
+function modelFrom(packs){
+  var m = { shared:[], masters:[], categories:[], dials:[], variation:[], fields:[], people:[],
+            wording:{}, settings:{}, castFields:[], discipline:[] };
+  var k;
+  for(k in BUILT_IN_WORDING) m.wording[k] = BUILT_IN_WORDING[k];
+  for(k in BUILT_IN_SETTINGS) m.settings[k] = BUILT_IN_SETTINGS[k];
+  BUILT_IN_CAST_FIELDS.forEach(function(f){
+    var copy = {}, j;
+    for(j in f) copy[j] = f[j];
+    m.castFields.push(copy);
+  });
+  BUILT_IN_DISCIPLINE.forEach(function(d){
+    var copy = {}, j;
+    for(j in d) copy[j] = d[j];
+    m.discipline.push(copy);
+  });
+  packs.forEach(function(p){
+    var d = p.data || {};
+    if(d.shared)     mergeById(m.shared, d.shared, "id");
+    if(d.masters)    mergeById(m.masters, d.masters, "id");
+    if(d.people)     mergeById(m.people, d.people, "id");
+    if(d.categories) mergeCategories(m.categories, d.categories);
+    if(d.dials)      mergeById(m.dials, d.dials, "id");
+    if(d.variation)  mergeById(m.variation, d.variation, "id");
+    if(d.fields)     mergeById(m.fields, d.fields, "id");
+    if(d.castFields) mergeById(m.castFields, d.castFields, "key");
+    if(d.discipline) mergeById(m.discipline, d.discipline, "id");
+    if(d.wording)    for(var wk in d.wording) m.wording[wk] = d.wording[wk];
+    if(d.settings)   for(var sk in d.settings) m.settings[sk] = d.settings[sk];
+  });
+  m.castFields = m.castFields.filter(function(f){ return !f.drop; });
+  m.discipline = m.discipline.filter(function(d){ return !d.drop; });
+  var byOrder = function(a,b){
+    var ao = a.order === undefined ? 999 : a.order;
+    var bo = b.order === undefined ? 999 : b.order;
+    return ao - bo;
+  };
+  m.categories.sort(byOrder); m.dials.sort(byOrder); m.discipline.sort(byOrder);
+  m.variation.sort(byOrder); m.fields.sort(byOrder);
+  var n = 0;
+  m.categories.forEach(function(c){ c.items.forEach(function(it){ n++; it.n = n; it.cat = c.key; }); });
+  m.count = n;
+  var cap = parseInt(m.settings.maxCast, 10);
+  if(isNaN(cap)) cap = BUILT_IN_SETTINGS.maxCast;
+  m.settings.maxCast = Math.max(1, Math.min(9, cap));
+  var pools = parseInt(m.settings.variationPools, 10);
+  m.settings.variationPools = isNaN(pools) ? BUILT_IN_SETTINGS.variationPools : Math.max(0, pools);
+  /* A bench that draws somebody from a description rather than reproducing a
+     real person has nothing to reference, so a named character without a photo
+     is the ordinary case there rather than something to stop and ask about. */
+  m.settings.requirePhoto = (m.settings.requirePhoto === undefined)
+    ? BUILT_IN_SETTINGS.requirePhoto : (m.settings.requirePhoto !== false);
+  if(!Array.isArray(m.settings.styleFirst)) m.settings.styleFirst = BUILT_IN_SETTINGS.styleFirst;
+  return m;
+}
+
+/* ---------------- cast ---------------- */
+function blankPerson(){
+  var p = { name:"", kind:"person", photo:"", desc:"" };
+  castFieldList().forEach(function(f){ p[f.key] = ""; });
+  return p;
+}
+
+function seedCast(fromPacks){
+  var src = fromPacks ? castSourceList() : [];
+  var out = [];
+  for(var i=0;i<MAX_CAST;i++){
+    if(src[i]){
+      var p = blankPerson(), k;
+      for(k in src[i]) if(k in p) p[k] = src[i][k] || "";
+      p.kind = src[i].kind || "person";
+      out.push(p);
+    } else { out.push(blankPerson()); }
+  }
+  return out;
+}
+
+/* A dial with no value set yet takes the one its pack declares. This used to
+   happen only when the sliders were drawn, which meant anything assembling
+   without an interface, a test or the agent engine, emitted "undefined" where
+   a dial's number belonged. */
+function ensureDials(){
+  if(!MODEL || !MODEL.dials) return;
+  MODEL.dials.forEach(function(d){
+    if(state.dials[d.id] === undefined){
+      state.dials[d.id] = (d.value === undefined ? (d.min === undefined ? 0 : d.min) : d.value);
+    }
+  });
+}
+
+function ensureCast(){
+  if(!state.cast || !state.cast.length) state.cast = seedCast(true);
+  while(state.cast.length < MAX_CAST) state.cast.push(blankPerson());
+  if(state.castCount === null || state.castCount === undefined){
+    state.castCount = Math.min(castSourceList().length, MAX_CAST);
+  }
+  if(state.castCount > MAX_CAST) state.castCount = MAX_CAST;
+  if(state.castCount < 0) state.castCount = 0;
+}
+
+function activeCast(){ return state.cast.slice(0, state.castCount); }
+
+/* Whether a named character with no photo is a gap to ask about. True on the
+   main bench, where the cast are real people being reproduced. False where a
+   pack turns it off, as Persona Bench does: there the modules are the
+   likeness, so demanding a photograph stops the work for nothing. */
+function requirePhoto(){
+  return !(MODEL && MODEL.settings && MODEL.settings.requirePhoto === false);
+}
+
+/* The categories that decide how a picture is made, as opposed to what is in
+   it. They are said before anybody is described, because order is instruction:
+   a receiving AI that meets "reference photograph attached" before it has been
+   told the style settles the face photographically and then draws a stylised
+   room around it. Saying the style first makes the face one more thing drawn
+   that way rather than the one thing exempt from it. */
+/* How many questions the prompt asks for, and whether it asks at all. The
+   switch is deliberately two positions rather than a suggestion: a model told
+   to ask "if anything is unclear" asks one polite question and guesses the
+   rest, which is the behaviour the switch exists to replace. */
+function askCount(){
+  var lo = (MODEL && MODEL.settings && MODEL.settings.minQuestions) || BUILT_IN_SETTINGS.minQuestions;
+  var hi = (MODEL && MODEL.settings && MODEL.settings.maxQuestions) || BUILT_IN_SETTINGS.maxQuestions;
+  var n = parseInt(state.askCount, 10);
+  if(isNaN(n)) n = BUILT_IN_SETTINGS.defaultQuestions;
+  return Math.max(lo, Math.min(hi, n));
+}
+
+function asksQuestions(){ return state.askQuestions !== false; }
+
+function askBlock(){
+  return say("askHeading") + "\n" + say(asksQuestions() ? "askOn" : "askOff");
+}
+
+/* How far the reference photograph is allowed to decide how a face is drawn,
+   as against the medium. It is a slider rather than a switch because the
+   honest answer sits on a line: a likeness taken entirely from a photograph
+   gives the pasted-in face, and a likeness taken entirely from the medium
+   gives somebody who is not quite them. With no reference attached there is
+   nothing to trade against, so the medium simply decides. */
+function mediumHold(){
+  var n = parseInt(state.mediumHold, 10);
+  if(isNaN(n)) n = BUILT_IN_SETTINGS.defaultMediumHold;
+  return Math.max(0, Math.min(10, n));
+}
+
+function hasReference(){
+  if(publicMode) return true;   /* a form: a photograph may well be attached to it */
+  return activeCast().some(function(p){ return !!p.photo; });
+}
+
+function mediumHoldKey(){
+  /* Left is the reference, right is the medium: the slider reads as how much
+     of the medium survives, so pushing it right gets you more of the drawing. */
+  var n = mediumHold();
+  if(n <= 1) return "mediumReferenceGoverns";
+  if(n <= 3) return "mediumReferenceLeads";
+  if(n <= 5) return "mediumEven";
+  if(n <= 8) return "mediumLeads";
+  return "mediumAbsolute";
+}
+
+function mediumHoldLine(){
+  return say(hasReference() ? mediumHoldKey() : "mediumNoReference");
+}
+
+function styleFirstKeys(){
+  var keys = (MODEL && MODEL.settings && MODEL.settings.styleFirst);
+  return Array.isArray(keys) ? keys : BUILT_IN_SETTINGS.styleFirst;
+}
+
+function splitPicks(picks){
+  var keys = styleFirstKeys(), style = [], rest = [];
+  picks.forEach(function(p){
+    if(keys.indexOf(p.cat.key) > -1) style.push(p); else rest.push(p);
+  });
+  return { style: style, rest: rest };
+}
+
+function moduleLines(picks, plain){
+  return picks.map(function(p){
+    return say("moduleLine", { LABEL: p.cat.label.toUpperCase(), label: p.cat.label,
+                               v: fill(plain ? p.it.t : textOf(p.it)) });
+  }).join("\n");
+}
+
+function composeDescription(p){
+  var name = (p.name || "").trim();
+  if(!name) return "";
+  var map = { name: name, NAME: name.toUpperCase() };
+  var parts = [ say("descriptionOpen", map) ];
+  castFieldList(true).forEach(function(f){
+    var v = (p[f.key] || "").trim().replace(/[.\s]+$/, "");
+    if(!v) return;
+    parts.push(fill(tpl(f.line === undefined ? "{v}." : f.line,
+      { v: v, name: name, NAME: map.NAME })));
+  });
+  return parts.join(" ").trim();
+}
+
+function tokens(){
+  var map = {};
+  activeCast().forEach(function(p,i){
+    map[String(i+1)] = (p.name || "").trim() || "somebody";
+  });
+  return map;
+}
+
+var publicMode = false;
+
+/* A readable list of who is in the image, in whichever vocabulary this build
+   is speaking: names on this device, Person_n in a shareable version. */
+function castNames(){
+  var n = castSize(), out = [], i;
+  for(i = 0; i < n; i++){
+    /* A shareable prompt speaks in identifiers, because the person running it
+       has not met anybody. This page speaks in names, and an unnamed slot is
+       somebody rather than Person_3: the identifier would be a placeholder
+       nobody had asked for. */
+    if(publicMode){ out.push("Person_" + (i+1)); continue; }
+    var p = state.cast[i] || {};
+    out.push((p.name || "").trim() || "somebody");
+  }
+  return out;
+}
+/* A plain readable list. listNames() goes through pack wording, which goes
+   back through fill(), so the cast token joins its own list instead. */
+function joinPlain(a){
+  if(!a.length) return "";
+  if(a.length === 1) return a[0];
+  return a.slice(0, -1).join(", ") + " and " + a[a.length - 1];
+}
+
+function castSize(){
+  var n = parseInt(state.castCount, 10);
+  if(isNaN(n) || n < 0) n = 0;
+  return Math.min(n, MAX_CAST);
+}
+
+/* Cast tokens are filled from the cast, and the grammar tokens let one piece
+   of pack wording read correctly whether there is one character or five. A
+   token naming a character the cast does not have is dropped along with the
+   module carrying it, so nothing reaches the prompt asking about somebody who
+   was never chosen. */
+/* With nobody in the cast, {cast} used to leave a hole, so a master body read
+   "drawing one portrait of ." This is read straight from the wording rather
+   than through say(), which would call back into fill() and never return. */
+function word(key, fallback){
+  var w = (MODEL && MODEL.wording) || BUILT_IN_WORDING;
+  var s = w[key] === undefined ? BUILT_IN_WORDING[key] : w[key];
+  return String(s === undefined || s === null ? fallback : s);
+}
+
+function anyoneWord(){ return word("castAnyone", "somebody"); }
+
+/* {n} gives the digit, which suits a line of instruction. {N} gives the word,
+   which is what prose wants: "three faces at three stages" rather than "3
+   faces at 3 stages". Past nine it falls back to the digit. */
+var NUMBER_WORDS = ["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+function numberWord(n){
+  n = parseInt(n, 10);
+  if(isNaN(n) || n < 0) return "0";
+  return NUMBER_WORDS[n] === undefined ? String(n) : NUMBER_WORDS[n];
+}
+
+/* Clauses that only make sense where a reference photograph is expected: the
+   offer of an upload control, the note about images arriving later, and the
+   ask to say who a photo is of. A bench that invents its subject supplies them
+   empty, so a shareable prompt never invites the receiving AI to ask for a
+   picture that was never going to exist. */
+function photoClauses(){
+  var on = requirePhoto();
+  return {
+    uploadOffer: on ? word("publicUploadOffer", "") : "",
+    laterImages: on ? word("publicLaterImages", "") : "",
+    photoOwner:  on ? word("publicPhotoOwner", "")  : ""
+  };
+}
+
+function fill(text){
+  var n = castSize(), names = castNames();
+  var out = String(text).replace(/\{([1-9])\}/g, function(whole, d){
+    var i = parseInt(d, 10);
+    if(i <= n) return names[i-1];
+    return publicMode ? "Person_" + d : "somebody";
+  });
+  return out
+    .replace(/\{n\}/g, String(n))
+    .replace(/\{N\}/g, numberWord(n))
+    .replace(/\{q\}/g, String(askCount()))
+    .replace(/\{qs\}/g, askCount() === 1 ? "" : "s")
+    .replace(/\{cast\}/g, joinPlain(names) || anyoneWord())
+    .replace(/\{s\}/g, n === 1 ? "" : "s")
+    .replace(/\{they\}/g, n === 1 ? "they" : "they")
+    .replace(/\{them\}/g, n === 1 ? "them" : "them")
+    .replace(/\{their\}/g, "their")
+    .replace(/\{is\}/g, n === 1 ? "is" : "are");
+}
+
+/* Said once, near the top: how many characters this image has, who they are,
+   and whether anybody else may appear. It is the line that stops a receiving
+   AI asking who Person_2, Person_3 and Person_4 are when one was chosen. */
+function castSizeBlock(){
+  var n = castSize();
+  if(!n) return say("castSizeNone");
+  var key = state.castOpen ? "castSizeOpen" : (n === 1 ? "castSizeOne" : "castSizeExact");
+  var line = say(key);
+  var strangers = say(state.strangers ? "strangersAllowed" : "strangersNone");
+  return strangers ? line + "\n" + strangers : line;
+}
+
+/* What is attached, how many and of whom, so a conversation carrying other
+   images cannot quietly donate them to this prompt. */
+function photoBlock(){
+  var cast = activeCast().filter(function(p){ return (p.name||"").trim() && p.photo; });
+  if(!cast.length) return "";
+  var names = listNames(cast.map(function(p){ return p.name.trim(); }));
+  var shots = 0;
+  cast.forEach(function(p){ shots += (p.photos && p.photos.length) ? p.photos.length : 1; });
+  var key;
+  if(shots === 1) key = "photosOne";
+  else if(cast.length === 1) key = "photosSomeOfOne";   /* several views of one person */
+  else key = "photosMany";
+  var line = say(key, { count: shots, names: names });
+  var complete = say("photosComplete");
+  return complete ? line + " " + complete : line;
+}
+
+/* What to attach, in the order the prompt names them, so the count in the
+   prompt and the count in somebody's hand agree. */
+function photoChecklist(){
+  var cast = activeCast().filter(function(p){ return (p.name||"").trim(); });
+  if(!cast.length) return "";
+  var have = cast.filter(function(p){ return !!p.photo; });
+  var miss = cast.filter(function(p){ return !p.photo; });
+  var bits = [];
+  if(have.length) bits.push("Attach " + have.length + " photo" + (have.length === 1 ? "" : "s")
+    + ": " + listNames(have.map(function(p){ return p.name.trim(); })) + ".");
+  if(miss.length) bits.push(listNames(miss.map(function(p){ return p.name.trim(); }))
+    + (miss.length === 1 ? " has" : " have") + " no photo on this page, so the prompt "
+    + (requirePhoto() ? "asks for one." : "builds them from the description instead."));
+  return bits.join(" ");
+}
+
+function castBlock(){
+  var cast = activeCast().filter(function(p){ return (p.name||"").trim() || (p.desc||"").trim(); });
+  if(!cast.length) return "";
+  var withPhoto = cast.filter(function(p){ return !!p.photo; });
+  var without = cast.filter(function(p){ return !p.photo && (p.name||"").trim(); });
+  var lines = [say("castHeading")];
+  lines.push(say(withPhoto.length ? "castWithPhotos" : "castWithoutPhotos"));
+  var photos = photoBlock();
+  if(photos) lines.push(photos);
+  cast.forEach(function(p){
+    var d = (p.desc||"").trim() || composeDescription(p);
+    if(d){ lines.push(""); lines.push(d); }
+  });
+  var outfitKeys = castFieldList().filter(function(f){ return f.outfitRule; });
+  var anyClothes = cast.some(function(p){
+    return p.kind !== "animal" && outfitKeys.some(function(f){ return (p[f.key]||"").trim(); });
+  });
+  if(anyClothes){
+    lines.push("");
+    lines.push(say("outfitRule"));
+  }
+  if(without.length){
+    var many = without.length > 1;
+    var key = requirePhoto()
+      ? (many ? "missingPhotoMany" : "missingPhotoOne")
+      : (many ? "noPhotoMany" : "noPhotoOne");
+    lines.push("");
+    lines.push(say(key,
+      { names: listNames(without.map(function(p){ return p.name.trim(); })) }));
+  }
+  return lines.join("\n");
+}
+
+function listNames(a){
+  if(a.length === 1) return a[0];
+  if(a.length === 2) return say("listTwo", { a: a[0], b: a[1] });
+  return say("listMany", { list: a.slice(0,-1).join(", "), last: a[a.length-1] });
+}
+
+/* ---------------- rendering ---------------- */
+function esc(s){
+  return String(s === undefined || s === null ? "" : s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+function note(t){ el("meta").textContent = t; }
+
+var PACKS_SHOWN = 8;
+var packsExpanded = false;
+
+function renderPacks(){
+  var chips = ['<span class="built">Built in</span>'];
+  serverPacks.forEach(function(p){
+    chips.push('<span class="built" title="From the server">' + esc(p.name) + '</span>');
+  });
+  loadedPacks.forEach(function(p){ chips.push('<span>' + esc(p.name) + '</span>'); });
+  var hidden = chips.length - PACKS_SHOWN;
+  var h = (packsExpanded || hidden < 2 ? chips : chips.slice(0, PACKS_SHOWN)).join("");
+  if(hidden >= 2){
+    h += '<button type="button" class="btn btn-sm btn-ghost" id="packsmore">'
+      +  (packsExpanded ? "Show fewer" : "Show " + hidden + " more") + '</button>';
+  }
+  el("packlist").innerHTML = h;
+  var foreign = foreignPacks().length;
+  el("packcount").textContent = MODEL.count + " modules available"
+    + (foreign ? " . " + foreign + " pack" + (foreign === 1 ? "" : "s") + " for the other bench" : "");
+}
+
+function renderCounter(){
+  var h = "";
+  for(var i=0;i<=MAX_CAST;i++){
+    h += '<button type="button" data-count="'+i+'" aria-pressed="'
+      + (state.castCount === i ? "true" : "false") + '">'+i+'</button>';
+  }
+  el("counter").innerHTML = h;
+  var named = activeCast().filter(function(p){ return (p.name||"").trim(); }).length;
+  var pics = activeCast().filter(function(p){ return !!p.photo; }).length;
+  el("castnote").textContent = state.castCount + " slots, " + named + " named, " + pics + " with a photo";
+}
+
+function renderPeople(){
+  var h = "";
+  for(var i=0;i<state.castCount;i++){
+    var p = state.cast[i];
+    h += '<div class="person" data-i="'+i+'"><div class="top">';
+    h += '<div class="slot'+(p.photo?" filled":"")+'" data-photo="'+i+'" role="button" tabindex="0"'
+      + ' aria-label="Photo for slot '+(i+1)+'">'
+      + (p.photo ? '<img alt="" src="'+esc(p.photo)+'">' : 'Add photo')
+      + '</div>';
+    h += '<div class="who"><input type="text" data-k="name" placeholder="Name, slot '+(i+1)+'" value="'+esc(p.name)+'">'
+      + '<div class="kind">'
+      + '<label><input type="radio" name="kind'+i+'" data-k="kind" value="person"'+(p.kind!=="animal"?" checked":"")+'><span>Person</span></label>'
+      + '<label><input type="radio" name="kind'+i+'" data-k="kind" value="animal"'+(p.kind==="animal"?" checked":"")+'><span>Animal</span></label>'
+      + '</div></div>';
+    h += '</div>';
+    h += '<div class="fields-grid">';
+    castFieldList().forEach(function(f){
+      h += '<div class="f"><label>'+esc(f.label || f.key)+' <em>'+esc(f.hint || "")+'</em>'
+        +  '<textarea data-k="'+esc(f.key)+'">'+esc(p[f.key] || "")+'</textarea></label></div>';
+    });
+    h += '</div>';
+    h += '<div class="rowbtn"><button type="button" class="btn btn-sm" data-write="'+i+'">Write description</button>'
+      +  '<button type="button" class="btn btn-sm btn-ghost" data-clearphoto="'+i+'">Remove photo</button>'
+      +  '<button type="button" class="btn btn-sm btn-ghost" data-clearperson="'+i+'">Clear slot</button></div>';
+    h += '<div class="desc f"><label>Description used in the prompt '
+      +  '<em>Leave empty to compose it from the fields above</em>'
+      +  '<textarea data-k="desc" placeholder="Press Write description, or type your own">'+esc(p.desc)+'</textarea>'
+      +  '</label></div>';
+    h += '</div>';
+  }
+  if(state.castCount === 0){
+    h = '<p class="hint">No cast. The prompt will be about whatever your modules describe, with nobody specified.</p>';
+  }
+  el("people").innerHTML = h;
+  renderCounter();
+  if(typeof renderMedium === "function") renderMedium();
+}
+
+function renderMasters(){
+  var cur = currentMasterId();
+  var h = "";
+  MODEL.masters.forEach(function(m,i){
+    var on = (cur ? m.id === cur : i === 0);
+    h += '<label class="master"><input type="radio" name="master" value="'+esc(m.id)+'"'+(on?" checked":"")+'>'
+      +  '<b>'+esc(m.name)+'</b><span>'+esc(m.blurb||"")+'</span></label>';
+  });
+  el("masters").innerHTML = h;
+}
+
+/* How many characters a module needs. A pack may say so outright; otherwise it
+   is the highest character token in the wording, so the packs that already
+   exist need no editing to behave correctly. */
+function needsOf(it){
+  if(it.needs !== undefined){
+    var n = parseInt(it.needs, 10);
+    if(!isNaN(n)) return Math.max(0, n);
+  }
+  var high = 0;
+  String(it.t || "").replace(/\{([1-9])\}/g, function(whole, d){
+    var v = parseInt(d, 10);
+    if(v > high) high = v;
+    return whole;
+  });
+  return high;
+}
+
+/* A master written for a group reads badly with one subject, so a master may
+   carry the same alt variants a module does. */
+function masterBody(m){
+  var n = castSize();
+  if(m && m.alt && typeof m.alt[String(n)] === "string") return m.alt[String(n)];
+  return (m && m.body) || "";
+}
+
+/* The wording to use for this module at the current cast size: the alternative
+   written for a smaller cast where the pack supplies one, otherwise the
+   ordinary text. */
+function textOf(it){
+  var n = castSize();
+  if(it.alt && needsOf(it) > n){
+    var key = String(n);
+    if(typeof it.alt[key] === "string") return it.alt[key];
+  }
+  return it.t;
+}
+
+/* A module fits the current cast when it needs no more characters than exist,
+   or when the pack supplies wording for this size. A module that brings
+   strangers into the picture fits only while strangers are welcome. */
+function fitsCast(it){
+  if(it.strangers === true && !state.strangers) return false;
+  var n = castSize();
+  if(needsOf(it) <= n) return true;
+  return !!(it.alt && typeof it.alt[String(n)] === "string");
+}
+
+function suits(it, mid){
+  if(!fitsCast(it)) return false;
+  return suitsMaster(it, mid);
+}
+function suitsMaster(it, mid){
+  if(it.m.indexOf(mid) > -1 || it.m.indexOf("*") > -1) return true;
+  for(var i=0;i<MODEL.masters.length;i++){
+    var m = MODEL.masters[i];
+    if(m.id === mid && m.inherits && it.m.indexOf(m.inherits) > -1) return true;
+  }
+  return false;
+}
+
+/* How many modules this master offers that the cast is currently too small for.
+   Shown on the page, because a module quietly disappearing is worse than one
+   that explains itself. */
+function hiddenByCast(mid){
+  var n = 0;
+  MODEL.categories.forEach(function(c){
+    c.items.forEach(function(it){
+      if(suitsMaster(it, mid) && !fitsCast(it)) n++;
+    });
+  });
+  return n;
+}
+
+var _masterId = null;
+/* The chosen master is state, and the radio button is one way of setting it.
+   Reading it from state rather than from the page is what lets the assembler
+   run anywhere: in the page, in a test, or in the agent interface. */
+function currentMasterId(){
+  var want = state.master || _masterId;
+  if(want){
+    for(var i=0;i<MODEL.masters.length;i++) if(MODEL.masters[i].id === want) return want;
+  }
+  return MODEL.masters.length ? MODEL.masters[0].id : null;
+}
+
+var CARET = '<svg class="caret" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"'
+  + ' stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5L10.5 8 6 12.5"/></svg>';
+
+/* Module numbers shift when packs change, so anything persisted long term
+   (a saved setup) records a module by its wording instead. */
+var modQuery = "";
+var openGroups = {};
+var allOpen = false;
+
+function highlight(text, q){
+  text = String(text);
+  if(!q) return esc(text);
+  var out = "", low = text.toLowerCase(), i = 0, idx;
+  while((idx = low.indexOf(q, i)) > -1){
+    out += esc(text.slice(i, idx)) + '<mark>' + esc(text.slice(idx, idx + q.length)) + '</mark>';
+    i = idx + q.length;
+  }
+  return out + esc(text.slice(i));
+}
+
+function renderGroups(){
+  var mid = currentMasterId();
+  var q = modQuery.trim().toLowerCase();
+  var h = "", shown = 0, total = 0;
+  MODEL.categories.forEach(function(c){
+    var items = c.items.filter(function(it){ return suits(it, mid); });
+    total += items.length;
+    var catHit = q && c.label.toLowerCase().indexOf(q) > -1;
+    var hits = !q ? items : items.filter(function(it){
+      return catHit || String(it.n) === q || fill(textOf(it)).toLowerCase().indexOf(q) > -1;
+    });
+    if(!hits.length) return;
+    shown += hits.length;
+    var open = q ? " open" : (openGroups[c.key] || allOpen ? " open" : "");
+    h += '<details class="group" data-cat="'+esc(c.key)+'"'+open+'><summary>' + CARET
+      +  '<span class="g-label">'+highlight(c.label, catHit ? q : "")+'</span>'
+      +  '<span class="g-note">'+esc(c.note||"")+'</span>'
+      +  '<span class="badge count" data-count-cat="'+esc(c.key)+'"></span></summary>'
+      +  '<div class="group-body">';
+    hits.forEach(function(it){
+      h += '<label class="mod"><input type="checkbox" data-n="'+it.n+'"'+(state.on[it.n]?" checked":"")+'>'
+        +  '<span class="num">'+it.n+'</span><span class="txt">'+highlight(fill(textOf(it)), q)+'</span></label>';
+    });
+    h += '</div></details>';
+  });
+  if(!h){
+    h = q
+      ? '<p class="hint">Nothing matches &ldquo;' + esc(modQuery.trim()) + '&rdquo; under this master.</p>'
+      : '<p class="hint">No modules suit this master.</p>';
+  }
+  el("groups").innerHTML = h;
+  var hidden = hiddenByCast(mid);
+  var castNote = hidden
+    ? hidden + " module" + (hidden === 1 ? " needs" : "s need") + " more characters than the cast has"
+      + (state.strangers ? "" : ", or people from outside it")
+    : "";
+  el("filternote").textContent = q
+    ? shown + " of " + total + " modules match" + (castNote ? ". " + castNote : "")
+    : castNote;
+  el("modsearchclear").hidden = !modQuery;
+  updateCounts();
+}
+
+function updateCounts(){
+  var mid = currentMasterId(), total = 0;
+  MODEL.categories.forEach(function(c){
+    var n = c.items.filter(function(it){ return state.on[it.n] && suits(it, mid); }).length;
+    total += n;
+    var node = document.querySelector('[data-count-cat="'+c.key+'"]');
+    if(node){
+      node.textContent = n ? n + " on" : "";
+      node.className = n ? "badge count on" : "badge count";
+    }
+  });
+  el("modcount").textContent = total + " selected";
+  el("modcount").className = total ? "badge on" : "badge";
+  renderPicked();
+}
+
+function currentPicks(){
+  var mid = currentMasterId(), out = [];
+  MODEL.categories.forEach(function(c){
+    c.items.forEach(function(it){ if(state.on[it.n] && suits(it, mid)) out.push(it); });
+  });
+  return out;
+}
+
+function renderPicked(){
+  var picks = currentPicks(), h = "";
+  picks.forEach(function(it){
+    var txt = fill(textOf(it));
+    h += '<span class="chip"><span class="chip-t" title="'+esc(txt)+'">'+it.n+'. '+esc(txt)+'</span>'
+      +  '<button type="button" data-off="'+it.n+'" aria-label="Remove module '+it.n+'">&times;</button></span>';
+  });
+  if(picks.length) h += '<button type="button" class="btn btn-sm btn-ghost" id="clearpicks">Clear all</button>';
+  el("picked").innerHTML = h;
+}
+
+function setQuery(q){
+  modQuery = q;
+  if(el("modsearch").value !== q) el("modsearch").value = q;
+  renderGroups();
+}
+
+/* ---------------- saved setups ---------------- */
+function loadSetups(){
+  try{ var a = localStorage.getItem(SETUP_KEY); setups = a ? (JSON.parse(a) || []) : []; }
+  catch(e){ setups = []; }
+  if(!Array.isArray(setups)) setups = [];
+}
+
+function saveSetups(){
+  try{ localStorage.setItem(SETUP_KEY, JSON.stringify(setups)); return true; }
+  catch(e){ note("Could not save that setup. This browser's storage is full."); return false; }
+}
+
+function currentSetup(){
+  var mods = [], dials = {}, fields = {}, k;
+  MODEL.categories.forEach(function(c){
+    c.items.forEach(function(it){ if(state.on[it.n]) mods.push(it.t); });
+  });
+  for(k in state.dials) dials[k] = state.dials[k];
+  for(k in state.fields) fields[k] = state.fields[k];
+  return { master: currentMasterId(), mods: mods, dials: dials, fields: fields,
+           discipline: !!state.discipline, strangers: !!state.strangers,
+           castOpen: !!state.castOpen, followup: !!state.followup,
+           askQuestions: asksQuestions(), askCount: askCount(), mediumHold: mediumHold() };
+}
+
+function applySetup(s){
+  var want = {}, k;
+  (s.mods || []).forEach(function(t){ want[t] = true; });
+  state.on = {};
+  MODEL.categories.forEach(function(c){
+    c.items.forEach(function(it){ if(want[it.t]) state.on[it.n] = true; });
+  });
+  if(s.master){
+    var radio = document.querySelector('input[name=master][value="'+s.master+'"]');
+    if(radio) radio.checked = true;
+    _masterId = s.master; state.master = s.master;
+  }
+  if(s.dials) for(k in s.dials) state.dials[k] = s.dials[k];
+  if(s.fields) for(k in s.fields) state.fields[k] = s.fields[k];
+  /* A setup saved before the tick box existed represents a prompt built
+     without it, so loading one turns it off rather than inheriting whatever
+     happens to be set now. */
+  state.discipline = !!s.discipline;
+  el("discipline").checked = state.discipline;
+  state.strangers = !!s.strangers;
+  state.castOpen = !!s.castOpen;
+  state.followup = !!s.followup;
+  /* A setup saved before this control existed was built by a prompt that
+     asked, so it loads as asking rather than silently turning it off. */
+  state.askQuestions = (s.askQuestions === undefined) ? true : !!s.askQuestions;
+  state.askCount = (s.askCount === undefined) ? BUILT_IN_SETTINGS.defaultQuestions : s.askCount;
+  state.mediumHold = (s.mediumHold === undefined) ? BUILT_IN_SETTINGS.defaultMediumHold : s.mediumHold;
+  el("strangers").checked = state.strangers;
+  el("castOpen").checked = state.castOpen;
+  el("followup").checked = state.followup;
+  renderAsk(); renderMedium();
+  saveState();
+  renderMasters(); renderGroups(); renderDials(); renderFields();
+  var found = currentPicks().length, asked = (s.mods || []).length;
+  note('Loaded "' + s.name + '". ' + found + " of " + asked + " module"
+    + (asked === 1 ? "" : "s") + " apply under this master.");
+}
+
+function renderSetups(){
+  var h = "";
+  setups.forEach(function(s, i){
+    var mname = "";
+    MODEL.masters.forEach(function(m){ if(m.id === s.master) mname = m.name; });
+    var n = (s.mods || []).length;
+    h += '<div class="setup"><div class="who"><b>'+esc(s.name)+'</b><small>'
+      +  (mname ? esc(mname) + " &middot; " : "") + n + " module" + (n === 1 ? "" : "s")
+      +  '</small></div>'
+      +  '<button type="button" class="btn btn-sm" data-load="'+i+'">Load</button>'
+      +  '<button type="button" class="btn btn-sm btn-ghost" data-del="'+i+'">Delete</button></div>';
+  });
+  el("setuplist").innerHTML = h
+    || '<p class="hint">Nothing saved yet. Build a combination you like, name it above and press Save.</p>';
+  el("setupcount").textContent = setups.length ? setups.length + " saved" : "";
+}
+
+function dialText(d, v){
+  var stops = d.stops || [];
+  for(var i=0;i<stops.length;i++){
+    if(v <= stops[i].upTo) return fill(String(stops[i].text).replace(/\{v\}/g, v));
+  }
+  return stops.length ? fill(String(stops[stops.length-1].text).replace(/\{v\}/g, v)) : "";
+}
+
+function renderDials(){
+  var h = "";
+  MODEL.dials.forEach(function(d){
+    var min = (d.min === undefined ? 0 : d.min), max = (d.max === undefined ? 10 : d.max);
+    if(state.dials[d.id] === undefined) state.dials[d.id] = (d.value === undefined ? min : d.value);
+    h += '<div class="dial"><div class="row"><label for="d_'+esc(d.id)+'">'+esc(d.label)+'</label>'
+      +  '<output id="o_'+esc(d.id)+'"></output></div>'
+      +  '<input type="range" id="d_'+esc(d.id)+'" min="'+min+'" max="'+max+'" step="1" value="'+state.dials[d.id]+'">'
+      +  '<div class="ends"><span>'+esc(d.lo===undefined?min:d.lo)+'</span><span>'+esc(d.hi===undefined?max:d.hi)+'</span></div></div>';
+  });
+  el("dials").innerHTML = h;
+  MODEL.dials.forEach(function(d){
+    var input = el("d_"+d.id);
+    if(!input) return;
+    var show = function(){
+      var v = parseInt(input.value,10);
+      if(isNaN(v)) v = (d.value === undefined ? (d.min === undefined ? 0 : d.min) : d.value);
+      state.dials[d.id] = v;
+      el("o_"+d.id).textContent = dialText(d, v);
+    };
+    input.addEventListener("input", function(){ show(); saveState(); });
+    show();
+  });
+}
+
+function renderFields(){
+  var h = "";
+  MODEL.fields.forEach(function(f){
+    if(state.fields[f.id] === undefined && f["default"] !== undefined) state.fields[f.id] = f["default"];
+    h += '<div class="textfield"><h3><label for="f_'+esc(f.id)+'">'+esc(f.label)+'</label></h3>';
+    if(f.hint) h += '<p class="hint">'+esc(f.hint)+'</p>';
+    h += '<textarea id="f_'+esc(f.id)+'" placeholder="'+esc(f.placeholder||"")+'"'
+      +  (f.rows ? ' rows="'+f.rows+'"' : '') + '>' + esc(state.fields[f.id]||"") + '</textarea></div>';
+  });
+  el("fields").innerHTML = h;
+  MODEL.fields.forEach(function(f){
+    var t = el("f_"+f.id);
+    if(t) t.addEventListener("input", function(){ state.fields[f.id] = t.value; saveState(); });
+  });
+}
+
+function rebuild(){
+  buildModel();
+  if(privateCastRestore){ privateCastRestore.remember(); privateCastRestore.refresh(); }
+  ensureDials();
+  ensureCast();
+  renderPacks(); renderPeople(); renderMasters(); renderGroups(); renderDials(); renderFields();
+  renderAsk(); renderMedium();
+  renderSetups(); renderDisciplineWarning();
+}
+
+/* ---------------- photos ---------------- */
+function readPhoto(file, cb){
+  var r = new FileReader();
+  r.onload = function(){
+    var img = new Image();
+    img.onload = function(){
+      var max = 220;
+      var w = img.width, h = img.height;
+      var s = Math.min(1, max/Math.max(w,h));
+      var c = document.createElement("canvas");
+      c.width = Math.max(1, Math.round(w*s)); c.height = Math.max(1, Math.round(h*s));
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      try{ cb(c.toDataURL("image/jpeg", 0.7)); }
+      catch(e){ cb(""); }
+    };
+    img.onerror = function(){ cb(""); };
+    img.src = r.result;
+  };
+  r.onerror = function(){ cb(""); };
+  r.readAsDataURL(file);
+}
+
+var photoInput = document.createElement("input");
+photoInput.type = "file"; photoInput.accept = "image/*"; photoInput.className = "hiddenfile";
+document.body.appendChild(photoInput);
+var photoTarget = -1;
+photoInput.addEventListener("change", function(e){
+  var f = e.target.files && e.target.files[0];
+  e.target.value = "";
+  if(!f || photoTarget < 0) return;
+  var i = photoTarget;
+  readPhoto(f, function(data){
+    if(!data){ note("Could not read that image."); return; }
+    state.cast[i].photo = data;
+    saveState(); renderPeople();
+    note("Photo added to slot " + (i+1) + ". It stays on this device.");
+  });
+});
+
+/* ---------------- pack loading ---------------- */
+function readFiles(fileList){
+  var files = [];
+  for(var i=0;i<fileList.length;i++){ if(/\.json$/i.test(fileList[i].name)) files.push(fileList[i]); }
+  if(!files.length){ note("No JSON files found in that selection."); return; }
+  files.sort(function(a,b){
+    var an = (a.webkitRelativePath || a.name), bn = (b.webkitRelativePath || b.name);
+    return an < bn ? -1 : an > bn ? 1 : 0;
+  });
+  var pending = files.length, added = 0, bad = [];
+  files.forEach(function(f){
+    var r = new FileReader();
+    r.onload = function(){
+      try{
+        var obj = JSON.parse(r.result);
+        var path = f.webkitRelativePath || f.name;
+        var rec = { name: obj.pack || f.name.replace(/\.json$/i,""), path:path, data:obj };
+        var idx = -1;
+        for(var i=0;i<loadedPacks.length;i++){ if(loadedPacks[i].path === path){ idx = i; break; } }
+        if(idx > -1) loadedPacks[idx] = rec; else loadedPacks.push(rec);
+        added++;
+      }catch(e){ bad.push(f.name); }
+      if(--pending === 0) finish();
+    };
+    r.onerror = function(){ bad.push(f.name); if(--pending === 0) finish(); };
+    r.readAsText(f);
+  });
+  function finish(){
+    savePacks(); rebuild();
+    var msg = added + " pack" + (added===1?"":"s") + " loaded.";
+    if(bad.length) msg += " Could not read: " + bad.join(", ") + ".";
+    note(msg);
+  }
+}
+
+/* ---------------- assembly ---------------- */
+function pickVariation(){
+  var r = seed, out = [], pools = MODEL.variation.slice();
+  var chosen = [];
+  while(pools.length && chosen.length < MODEL.settings.variationPools){
+    r = (r * 1103515245 + 12345) % 2147483648;
+    chosen.push(pools.splice(Math.abs(r) % pools.length, 1)[0]);
+  }
+  chosen.sort(function(a,b){ return (a.order===undefined?999:a.order) - (b.order===undefined?999:b.order); });
+  chosen.forEach(function(pool,i){
+    r = (r * 1103515245 + 12345 + i*7919) % 2147483648;
+    var opts = pool.options || [];
+    if(opts.length) out.push(fill(opts[Math.abs(r) % opts.length]));
+  });
+  return out;
+}
+
+function selected(){
+  var mid = currentMasterId(), out = [];
+  MODEL.categories.forEach(function(c){
+    c.items.forEach(function(it){
+      if(state.on[it.n] && suits(it, mid)) out.push({cat:c, it:it});
+    });
+  });
+  return out;
+}
+
+function fieldValue(f){
+  var v = (state.fields[f.id] || "").trim();
+  if(!v) return "";
+  if(f.splitList){
+    var items = v.split(/[,\n]/).map(function(s){return s.trim();}).filter(Boolean);
+    if(f.limit) items = items.slice(0, f.limit);
+    if(!items.length) return "";
+    v = items.join(", ");
+  }
+  return fill(String(f.wrap || "{v}").replace(/\{v\}/g, v));
+}
+
+function assemble(){
+  var mid = currentMasterId(), master = null;
+  for(var i=0;i<MODEL.masters.length;i++){ if(MODEL.masters[i].id === mid) master = MODEL.masters[i]; }
+  if(!master) return "No master prompt available. Load a pack containing one.";
+  var picks = selected(), lines = [];
+
+  if(state.followup){
+    lines.push(askBlock());
+    lines.push("");
+    lines.push(say("followUpOpen"));
+    lines.push("");
+    var item = function(v){ lines.push(say("followUpItem", { v: v })); };
+    picks.forEach(function(p){ item(fill(textOf(p.it))); });
+    MODEL.dials.forEach(function(d){
+      if(d.carryToFollowUp) item(dialText(d, state.dials[d.id]));
+    });
+    MODEL.fields.forEach(function(f){
+      if(f.carryToFollowUp){ var v = fieldValue(f); if(v) item(v); }
+    });
+    lines.push("");
+    lines.push(say("followUpClose"));
+    var fd = disciplineBlock();
+    if(fd){ lines.push(""); lines.push(fd); }
+    return lines.join("\n");
+  }
+
+  lines.push(askBlock());
+  lines.push("");
+  lines.push(fill(masterBody(master)));
+
+  var sizeLine = castSizeBlock();
+  if(sizeLine){ lines.push(""); lines.push(fill(sizeLine)); }
+
+  var ctxField = null;
+  MODEL.fields.forEach(function(f){ if(f.section === "CONTEXT") ctxField = f; });
+  if(ctxField){
+    var ctx = fieldValue(ctxField);
+    if(ctx){ lines.push(""); lines.push("CONTEXT"); lines.push(ctx); }
+  }
+
+  var split = splitPicks(picks);
+  if(split.style.length){
+    lines.push(""); lines.push(say("styleHeading"));
+    lines.push(moduleLines(split.style));
+    lines.push(""); lines.push(say("styleRule"));
+  }
+  lines.push(""); lines.push(mediumHoldLine());
+
+  /* The standing rules, the craft block among them, belong with the style and
+     ahead of the people for the same reason: they are how the picture is made,
+     and a rule read after a reference photograph arrives is a rule applied to
+     everything except the face. */
+  MODEL.shared.forEach(function(s){
+    (s.blocks || []).forEach(function(b){ lines.push(""); lines.push(fill(b)); });
+    MODEL.fields.forEach(function(f){
+      if(f.attachTo !== s.id) return;
+      var v = fieldValue(f);
+      if(v) lines.push(v);
+    });
+  });
+
+  var cb = castBlock();
+  if(cb){ lines.push(""); lines.push(cb); }
+
+  if(split.rest.length){
+    lines.push(""); lines.push(say("thisImageHeading"));
+    lines.push(moduleLines(split.rest));
+  }
+
+  if(MODEL.dials.length){
+    lines.push(""); lines.push(say("dialsHeading"));
+    MODEL.dials.forEach(function(d){
+      var t = dialText(d, state.dials[d.id]);
+      if(t) lines.push(t);
+    });
+  }
+
+  var vary = pickVariation();
+  if(vary.length){ lines.push(""); lines.push(say("variationHeading")); lines.push(vary.join(" ")); }
+
+  var sections = {}, order = [];
+  MODEL.fields.forEach(function(f){
+    if(f.attachTo || f.section === "CONTEXT") return;
+    var v = fieldValue(f);
+    if(!v) return;
+    var sec = f.section || say("defaultSection");
+    if(!sections[sec]){ sections[sec] = []; order.push(sec); }
+    sections[sec].push(v);
+  });
+  order.forEach(function(sec){
+    lines.push(""); lines.push(sec); lines.push(sections[sec].join("\n"));
+  });
+
+  var disc = disciplineBlock();
+  if(disc){ lines.push(""); lines.push(disc); }
+
+  return lines.join("\n");
+}
+
+/* A version anyone can paste elsewhere. It carries the master, the shared
+   blocks, the chosen modules, the dials and the variation, and asks whoever
+   runs it for their own people. Nothing typed about this device's cast, and no
+   free text box, is included. */
+/* The block only works because every line says what the picture shows. A pack
+   may write whatever it likes and it is used exactly as given, but a rule
+   phrased as a ban defeats the point, so say so plainly on the page.
+
+   This reads wording, not meaning. It catches the common turns of phrase and
+   nothing more: a sentence can be negative in substance while using none of
+   these words, so a quiet result means only that none of them appeared. The
+   same list backs the test over the built in rules. */
+var NEGATIVE_PHRASING = /\b(do not|don't|never|avoid|avoiding|must not|should not|cannot|can't|refrain|no extra|without any)\b/i;
+
+function negativeRuleIds(){
+  var out = [];
+  MODEL.discipline.forEach(function(d){
+    if(d.text && NEGATIVE_PHRASING.test(d.text)) out.push(d.id);
+  });
+  return out;
+}
+
+function renderDisciplineWarning(){
+  var bad = negativeRuleIds();
+  el("discwarn").textContent = bad.length
+    ? (bad.length === 1 ? "One anatomy and continuity rule is" : bad.length + " anatomy and continuity rules are")
+      + " written as something to avoid rather than as what the picture shows: "
+      + bad.join(", ") + ". An image model has no true negative field, so naming a mistake can summon it. "
+      + "The wording is still used exactly as the pack wrote it. This check reads the wording rather than "
+      + "the meaning, so it catches the usual phrases and no more."
+    : "";
+}
+
+/* Appended to whatever is being built, when the box is ticked. */
+function disciplineBlock(){
+  if(!state.discipline || !MODEL.discipline.length) return "";
+  var lines = [say("disciplineHeading")];
+  MODEL.discipline.forEach(function(d){
+    if(d.text) lines.push(fill(d.text));
+  });
+  return lines.join("\n");
+}
+
+/* A blank, fillable stand-in for the cast. It keeps the shape the modules
+   refer to (how many characters, and which are animals) and none of who they
+   are. Built from castFields, so a pack that adds a field gets it here too. */
+function publicCastBlock(){
+  var fields = castFieldList();
+  /* Zero is a real choice the counter offers, so an empty cast stays empty
+     here. With no blocks there is nothing to replace, so the form is just the
+     heading and the invitation to add the first character. */
+  var n = Math.max(0, Math.min(MAX_CAST, parseInt(state.castCount, 10) || 0));
+  var lines = [say("castHeading")];
+  if(n) lines.push(say("publicCastIntro"));
+  for(var i = 0; i < n; i++){
+    var id = "Person_" + (i + 1);
+    var animal = !!(state.cast[i] && state.cast[i].kind === "animal");
+    lines.push("");
+    lines.push(say(animal ? "publicCastWhoAnimal" : "publicCastWhoPerson", { id: id }));
+    lines.push(say("publicCastName", { id: id }));
+    fields.forEach(function(f){
+      if(animal && f.outfitRule) return;
+      lines.push(say("publicCastField", { label: f.label || f.key, hint: f.hint || f.label || f.key }));
+    });
+  }
+  lines.push("");
+  lines.push(state.castOpen
+    ? say("publicCastRepeat", { next: "Person_" + (n + 1) })
+    : say("publicCastComplete"));
+  return lines.join("\n");
+}
+
+function assemblePublic(){
+  var mid = currentMasterId();
+  /* Module numbers are assigned per model, so a selection cannot be carried
+     across by number once private packs are dropped. Carry it by wording. */
+  var wanted = {};
+  selected().forEach(function(p){ wanted[p.it.t] = true; });
+
+  var keepModel = MODEL, keepOn = state.on;
+  MODEL = modelFrom(publicPacks());
+  state.on = {};
+  MODEL.categories.forEach(function(c){
+    c.items.forEach(function(it){ if(wanted[it.t]) state.on[it.n] = true; });
+  });
+  publicMode = true;
+  try{
+    var master = null, i;
+    for(i=0;i<MODEL.masters.length;i++){ if(MODEL.masters[i].id === mid) master = MODEL.masters[i]; }
+    if(!master){
+      return "This master prompt comes from a pack marked private, so there is nothing here to share. "
+           + "Choose a master from a pack that is not private, or publish that pack.";
+    }
+    var picks = selected(), lines = [];
+    if(asksQuestions()){
+      lines.push(say("publicIntro"));
+      lines.push("");
+      lines.push(say("publicWhenToAsk"));
+    } else {
+      lines.push(say("askHeading"));
+      lines.push(say("askOff"));
+    }
+    var split = splitPicks(picks);
+    if(split.style.length){
+      lines.push(""); lines.push(say("styleHeading"));
+      lines.push(moduleLines(split.style, true));
+      lines.push(""); lines.push(say("styleRule"));
+    }
+    lines.push(""); lines.push(mediumHoldLine());
+    /* Standing rules before anybody is described, for the same reason the
+       style goes first: read afterwards, they arrive as a comment on a face
+       that has already been settled. */
+    MODEL.shared.forEach(function(sh){
+      (sh.blocks || []).forEach(function(b){ lines.push(""); lines.push(fill(b)); });
+    });
+    lines.push("");
+    lines.push(say("publicCharacters"));
+    if(state.castOpen){
+      lines.push("");
+      lines.push(say("publicCharactersOpen"));
+      lines.push("");
+      lines.push(say("publicAskHowMany"));
+    }
+    lines.push("");
+    lines.push(fill(castSizeBlock()));
+    lines.push("");
+    lines.push(say("publicContext"));
+    lines.push("");
+    lines.push(fill(masterBody(master)));
+    lines.push("");
+    lines.push(publicCastBlock());
+    if(split.rest.length){
+      lines.push(""); lines.push(say("thisImageHeading"));
+      lines.push(moduleLines(split.rest, true));
+    }
+    if(MODEL.dials.length){
+      lines.push(""); lines.push(say("dialsHeading"));
+      MODEL.dials.forEach(function(d){
+        var txt = dialText(d, state.dials[d.id]);
+        if(txt) lines.push(txt);
+      });
+    }
+    var vary = pickVariation();
+    if(vary.length){ lines.push(""); lines.push(say("variationHeading")); lines.push(vary.join(" ")); }
+    var disc = disciplineBlock();
+    if(disc){ lines.push(""); lines.push(disc); }
+    return lines.join("\n");
+  } finally {
+    MODEL = keepModel; state.on = keepOn; publicMode = false;
+  }
+}
+
+/* ---------------- layouts ----------------
+   The same page, arranged five ways. A layout decides what is on screen and
+   where, never what exists: every control is reachable in all five, and the
+   choice is remembered per bench.
+
+   Workbench and Guided both show one section at a time, so they share one
+   stage router. Library and Composer are arrangement only, with Composer
+   adding a live rebuild so the prompt is never out of date while you read it. */
+var LAYOUT_KEY = PROFILE.keyPrefix + ".layout.v1";
+var STAGES = [
+  { id:"sec-cast",    label:"Cast",    step:true },
+  { id:"sec-master",  label:"Master",  step:true },
+  { id:"sec-modules", label:"Modules", step:true },
+  { id:"sec-dials",   label:"Dials",   step:true },
+  { id:"sec-text",    label:"Text",    step:true },
+  { id:"sec-modes",   label:"Modes",   step:true },
+  { id:"sec-setups",  label:"Setups",  step:false },
+  { id:"sec-packs",   label:"Packs",   step:false }
+];
+var layout = "classic", stage = "sec-cast", liveTimer = null;
+
+function stageTally(id){
+  if(id === "sec-modules") return selected().length || "";
+  if(id === "sec-cast") return activeCast().filter(function(p){ return (p.name||"").trim(); }).length || "";
+  if(id === "sec-dials") return MODEL.dials.length || "";
+  if(id === "sec-setups") return setups.length || "";
+  if(id === "sec-modes"){
+    var on = (state.followup ? 1 : 0) + (state.discipline ? 1 : 0)
+           + (state.strangers ? 1 : 0) + (state.castOpen ? 1 : 0);
+    return on || "";
+  }
+  if(id === "sec-master"){
+    var name = "";
+    MODEL.masters.forEach(function(m){ if(m.id === currentMasterId()) name = m.name; });
+    return name;
+  }
+  return "";
+}
+
+function stagedLayout(){ return layout === "workbench" || layout === "guided"; }
+
+function renderStageNav(){
+  var rail = "", bar = "", steps = STAGES.filter(function(x){ return x.step; });
+  STAGES.forEach(function(x, i){
+    rail += '<button type="button" data-stage="' + x.id + '" aria-current="' + (stage === x.id) + '">'
+         +  '<span>' + esc(x.label) + '</span>'
+         +  '<span class="tail">' + esc(String(stageTally(x.id))) + '</span></button>';
+  });
+  var at = stepIndex();
+  steps.forEach(function(x, i){
+    var state = i === at ? "now" : (i < at ? "done" : "todo");
+    bar += '<button type="button" data-stage="' + x.id + '" data-state="' + state + '"'
+        +  ' aria-current="' + (stage === x.id) + '"><span class="bar"></span>'
+        +  '<span>' + esc(x.label) + '</span></button>';
+  });
+  el("stagerail").innerHTML = rail;
+  el("stagebar").innerHTML = bar;
+}
+
+function stepIndex(){
+  var steps = STAGES.filter(function(x){ return x.step; });
+  for(var i = 0; i < steps.length; i++) if(steps[i].id === stage) return i;
+  return 0;
+}
+
+function showStage(id){
+  stage = id;
+  STAGES.forEach(function(x){
+    var node = el(x.id);
+    if(node) node.hidden = stagedLayout() && x.id !== id;
+  });
+  var hero = document.querySelector(".hero");
+  if(hero) hero.hidden = stagedLayout();
+  var notes = document.querySelector(".footnote");
+  if(notes) notes.hidden = stagedLayout() && id !== "sec-packs";
+  renderStageNav();
+  var steps = STAGES.filter(function(x){ return x.step; });
+  el("stepBack").disabled = stepIndex() === 0;
+  el("stepNext").textContent = stepIndex() === steps.length - 1 ? "Finish" : "Next";
+  if(stagedLayout()) window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+}
+
+function stepTo(delta){
+  var steps = STAGES.filter(function(x){ return x.step; });
+  var at = Math.max(0, Math.min(steps.length - 1, stepIndex() + delta));
+  showStage(steps[at].id);
+  if(delta > 0 && at === steps.length - 1) el("build").click();
+}
+
+/* Composer keeps the result current, so nothing on screen is ever stale. */
+function liveRebuild(){
+  if(layout !== "composer") return;
+  clearTimeout(liveTimer);
+  liveTimer = setTimeout(function(){ el("build").click(); }, 180);
+}
+
+function applyLayout(name){
+  var known = ["classic","workbench","composer","library","guided"];
+  if(known.indexOf(name) < 0) name = "classic";
+  layout = name;
+  document.documentElement.setAttribute("data-layout", name);
+  try{ localStorage.setItem(LAYOUT_KEY, name); }catch(e){}
+  if(el("layout").value !== name) el("layout").value = name;
+
+  /* Library opens every group, because a card grid nobody has opened is an
+     empty page. Leaving it open is also what makes the grid worth having. */
+  if(name === "library" && !allOpen){
+    allOpen = true;
+    MODEL.categories.forEach(function(c){ openGroups[c.key] = true; });
+    el("toggleGroups").textContent = "Collapse all";
+    renderGroups();
+  }
+  showStage(stagedLayout() ? stage : stage);
+  if(!stagedLayout()){
+    STAGES.forEach(function(x){ var node = el(x.id); if(node) node.hidden = false; });
+    var hero = document.querySelector(".hero");
+    if(hero) hero.hidden = false;
+    var notes = document.querySelector(".footnote");
+    if(notes) notes.hidden = false;
+  }
+  if(name === "composer") liveRebuild();
+}
+
+el("layout").addEventListener("change", function(){ applyLayout(el("layout").value); });
+el("stagerail").addEventListener("click", function(e){
+  var b = e.target.closest("[data-stage]");
+  if(b) showStage(b.dataset.stage);
+});
+el("stagebar").addEventListener("click", function(e){
+  var b = e.target.closest("[data-stage]");
+  if(b) showStage(b.dataset.stage);
+});
+el("stepBack").addEventListener("click", function(){ stepTo(-1); });
+el("stepNext").addEventListener("click", function(){ stepTo(1); });
+el("stepSkip").addEventListener("click", function(){ stepTo(1); });
+
+/* Anything that changes the prompt refreshes the rail counts, and refreshes
+   the prompt itself while Composer is open. */
+document.addEventListener("change", function(){ renderStageNav(); liveRebuild(); });
+document.addEventListener("input", function(){ liveRebuild(); });
+
+/* ---------------- events ---------------- */
+el("followup").addEventListener("change", function(){
+  state.followup = el("followup").checked;
+  saveState();
+  note(state.followup
+    ? "Assembling a short edit instruction instead of the whole prompt."
+    : "Assembling the whole prompt.");
+});
+
+el("discipline").addEventListener("change", function(){
+  state.discipline = el("discipline").checked;
+  saveState();
+  note(state.discipline
+    ? "Anatomy and continuity rules will be added to the end of the prompt."
+    : "Anatomy and continuity rules turned off.");
+});
+
+el("theme").addEventListener("click", function(){
+  var next = currentTheme() === "dark" ? "light" : "dark";
+  applyTheme(next);
+  try{ localStorage.setItem(THEME_KEY, next); }catch(e){}
+});
+
+el("counter").addEventListener("click", function(e){
+  var b = e.target.closest("button[data-count]");
+  if(!b) return;
+  state.castCount = parseInt(b.dataset.count,10);
+  saveState(); renderPeople(); renderGroups(); updateCounts();
+});
+
+el("people").addEventListener("input", function(e){
+  var card = e.target.closest(".person");
+  if(!card || !e.target.dataset.k) return;
+  var i = parseInt(card.dataset.i,10);
+  state.cast[i][e.target.dataset.k] = e.target.value;
+  saveState();
+  if(e.target.dataset.k === "name"){ renderCounter(); renderGroups(); }
+});
+
+el("people").addEventListener("change", function(e){
+  var card = e.target.closest(".person");
+  if(!card) return;
+  if(e.target.dataset.k === "kind" && e.target.checked){
+    state.cast[parseInt(card.dataset.i,10)].kind = e.target.value;
+    saveState();
+  }
+});
+
+el("people").addEventListener("click", function(e){
+  var slot = e.target.closest("[data-photo]");
+  if(slot){ photoTarget = parseInt(slot.dataset.photo,10); photoInput.click(); return; }
+  var b = e.target.closest("button");
+  if(!b) return;
+  if(b.dataset.write !== undefined){
+    var i = parseInt(b.dataset.write,10);
+    var d = composeDescription(state.cast[i]);
+    if(!d){ note("Give slot " + (i+1) + " a name first."); return; }
+    state.cast[i].desc = d; saveState(); renderPeople();
+    note("Description written for " + state.cast[i].name + ". Edit it freely.");
+  } else if(b.dataset.clearphoto !== undefined){
+    state.cast[parseInt(b.dataset.clearphoto,10)].photo = ""; saveState(); renderPeople();
+  } else if(b.dataset.clearperson !== undefined){
+    state.cast[parseInt(b.dataset.clearperson,10)] = blankPerson(); saveState(); renderPeople(); renderGroups();
+  }
+});
+
+el("people").addEventListener("keydown", function(e){
+  if(e.key !== "Enter" && e.key !== " ") return;
+  var slot = e.target.closest ? e.target.closest("[data-photo]") : null;
+  if(!slot) return;
+  e.preventDefault();
+  photoTarget = parseInt(slot.dataset.photo,10);
+  photoInput.click();
+});
+
+
+var MEDIUM_LABELS = ["Reference governs", "Reference governs", "Reference leads", "Reference leads",
+                     "Even hold", "Even hold", "Medium leads", "Medium leads",
+                     "Medium leads", "Medium absolute", "Medium absolute"];
+
+function renderMedium(){
+  var n = mediumHold();
+  el("mediumHold").value = String(n);
+  el("mediumOut").textContent = MEDIUM_LABELS[n];
+  el("mediumHint").textContent = hasReference()
+    ? "How much of the medium survives on a face, against the attached photograph. "
+      + "Right, the photograph says only who and the medium says how; left, the photograph says how as well "
+      + "and the drawing follows it."
+    : "No photo is attached to any slot, so the prompt says the medium decides everything. "
+      + "Add a photo and this slider starts to matter.";
+}
+
+function renderAsk(){
+  var on = asksQuestions(), n = askCount();
+  el("askQuestions").checked = on;
+  el("askRow").hidden = !on;
+  el("askCount").value = String(n);
+  el("askCountOut").textContent = String(n);
+  el("askHint").textContent = on
+    ? "The prompt will ask for " + n + " question" + (n === 1 ? "" : "s")
+      + " in one go, before anything is drawn, and says to prefer asking over guessing."
+    : "The prompt will say to ask nothing and draw straight away.";
+}
+
+el("mediumHold").addEventListener("input", function(){
+  state.mediumHold = parseInt(el("mediumHold").value, 10);
+  saveState(); renderMedium();
+});
+
+el("askQuestions").addEventListener("change", function(){
+  state.askQuestions = el("askQuestions").checked;
+  saveState(); renderAsk();
+  note(state.askQuestions
+    ? "The prompt will interview you first, using the platform's own controls where it has them."
+    : "The prompt will ask nothing and draw straight away. Anything it is not told, it decides.");
+});
+
+el("askCount").addEventListener("input", function(){
+  state.askCount = parseInt(el("askCount").value, 10);
+  saveState(); renderAsk();
+});
+
+el("strangers").addEventListener("change", function(){
+  state.strangers = el("strangers").checked;
+  saveState(); renderGroups();
+  note(state.strangers
+    ? "Unnamed background figures may appear. Modules that bring strangers into the picture are available again."
+    : "Everybody in the image will be from your cast. Modules needing strangers are put away.");
+});
+
+el("castOpen").addEventListener("change", function(){
+  state.castOpen = el("castOpen").checked;
+  saveState();
+  note(state.castOpen
+    ? "The prompt will invite whoever runs it to add more characters."
+    : "The prompt will state that your cast is the whole cast.");
+});
+
+el("blankCast").addEventListener("click", function(){
+  state.cast = seedCast(false);
+  saveState(); renderPeople(); renderGroups();
+  note("Every slot emptied. The count is unchanged.");
+});
+
+document.addEventListener("change", function(e){
+  var t = e.target;
+  if(t && t.name === "master"){ _masterId = t.value; state.master = t.value; saveState(); renderGroups(); return; }
+  if(t && t.type === "checkbox" && t.dataset && t.dataset.n){
+    state.on[parseInt(t.dataset.n,10)] = t.checked;
+    updateCounts(); saveState();
+  }
+});
+
+el("build").addEventListener("click", function(){
+  var text = assemble();
+  el("out").textContent = text;
+  el("outkind").textContent = "";
+  var masterName = "";
+  MODEL.masters.forEach(function(m){ if(m.id === currentMasterId()) masterName = m.name; });
+  var missing = activeCast().filter(function(p){ return (p.name||"").trim() && !p.photo; }).length;
+  var attach = photoChecklist();
+  el("meta").textContent = (attach ? attach + "\n" : "")
+    + "Master " + masterName + " . " + selected().length + " modules . "
+    + activeCast().filter(function(p){ return (p.name||"").trim(); }).length + " cast . seed " + seed
+    + " . " + text.trim().split(/\s+/).length + " words"
+    + (missing ? " . " + missing + " without a photo" : "");
+  if(!window.matchMedia || !window.matchMedia("(min-width: 1040px)").matches){
+    el("out").scrollIntoView({block:"start"});
+  }
+});
+
+function copyText(text, done, fail){
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(); });
+  } else { fallback(); }
+  function fallback(){
+    var ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    var copied = false;
+    try{ copied = document.execCommand("copy"); }catch(err){ copied = false; }
+    document.body.removeChild(ta);
+    if(copied) done(); else fail();
+  }
+}
+
+function flash(btn, word){
+  var label = btn.querySelector(".btn-label") || btn;
+  var was = label.textContent;
+  label.textContent = word;
+  setTimeout(function(){ label.textContent = was; }, 1400);
+}
+
+el("copy").addEventListener("click", function(){
+  var text = el("out").textContent;
+  if(!text){ note("Press Assemble first."); return; }
+  copyText(text,
+    function(){ flash(el("copy"), "Copied"); },
+    function(){ note("Select the text above and copy it manually."); });
+});
+
+el("copyPublic").addEventListener("click", function(){
+  /* The shareable text is shown as well as copied, so you can read what you
+     are about to hand somebody. The badge says which version is on display,
+     because Copy takes whatever is there. */
+  var text = assemblePublic();
+  el("out").textContent = text;
+  el("outkind").textContent = "shareable version";
+  var words = text.trim().split(/\s+/).length;
+  copyText(text,
+    function(){
+      flash(el("copyPublic"), "Copied");
+      var held = allPacks().length - publicPacks().length;
+      note("Shareable version copied, " + words + " words. It carries the master, "
+        + selected().length + " module" + (selected().length === 1 ? "" : "s")
+        + " and the dials. Your cast is replaced by blank Person_1 placeholders for anyone to fill in, "
+        + "and nothing you typed in the text boxes is included."
+        + (held ? " " + held + " pack" + (held === 1 ? " marked private was" : "s marked private were")
+                + " left out of it entirely." : ""));
+    },
+    function(){ note("Shareable version is shown above. Select it and copy it manually."); });
+});
+
+el("shuffle").addEventListener("click", function(){
+  seed = Math.floor(Math.random()*1000)+1;
+  if(el("out").textContent) el("build").click();
+  else note("Variation seed " + seed + ". Press Assemble.");
+});
+
+el("loadFolder").addEventListener("click", function(){ el("fFolder").click(); });
+el("loadFiles").addEventListener("click", function(){ el("fFiles").click(); });
+el("fFolder").addEventListener("change", function(e){ readFiles(e.target.files); e.target.value = ""; });
+el("fFiles").addEventListener("change", function(e){ readFiles(e.target.files); e.target.value = ""; });
+
+el("clearPacks").addEventListener("click", function(){
+  if(!loadedPacks.length){ note("No packs loaded."); return; }
+  var kept = loadedPacks.filter(function(p){ return String(p.path||"").indexOf("private:") === 0; });
+  var removed = loadedPacks.length - kept.length;
+  if(!removed){
+    note("Only private packs are loaded. Those are removed from the admin page, so your cast is not lost by accident.");
+    return;
+  }
+  loadedPacks = kept; state.on = {}; savePacks(); rebuild();
+  note(removed + " pack" + (removed === 1 ? "" : "s") + " cleared."
+    + (kept.length ? " Your private packs were kept." : " Built in set restored."));
+});
+
+el("exportPack").addEventListener("click", function(){
+  var people = activeCast().filter(function(p){ return (p.name||"").trim(); }).map(function(p,i){
+    var out = { id:"p"+(i+1), name:p.name, kind:p.kind };
+    castFieldList().forEach(function(f){ out[f.key] = p[f.key] || ""; });
+    return out;
+  });
+  var out = { pack:"Prompt Bench export", shared:MODEL.shared, masters:MODEL.masters,
+              people: people.length ? people : MODEL.people,
+              categories: MODEL.categories.map(function(c){
+                return { key:c.key, label:c.label, note:c.note, order:c.order,
+                         items:c.items.map(function(i){
+                           var out = {}, k;
+                           for(k in i) if(k !== "n" && k !== "cat") out[k] = i[k];
+                           return out;
+                         }) };
+              }),
+              dials:MODEL.dials, variation:MODEL.variation, fields:MODEL.fields,
+              castFields:MODEL.castFields, wording:MODEL.wording, settings:MODEL.settings,
+              discipline:MODEL.discipline };
+  var blob = new Blob([JSON.stringify(out, null, 2)], {type:"application/json"});
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "prompt-bench-pack.json";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(a.href); }, 2000);
+  note("Exported the merged set, cast included. Photos are never exported.");
+});
+
+el("reloadPacks").addEventListener("click", function(){
+  el("reloadPacks").hidden = true;
+  loadServerPacks(true);
+});
+
+el("packlist").addEventListener("click", function(e){
+  if(e.target.closest("#packsmore")){ packsExpanded = !packsExpanded; renderPacks(); }
+});
+
+/* ---------------- module search, groups, picks ---------------- */
+el("modsearch").addEventListener("input", function(){ setQuery(el("modsearch").value); });
+
+el("modsearchclear").addEventListener("click", function(){
+  setQuery("");
+  el("modsearch").focus();
+});
+
+el("toggleGroups").addEventListener("click", function(){
+  allOpen = !allOpen;
+  MODEL.categories.forEach(function(c){ openGroups[c.key] = allOpen; });
+  el("toggleGroups").textContent = allOpen ? "Collapse all" : "Expand all";
+  renderGroups();
+});
+
+/* toggle does not bubble, so listen in the capture phase */
+el("groups").addEventListener("toggle", function(e){
+  var d = e.target;
+  if(d && d.tagName === "DETAILS" && d.dataset.cat && !modQuery) openGroups[d.dataset.cat] = d.open;
+}, true);
+
+el("picked").addEventListener("click", function(e){
+  var off = e.target.closest("button[data-off]");
+  if(off){
+    var n = parseInt(off.dataset.off, 10);
+    state.on[n] = false;
+    var box = document.querySelector('#groups input[data-n="'+n+'"]');
+    if(box) box.checked = false;
+    updateCounts(); saveState();
+    return;
+  }
+  if(e.target.closest("#clearpicks")){
+    var picks = currentPicks();
+    picks.forEach(function(it){ state.on[it.n] = false; });
+    var boxes = el("groups").querySelectorAll('input[type=checkbox]');
+    for(var i=0;i<boxes.length;i++) boxes[i].checked = !!state.on[boxes[i].dataset.n];
+    updateCounts(); saveState();
+    note(picks.length + " module" + (picks.length === 1 ? "" : "s") + " cleared.");
+  }
+});
+
+/* ---------------- saved setups ---------------- */
+function doSaveSetup(){
+  var name = el("setupname").value.trim();
+  if(!name){ note("Give the setup a name first."); el("setupname").focus(); return; }
+  var s = currentSetup();
+  s.name = name;
+  var at = -1;
+  for(var i=0;i<setups.length;i++){ if(setups[i].name.toLowerCase() === name.toLowerCase()) at = i; }
+  if(at > -1){
+    if(!confirm('Replace the setup named "' + setups[at].name + '"?')) return;
+    setups[at] = s;
+  } else { setups.push(s); }
+  if(!saveSetups()) return;
+  el("setupname").value = "";
+  renderSetups();
+  note('Saved "' + name + '" with ' + s.mods.length + " module" + (s.mods.length === 1 ? "" : "s") + ".");
+}
+
+el("setupsave").addEventListener("click", doSaveSetup);
+el("setupname").addEventListener("keydown", function(e){
+  if(e.key === "Enter"){ e.preventDefault(); doSaveSetup(); }
+});
+
+el("setuplist").addEventListener("click", function(e){
+  var load = e.target.closest("button[data-load]");
+  if(load){ applySetup(setups[parseInt(load.dataset.load, 10)]); return; }
+  var del = e.target.closest("button[data-del]");
+  if(del){
+    var i = parseInt(del.dataset.del, 10);
+    if(!confirm('Delete the setup "' + setups[i].name + '"?')) return;
+    setups.splice(i, 1);
+    saveSetups(); renderSetups();
+  }
+});
+
+/* ---------------- a setup in a link ----------------
+   So that a setup can be handed to somebody, or to an agent, without a file.
+   It carries what a saved setup carries: the master, the modules by their
+   wording, the dials, the text boxes and the switches. It carries no cast and
+   no photographs, for the same reason a saved setup does not. */
+function encodeRecipe(obj){
+  var json = JSON.stringify(obj);
+  var bytes = unescape(encodeURIComponent(json));
+  return btoa(bytes).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+function decodeRecipe(text){
+  var padded = text.replace(/-/g, "+").replace(/_/g, "/");
+  while(padded.length % 4) padded += "=";
+  return JSON.parse(decodeURIComponent(escape(atob(padded))));
+}
+
+function currentLinkRecipe(){
+  var s = currentSetup();
+  return { recipe: 1, bench: PROFILE.bench, name: el("setupname").value.trim(),
+           master: s.master, modules: s.mods, dials: s.dials, fields: s.fields,
+           castCount: castSize(), discipline: s.discipline, strangers: s.strangers,
+           castOpen: s.castOpen, followup: s.followup,
+           askQuestions: s.askQuestions, askCount: s.askCount,
+           mediumHold: s.mediumHold, seed: seed };
+}
+
+function applyLinkRecipe(r){
+  if(!r || r.bench && r.bench !== PROFILE.bench){
+    note("That link was made for the other bench. Open it there instead.");
+    return false;
+  }
+  applySetup({ name: r.name || "a shared link", master: r.master, mods: r.modules || [],
+               dials: r.dials || {}, fields: r.fields || {}, discipline: !!r.discipline,
+               askQuestions: r.askQuestions, askCount: r.askCount, mediumHold: r.mediumHold,
+               strangers: !!r.strangers, castOpen: !!r.castOpen, followup: !!r.followup });
+  if(r.castCount !== undefined){
+    state.castCount = Math.max(0, Math.min(MAX_CAST, parseInt(r.castCount, 10) || 0));
+    renderPeople();
+  }
+  if(r.seed !== undefined) seed = parseInt(r.seed, 10) || seed;
+  saveState(); renderGroups();
+  return true;
+}
+
+el("copylink").addEventListener("click", function(){
+  var link = location.href.split("#")[0] + "#recipe=" + encodeRecipe(currentLinkRecipe());
+  copyText(link,
+    function(){
+      flash(el("copylink"), "Copied");
+      note("A link to this setup is on the clipboard. It carries the master, the modules, the dials, "
+         + "your text boxes and the switches, and no cast or photographs.");
+    },
+    function(){ note("Could not copy the link. This browser refused the clipboard."); });
+});
+
+/* Called from the start up sequence rather than here, because a link can only
+   be applied once the packs have been merged and there is a model to match its
+   modules against. */
+function applyLinkFromHash(){
+  var hash = location.hash || "";
+  if(hash.indexOf("#recipe=") !== 0) return;
+  try{
+    if(applyLinkRecipe(decodeRecipe(hash.slice(8)))){
+      note("Opened from a link. Your cast is your own: a link never carries one.");
+    }
+  }catch(e){
+    note("That link could not be read. It may have been shortened or cut off.");
+  }
+}
+
+/* ---------------- keyboard shortcuts ---------------- */
+document.addEventListener("keydown", function(e){
+  var t = e.target, tag = (t && t.tagName || "").toLowerCase();
+  var typing = tag === "input" || tag === "textarea" || (t && t.isContentEditable);
+  if((e.metaKey || e.ctrlKey) && e.key === "Enter"){ e.preventDefault(); el("build").click(); return; }
+  if((e.metaKey || e.ctrlKey) && e.shiftKey && (e.key === "c" || e.key === "C")){
+    e.preventDefault(); el("copy").click(); return;
+  }
+  if(e.key === "/" && !typing && !e.metaKey && !e.ctrlKey && !e.altKey){
+    e.preventDefault();
+    el("sec-modules").scrollIntoView({block:"start"});
+    el("modsearch").focus(); el("modsearch").select();
+    return;
+  }
+  if(e.key === "Escape" && t === el("modsearch")){
+    if(modQuery){ setQuery(""); } else { el("modsearch").blur(); }
+  }
+});
+
+if(/Mac|iPhone|iPad|iPod/.test(navigator.platform || navigator.userAgent || "")){
+  el("kbdmod").textContent = "⌘";
+}
+
+["dragenter","dragover"].forEach(function(ev){
+  document.addEventListener(ev, function(e){ e.preventDefault(); document.body.classList.add("drag"); });
+});
+["dragleave","drop"].forEach(function(ev){
+  document.addEventListener(ev, function(e){ e.preventDefault(); document.body.classList.remove("drag"); });
+});
+document.addEventListener("drop", function(e){
+  if(e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) readFiles(e.dataTransfer.files);
+});
+
+var serverPackVersion = "";
+var packScope = "public";
+
+/* A cast nobody has touched is filled in from the packs when they arrive.
+
+   ensureCast() only seeds an empty cast, and a stored state always has its
+   full row of blank slots, so the first visit after the private packs start
+   being served would otherwise show an empty cast with no sign that anything
+   had loaded. Filling in blank slots takes nothing away; a single name, photo
+   or description anywhere means somebody has been working here, and then the
+   packs stay out of it and Restore is there for whoever wants it. */
+function castIsUntouched(){
+  if(!state.cast || !state.cast.length) return true;
+  var fields = castFieldList().map(function(f){ return f.key; });
+  return state.cast.every(function(p){
+    if((p.name || "").trim() || (p.desc || "").trim() || p.photo) return false;
+    return !fields.some(function(k){ return (p[k] || "").trim(); });
+  });
+}
+
+function seedCastIfUntouched(){
+  if(!castSourceList().length) return false;
+  if(!castIsUntouched()) return false;
+  state.cast = seedCast(true);
+  state.castCount = Math.min(castSourceList().length, MAX_CAST);
+  saveState(); renderPeople(); renderGroups();
+  return true;
+}
+
+function loadServerPacks(quiet){
+  if(location.protocol === "file:" || typeof fetch !== "function") return;
+  /* all=auto asks for whatever this visitor is entitled to. Signed in on the
+     admin page, that includes the private packs and the cast in them; not
+     signed in, it is the public list, and no password box ever appears.
+     Credentials are sent so the session cookie travels with it. */
+  fetch("api/packs?all=auto&bench=" + encodeURIComponent(PROFILE.bench),
+        {cache:"no-store", credentials:"same-origin"}).then(function(r){
+    if(!r.ok) throw new Error("no server packs");
+    serverPackVersion = r.headers.get("X-Pack-Version") || "";
+    packScope = r.headers.get("X-Pack-Scope") || "public";
+    return r.json();
+  }).then(function(list){
+    if(!Array.isArray(list) || !list.length) return;
+    serverPacks = list.map(function(p){
+      return { name: (p.data && p.data.pack) || p.path, path: p.path, data: p.data };
+    });
+    rebuild();
+    var seeded = seedCastIfUntouched();
+    var waiting = !seeded && castSourceList().length;
+    el("reloadPacks").hidden = true;
+    note(serverPacks.length + " pack" + (serverPacks.length===1?"":"s") + " loaded from the server."
+       + (packScope === "private" ? " Signed in, so your private packs are included." : "")
+       + (seeded ? " Your cast is filled in from them." : "")
+       + (waiting ? " They carry a cast of " + castSourceList().length + "."
+                  + (privateCastRestore ? " " + privateCastRestore.waitingNote() : "") : "")
+       + (quiet ? " Your own selection is untouched." : ""));
+  }).catch(function(){});
+}
+
+/* Somebody else may install packs while this page is open. Rather than
+   reaching in and changing what is on screen, the page notices and offers.
+   Checked when the window is given attention again, which is when a person
+   has most likely just come back from the admin page. */
+var lastPackCheck = 0;
+function checkPackVersion(){
+  if(location.protocol === "file:" || typeof fetch !== "function") return;
+  if(!serverPackVersion) return;
+  var now = Date.now();
+  if(now - lastPackCheck < 20000) return;
+  lastPackCheck = now;
+  fetch("api/packs/version", {cache:"no-store"}).then(function(r){
+    return r.ok ? r.json() : null;
+  }).then(function(v){
+    if(!v || !v.version || v.version === serverPackVersion) return;
+    el("reloadPacks").hidden = false;
+    note("The packs on the server have changed since this page loaded. Nothing here has moved: "
+       + "press Reload packs when you want them.");
+  }).catch(function(){});
+}
+window.addEventListener("focus", checkPackVersion);
+document.addEventListener("visibilitychange", function(){
+  if(!document.hidden) checkPackVersion();
+});
+
+/* the page introduces itself before anything else renders */
+document.documentElement.setAttribute("data-bench", PROFILE.bench);
+document.title = PROFILE.name;
+el("benchName").textContent = PROFILE.name;
+el("benchTagline").textContent = PROFILE.tagline;
+(function(){
+  var h1 = document.querySelector(".hero h1");
+  if(h1 && PROFILE.heading) h1.textContent = PROFILE.heading;
+  var copy = PROFILE.copy || {};
+  var set = function(sel, text){
+    if(!text) return;
+    var node = document.querySelector(sel);
+    if(node) node.textContent = text;
+  };
+  set(".hero p", copy.intro);
+  set("#sec-cast .card-head h2", copy.castHeading);
+  set("#sec-cast > .hint", copy.castHint);
+  set('.steps a[href="#sec-cast"]', copy.castStep);
+  if(copy.castStep){
+    var step = document.querySelector('.steps a[href="#sec-cast"]');
+    if(step) step.innerHTML = '<b>1</b> ' + esc(copy.castStep);
+  }
+  if(copy.castStage){
+    for(var i = 0; i < STAGES.length; i++) if(STAGES[i].id === "sec-cast") STAGES[i].label = copy.castStage;
+  }
+  var link = el("benchSwitch");
+  if(PROFILE.sibling && PROFILE.sibling.href){
+    link.href = PROFILE.sibling.href;
+    link.textContent = PROFILE.sibling.label;
+    link.title = "Open the " + PROFILE.sibling.label + " in this tab";
+  } else { link.hidden = true; }
+})();
+
+loadStored();
+el("discipline").checked = !!state.discipline;
+el("followup").checked = !!state.followup;
+el("strangers").checked = !!state.strangers;
+el("castOpen").checked = !!state.castOpen;
+if(privateCastRestore) privateCastRestore.load();
+loadSetups();
+rebuild();
+(function(){
+  var saved = null;
+  try{ saved = localStorage.getItem(LAYOUT_KEY); }catch(e){}
+  applyLayout(saved || "classic");
+})();
+applyLinkFromHash();
+loadServerPacks();
+if(loadedPacks.length) note(loadedPacks.length + " saved pack" + (loadedPacks.length===1?"":"s") + " restored.");
+</script>
+</body>
+</html>

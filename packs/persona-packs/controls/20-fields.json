@@ -1,0 +1,57 @@
+{
+  "pack": "Persona: text fields",
+  "bench": "persona",
+  "fields": [
+    {
+      "id": "who",
+      "order": 5,
+      "label": "Who this is",
+      "hint": "One or two lines about the person behind the face. It is what stops a portrait being a mannequin.",
+      "placeholder": "A ferry engineer of twenty years who would rather be fixing something than talking.",
+      "section": "WHO THIS IS",
+      "wrap": "{v}",
+      "rows": 3
+    },
+    {
+      "id": "presents",
+      "order": 10,
+      "label": "How they present",
+      "hint": "Male, female, non binary, or however they would put it themselves. Left empty, it is decided from everything else.",
+      "placeholder": "Non binary, and comfortable being read either way.",
+      "section": "HOW THEY PRESENT",
+      "wrap": "{v}",
+      "rows": 2
+    },
+    {
+      "id": "signature",
+      "order": 20,
+      "label": "Signature object, in detail",
+      "hint": "If the object in their possession matters, describe it here and it will be drawn with care.",
+      "placeholder": "A brass pocket compass, the glass crazed, worn smooth on one side.",
+      "section": "SIGNATURE OBJECT",
+      "wrap": "{v}",
+      "rows": 2
+    },
+    {
+      "id": "extras",
+      "order": 30,
+      "label": "Your own additions",
+      "hint": "Anything else this particular image needs.",
+      "placeholder": "Caught mid laugh at something off to the left.",
+      "section": "ALSO",
+      "wrap": "{v}",
+      "carryToFollowUp": true
+    },
+    {
+      "id": "avoid",
+      "order": 40,
+      "label": "Things to keep out",
+      "hint": "Use sparingly. Naming a thing puts the word in the prompt either way. Three items maximum.",
+      "placeholder": "For example: hats, sunglasses",
+      "attachTo": "personacore",
+      "splitList": true,
+      "limit": 3,
+      "wrap": "Also keep out: {v}."
+    }
+  ]
+}

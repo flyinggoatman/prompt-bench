@@ -1,0 +1,54 @@
+{
+  "pack": "Persona: Expression",
+  "bench": "persona",
+  "categories": [
+    {
+      "key": "EXPRESSION",
+      "label": "Expression",
+      "note": "What the face is doing",
+      "order": 230,
+      "items": [
+        {
+          "m": "*",
+          "t": "A neutral face, at rest."
+        },
+        {
+          "m": "*",
+          "t": "The beginning of a smile."
+        },
+        {
+          "m": "*",
+          "t": "A broad open laugh."
+        },
+        {
+          "m": "*",
+          "t": "A closed mouth smile that reaches the eyes."
+        },
+        {
+          "m": "*",
+          "t": "Mid sentence."
+        },
+        {
+          "m": "*",
+          "t": "Listening carefully."
+        },
+        {
+          "m": "*",
+          "t": "Unimpressed."
+        },
+        {
+          "m": "*",
+          "t": "Tired, and not hiding it."
+        },
+        {
+          "m": "*",
+          "t": "Concentrating on something out of frame."
+        },
+        {
+          "m": "*",
+          "t": "Caught off guard."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "pack": "DLC2: Text options",
+  "categories": [
+    {
+      "key": "TEXT",
+      "items": [
+        {
+          "m": "ABCD",
+          "t": "A single exclamation, three letters maximum, hand lettered near the person who made it."
+        },
+        {
+          "m": "ABCD",
+          "t": "Two words on a hand painted banner held between two of them.",
+          "needs": 2,
+          "alt": {
+            "1": "Two words on a hand painted banner, one end held and the other tied to something."
+          }
+        },
+        {
+          "m": "ABCD",
+          "t": "One line of text written on a steamed window with a finger."
+        },
+        {
+          "m": "ABCD",
+          "t": "Text on a scrap of paper visible in frame, four words, in real handwriting rather than lettering."
+        },
+        {
+          "m": "ABCD",
+          "t": "One word repeated three times at decreasing size as somebody walks away."
+        },
+        {
+          "m": "ABCD",
+          "t": "A hand lettered arrow with two words next to it, pointing at the wrong thing."
+        },
+        {
+          "m": "ABCD",
+          "t": "Numbers only. A step number, a date or a price, nothing else."
+        },
+        {
+          "m": "ABCD",
+          "t": "One name, hand lettered, on a mug, a coat peg or a door."
+        },
+        {
+          "m": "ABCD",
+          "t": "A crossed out word and the correction above it, both hand written."
+        },
+        {
+          "m": "ABCD",
+          "t": "Text so small it reads as texture rather than words. No legible content."
+        },
+        {
+          "m": "ABCD",
+          "t": "One speech bubble with no words in it at all, just a full stop."
+        },
+        {
+          "m": "ABCD",
+          "t": "A short list of three items on a scrap, the third one absurd."
+        },
+        {
+          "m": "ABCD",
+          "t": "The words hand lettered in a curve following the shape of an object."
+        },
+        {
+          "m": "ABCD",
+          "t": "A shop or street sign in the background, three words, part of the world."
+        },
+        {
+          "m": "ABCD",
+          "t": "Two words on a t shirt, and nothing else anywhere in the image."
+        },
+        {
+          "m": "ABCD",
+          "t": "A whispered aside in a small bubble, five words, lower case."
+        },
+        {
+          "m": "ABCD",
+          "t": "One word painted enormous behind them, partly hidden by their bodies."
+        },
+        {
+          "m": "ABCD",
+          "t": "A single letter, three feet tall, that is all that remains of a longer sign."
+        },
+        {
+          "m": "ABCD",
+          "t": "A handwritten note stuck to something, six words, in a hurry."
+        },
+        {
+          "m": "ABCD",
+          "t": "Text spelled out in objects rather than lettering: magnets, cereal, chalk."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,145 @@
+{
+  "pack": "DLC: More dials",
+  "dials": [
+    {
+      "id": "clutter",
+      "label": "Clutter",
+      "lo": "Bare",
+      "hi": "Buried",
+      "min": 0,
+      "max": 10,
+      "value": 5,
+      "order": 55,
+      "stops": [
+        {
+          "upTo": 2,
+          "text": "Almost empty room. Three or four objects, each one chosen."
+        },
+        {
+          "upTo": 5,
+          "text": "A lived in amount of stuff. Surfaces have things on them, none of it staged."
+        },
+        {
+          "upTo": 8,
+          "text": "Busy. Every surface occupied, small stories in the background, but the figures still read first."
+        },
+        {
+          "upTo": 10,
+          "text": "Drowning in objects. The people are found rather than seen. Every corner has a joke in it."
+        }
+      ]
+    },
+    {
+      "id": "exaggeration",
+      "label": "Exaggeration",
+      "lo": "Observed",
+      "hi": "Cartoon",
+      "min": 0,
+      "max": 10,
+      "value": 4,
+      "order": 56,
+      "stops": [
+        {
+          "upTo": 2,
+          "text": "Proportions as observed. Expression carried by small things: a hand, an eyebrow, a lean."
+        },
+        {
+          "upTo": 5,
+          "text": "Gently pushed. Expressions a notch bigger than life, bodies still plausible."
+        },
+        {
+          "upTo": 8,
+          "text": "Caricature. Heads and hands larger, limbs elastic, faces doing more than faces can."
+        },
+        {
+          "upTo": 10,
+          "text": "Full cartoon physics. Rubber limbs, motion smears, eyes leaving sockets if the moment earns it."
+        }
+      ]
+    },
+    {
+      "id": "colours",
+      "label": "Number of colours",
+      "lo": "Two",
+      "hi": "Full",
+      "min": 2,
+      "max": 12,
+      "value": 5,
+      "order": 57,
+      "stops": [
+        {
+          "upTo": 2,
+          "text": "Two colours only, plus the paper. Everything mixed from those."
+        },
+        {
+          "upTo": 4,
+          "text": "Three or four flat colours, no tints beyond them."
+        },
+        {
+          "upTo": 7,
+          "text": "A limited palette of about {v} colours. Still visibly restricted."
+        },
+        {
+          "upTo": 12,
+          "text": "Full colour, but matte and hand made, never a gradient."
+        }
+      ]
+    },
+    {
+      "id": "line",
+      "label": "Line weight",
+      "lo": "Hairline",
+      "hi": "Heavy",
+      "min": 0,
+      "max": 10,
+      "value": 5,
+      "order": 58,
+      "stops": [
+        {
+          "upTo": 2,
+          "text": "Hairline outline or none. Shapes hold the drawing."
+        },
+        {
+          "upTo": 5,
+          "text": "A medium line that thickens on the shadow side and thins on the light."
+        },
+        {
+          "upTo": 8,
+          "text": "Heavy confident line, brush or thick pen, colour sitting loosely inside it."
+        },
+        {
+          "upTo": 10,
+          "text": "Massive line, almost woodcut, colour reduced to fills between black."
+        }
+      ]
+    },
+    {
+      "id": "distance",
+      "label": "Camera distance",
+      "lo": "In their face",
+      "hi": "Across the room",
+      "min": 0,
+      "max": 10,
+      "value": 5,
+      "order": 59,
+      "stops": [
+        {
+          "upTo": 2,
+          "text": "Very close. Faces and hands fill the frame, edges of people cut off."
+        },
+        {
+          "upTo": 5,
+          "text": "Conversational distance. Whole upper bodies, some room around them."
+        },
+        {
+          "upTo": 8,
+          "text": "Full figures with floor and ceiling, the room as a character."
+        },
+        {
+          "upTo": 10,
+          "text": "Far back. The people are small in a large space, and the space says as much as they do."
+        }
+      ]
+    }
+  ]
+}

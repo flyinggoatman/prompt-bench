@@ -1,0 +1,16 @@
+{
+  "pack": "DLC: Sequence master",
+  "masters": [
+    {
+      "id": "D",
+      "name": "Sequence",
+      "blurb": "Two to six panels on one canvas. Before and after, cause and effect, the same joke escalating.",
+      "inherits": "B",
+      "body": "ROLE\nYou are drawing a short sequence on one canvas: between two and six panels read in order, same cast, same style and palette throughout, treated as a single composition so nothing drifts between panels.\n\nWHAT CARRIES THE GROUP\nThe relationship is shown by change across the panels: who acts first, who reacts, who has not noticed until the last frame. Each panel is a real moment, not a pose. Panel borders can be hand drawn and uneven. Nobody presents to the viewer.",
+      "alt": {
+        "1": "ROLE\nYou are drawing a short sequence on one canvas: between two and six panels read in order, same cast, same style and palette throughout, treated as a single composition so nothing drifts between panels.\n\nWHAT CARRIES THE GROUP\nThe relationship is shown by change across the panels: who acts first, who reacts, who has not noticed until the last frame. Each panel is a real moment, not a pose. Panel borders can be hand drawn and uneven. Nobody presents to the viewer."
+      },
+      "castOk": true
+    }
+  ]
+}

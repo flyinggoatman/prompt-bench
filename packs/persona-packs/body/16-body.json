@@ -1,0 +1,62 @@
+{
+  "pack": "Persona: Build",
+  "bench": "persona",
+  "categories": [
+    {
+      "key": "BODY",
+      "label": "Build",
+      "note": "Proportion, height and posture",
+      "order": 160,
+      "items": [
+        {
+          "m": "*",
+          "t": "A slight build."
+        },
+        {
+          "m": "*",
+          "t": "A lean build."
+        },
+        {
+          "m": "*",
+          "t": "An average build."
+        },
+        {
+          "m": "*",
+          "t": "A solid build."
+        },
+        {
+          "m": "*",
+          "t": "A heavy build, carried comfortably."
+        },
+        {
+          "m": "*",
+          "t": "A broad shouldered build."
+        },
+        {
+          "m": "*",
+          "t": "Noticeably tall in the frame."
+        },
+        {
+          "m": "*",
+          "t": "Noticeably short in the frame."
+        },
+        {
+          "m": "*",
+          "t": "A straight upright posture."
+        },
+        {
+          "m": "*",
+          "t": "A relaxed slouch."
+        },
+        {
+          "m": "*",
+          "t": "Weight on one hip."
+        },
+        {
+          "m": "*",
+          "t": "Shoulders slightly forward, as somebody who works at a desk."
+        }
+      ]
+    }
+  ]
+}

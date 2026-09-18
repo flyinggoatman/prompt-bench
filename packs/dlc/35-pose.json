@@ -1,0 +1,213 @@
+{
+  "pack": "DLC: Dynamic poses",
+  "categories": [
+    {
+      "key": "POSE",
+      "label": "Pose",
+      "note": "What bodies are doing",
+      "order": 35,
+      "items": [
+        {
+          "m": "ABD",
+          "t": "Mid fall, arms out, expression still catching up with the body."
+        },
+        {
+          "m": "ABD",
+          "t": "Mid leap off a piece of furniture that was not designed for it."
+        },
+        {
+          "m": "ABD",
+          "t": "One character carrying another who did not ask to be carried."
+        },
+        {
+          "m": "ABD",
+          "t": "Two people pulling the same bag in opposite directions."
+        },
+        {
+          "m": "ABD",
+          "t": "Lifting {4} at full arm's length like something found under a sink.",
+          "alt": {
+            "1": "{1} holding something at full arm's length, like it was found under a sink.",
+            "2": "{1} lifting something at full arm's length like it was found under a sink, {2} declining to come any closer.",
+            "3": "{1} lifting something at full arm's length, {2} and {3} both declining to come any closer."
+          }
+        },
+        {
+          "m": "ABD",
+          "t": "Sprinting through a doorway, one foot off the ground, hair behind."
+        },
+        {
+          "m": "ABD",
+          "t": "Tripping over something small, both arms already compensating."
+        },
+        {
+          "m": "ABD",
+          "t": "Dodging a thrown object, back arched, eyes shut."
+        },
+        {
+          "m": "ABD",
+          "t": "Catching something one handed without looking, still mid conversation."
+        },
+        {
+          "m": "ABD",
+          "t": "Hauling a full bin bag with the whole body, the bag winning."
+        },
+        {
+          "m": "ABD",
+          "t": "Shouldering a door open with both hands full."
+        },
+        {
+          "m": "ABD",
+          "t": "Piggyback, the carrier regretting it, the passenger delighted."
+        },
+        {
+          "m": "ABD",
+          "t": "Standing on a chair to reach something, the chair on two legs."
+        },
+        {
+          "m": "ABD",
+          "t": "Ducking under a low beam a second too late."
+        },
+        {
+          "m": "ABD",
+          "t": "Frozen mid step on a floorboard that has made a noise."
+        },
+        {
+          "m": "ABD",
+          "t": "Spinning to look for something already in their hand."
+        },
+        {
+          "m": "ABD",
+          "t": "Hanging off the back of the sofa, upside down, phone still in use."
+        },
+        {
+          "m": "ABD",
+          "t": "Reaching for a top shelf while somebody else holds their belt loop.",
+          "needs": 2,
+          "alt": {
+            "1": "Reaching for a top shelf on tiptoe with nothing to hold on to."
+          }
+        },
+        {
+          "m": "ABD",
+          "t": "Crouched on the floor eye to eye with {4}, negotiating.",
+          "alt": {
+            "1": "{1} crouched on the floor, eye to eye with something under the furniture, negotiating.",
+            "2": "{1} crouched on the floor eye to eye with {2}, negotiating.",
+            "3": "{1} crouched on the floor eye to eye with {3}, negotiating, while {2} pretends not to be listening."
+          }
+        },
+        {
+          "m": "ABD",
+          "t": "Launching off the sofa to answer a door nobody knocked on."
+        },
+        {
+          "m": "ABD",
+          "t": "Flailing to keep a tray level while walking backwards."
+        },
+        {
+          "m": "ABD",
+          "t": "Blocking a doorway with one arm, entirely casual about it."
+        },
+        {
+          "m": "ABD",
+          "t": "Yanking headphones off at a sudden noise, cable snapping taut."
+        },
+        {
+          "m": "ABD",
+          "t": "Swerving mid stride around {4}, who has not moved.",
+          "alt": {
+            "1": "{1} swerving mid stride around something on the floor that has no intention of moving.",
+            "2": "{1} swerving mid stride around {2}, who has not moved.",
+            "3": "{1} swerving mid stride around {3}, who has not moved, {2} already past it."
+          }
+        },
+        {
+          "m": "ABD",
+          "t": "Collapsing into an armchair, limbs arriving in the wrong order."
+        },
+        {
+          "m": "ABD",
+          "t": "A high five that has missed, both hands still in the air."
+        },
+        {
+          "m": "ABD",
+          "t": "Dragging someone by the sleeve toward something they must see."
+        },
+        {
+          "m": "ABD",
+          "t": "Leaning so far back on a chair that gravity has an opinion."
+        },
+        {
+          "m": "ABD",
+          "t": "Both hands up in surrender, holding a cup in one of them.",
+          "needs": 2,
+          "alt": {
+            "1": "Both hands up in surrender to nobody in particular, a cup still in one of them."
+          }
+        },
+        {
+          "m": "ABD",
+          "t": "Braced against a door that something is pushing from the other side.",
+          "needs": 2,
+          "alt": {
+            "1": "Braced alone against a door that something is pushing from the other side."
+          }
+        },
+        {
+          "m": "ABD",
+          "t": "Balancing three mugs and a plate, tongue out in concentration."
+        },
+        {
+          "m": "ABD",
+          "t": "Kneeling to tie a shoe while the others keep walking.",
+          "needs": 2,
+          "alt": {
+            "1": "Kneeling to tie a shoe in the middle of somewhere nobody should stop."
+          }
+        },
+        {
+          "m": "ABD",
+          "t": "Stretching across two people on a sofa to reach the far cushion."
+        },
+        {
+          "m": "ABD",
+          "t": "Vaulting a low fence with less clearance than planned."
+        },
+        {
+          "m": "ABD",
+          "t": "Pointing hard at something off frame, mouth open, nobody following the finger."
+        },
+        {
+          "m": "ABD",
+          "t": "Recoiling from a plant as though it moved."
+        },
+        {
+          "m": "ABD",
+          "t": "Sliding on socks across a hard floor, arms out for balance."
+        },
+        {
+          "m": "ABD",
+          "t": "Holding a phone up to show the others, both of whom are looking at something else.",
+          "needs": 2,
+          "alt": {
+            "1": "Holding a phone up to show somebody who has already left the room."
+          }
+        },
+        {
+          "m": "ABD",
+          "t": "Shielding a laptop from a spill with the whole upper body."
+        },
+        {
+          "m": "ABD",
+          "t": "Squeezing all {N} of them through a door meant for one, nobody giving way.",
+          "alt": {
+            "1": "Getting through a door sideways while carrying far too much, nobody to hold it open.",
+            "2": "Squeezing both of them through a door meant for one, neither giving way."
+          },
+          "needs": 3
+        }
+      ]
+    }
+  ]
+}

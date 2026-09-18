@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Prompt Bench admin</title>
+<style>
+:root{
+  --bg:#F4F3EF;--surface:#FFFFFF;--surface2:#FAF9F6;--surface3:#F0EEE9;
+  --text:#15181F;--soft:#5A6170;--faint:#888E9B;--line:#E5E2DB;--line2:#D3CFC6;
+  --accent:#DE2168;--accent2:#C11A58;--accentSoft:#FCE8F0;--teal:#0E766C;--tealSoft:#E2F2F0;
+  --danger:#B23C1B;--dangerSoft:#FBEBE4;--radius:16px;--font:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Arial,sans-serif;
+  color-scheme:light;
+}
+:root[data-theme=dark]{
+  --bg:#0F1116;--surface:#171A21;--surface2:#1C2029;--surface3:#242935;
+  --text:#E9EBF0;--soft:#A3AAB8;--faint:#79808E;--line:#272C36;--line2:#3A404E;
+  --accent:#FF5C97;--accent2:#FF7AAB;--accentSoft:rgba(255,92,151,.14);--teal:#45CFC0;--tealSoft:rgba(69,207,192,.13);
+  --danger:#F08159;--dangerSoft:rgba(240,129,89,.14);color-scheme:dark;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){
+  --bg:#0F1116;--surface:#171A21;--surface2:#1C2029;--surface3:#242935;
+  --text:#E9EBF0;--soft:#A3AAB8;--faint:#79808E;--line:#272C36;--line2:#3A404E;
+  --accent:#FF5C97;--accent2:#FF7AAB;--accentSoft:rgba(255,92,151,.14);--teal:#45CFC0;--tealSoft:rgba(69,207,192,.13);
+  --danger:#F08159;--dangerSoft:rgba(240,129,89,.14);color-scheme:dark;
+}}
+*{box-sizing:border-box}html,body{margin:0;padding:0}body{background:var(--bg);color:var(--text);font:400 15px/1.5 var(--font);padding-bottom:48px}
+a{color:var(--accent)}button,input{font:inherit}.topbar{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--line)}
+.topbar-in{max-width:880px;height:58px;margin:auto;padding:0 20px;display:flex;align-items:center;gap:12px}.brand{display:flex;align-items:center;gap:10px}.mark{width:30px;height:30px;border-radius:9px;background:linear-gradient(140deg,var(--accent),var(--teal));position:relative}.mark:after{content:"";position:absolute;inset:9px;border-radius:3px;background:var(--surface)}.brand strong{display:block;font-size:15px}.brand small{display:block;font-size:11.5px;color:var(--faint)}.top-actions{margin-left:auto;display:flex;gap:8px}
+.wrap{max-width:880px;margin:auto;padding:24px 20px;display:flex;flex-direction:column;gap:16px}.hero{padding:2px}.hero h1{font-size:30px;margin:0 0 6px}.hero p{margin:0;color:var(--soft);max-width:70ch}.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px}.card-head{display:flex;align-items:center;gap:10px;margin-bottom:5px}.card-head h2{font-size:17px;margin:0}.badge{margin-left:auto;background:var(--surface3);color:var(--soft);border-radius:999px;padding:3px 9px;font-size:11.5px;font-weight:650}.hint{margin:0 0 14px;color:var(--soft);font-size:13.5px}.hint:last-child{margin-bottom:0}.btn-row{display:flex;flex-wrap:wrap;gap:8px}.btn{border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:9px;padding:9px 12px;font-weight:650;cursor:pointer}.btn:hover{background:var(--surface2);border-color:var(--line2)}.btn-primary{background:var(--text);color:var(--surface);border-color:var(--text)}.btn-accent{background:var(--accent);color:#fff;border-color:var(--accent)}.btn-danger{color:var(--danger)}.btn-sm{font-size:13px;padding:7px 10px}.hiddenfile{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.form-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:end}.form-stack{display:grid;gap:10px}.field label{display:block;font-size:12px;font-weight:700;color:var(--soft);margin-bottom:5px}.field input{width:100%;border:1px solid var(--line2);background:var(--surface2);color:var(--text);border-radius:9px;padding:10px 11px;outline:none}.field input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accentSoft)}
+.table-scroll{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13.5px}th{text-align:left;color:var(--faint);font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:0 8px 8px 4px;border-bottom:1px solid var(--line)}td{padding:10px 8px 10px 4px;border-bottom:1px solid var(--line);vertical-align:top}.sub{display:block;color:var(--soft);font-size:12.5px;margin-top:2px}.path{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--faint);font-size:12px;word-break:break-all}.act{text-align:right}.tag{display:inline-block;margin-left:6px;padding:2px 7px;border-radius:999px;background:var(--surface3);color:var(--soft);font-size:10px;font-weight:700;text-transform:uppercase}.tag.priv{background:var(--dangerSoft);color:var(--danger)}.tag.up{background:var(--tealSoft);color:var(--teal)}.tag.broken{background:var(--danger);color:#fff}.note{display:none;border:1px solid var(--danger);background:var(--dangerSoft);border-radius:12px;padding:12px 14px}.log{white-space:pre-wrap;background:var(--surface2);border:1px solid var(--line);border-radius:11px;padding:12px 14px;font:400 12.5px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;max-height:38vh;overflow:auto}.logcard{display:none}footer{color:var(--faint);font-size:12.5px;padding:2px}
+body.drag:after{content:"Drop pack files to install them";position:fixed;inset:10px;z-index:99;border:2px dashed var(--accent);border-radius:22px;background:color-mix(in srgb,var(--bg) 88%,transparent);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent)}
+@media(max-width:620px){.form-row{grid-template-columns:1fr}.form-row .btn{width:100%}.wrap{padding:18px 14px}.topbar-in{padding:0 14px}.hero h1{font-size:25px}}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-in">
+  <div class="brand"><span class="mark" aria-hidden="true"></span><span><strong>Prompt Bench admin</strong><small>Pack management</small></span></div>
+  <div class="top-actions"><a class="btn btn-sm" href="/">Open the bench</a><button class="btn btn-sm" id="theme" type="button">Theme</button></div>
+</div></header>
+
+<main class="wrap">
+  <section class="hero"><h1>Prompt Bench packs</h1><p>Install and remove Prompt Bench packs, import pack repositories from GitHub, and load private packs into this browser. The persona bench has its own page at <a href="admin-persona.html">admin-persona.html</a>.</p></section>
+  <div class="note" id="privnote"></div>
+
+  <section class="card">
+    <div class="card-head"><h2>Install local packs</h2></div>
+    <p class="hint">Choose JSON pack files or a folder. Each file is parsed and checked for recognised Prompt Bench keys before it is written to <code>uploads/</code>.</p>
+    <div class="btn-row"><button class="btn btn-primary" id="pick" type="button">Choose files</button><button class="btn" id="pickFolder" type="button">Choose a folder</button><button class="btn" id="refresh" type="button">Refresh list</button></div>
+    <input type="file" id="f" class="hiddenfile" multiple accept=".json,application/json"><input type="file" id="fdir" class="hiddenfile" webkitdirectory directory multiple>
+    <p class="hint" style="margin-top:14px">You can also drag JSON files anywhere onto this page.</p>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><h2>Import GitHub packs</h2><span class="badge">repository</span></div>
+    <p class="hint">Paste a GitHub repository link. Prompt Bench downloads the repository on the server, finds valid pack JSON files, ignores unrelated JSON such as catalog indexes, and installs the recognised packs into <code>uploads/</code>.</p>
+    <div class="form-stack">
+      <div class="field"><label for="githubUrl">GitHub repository link</label><input id="githubUrl" type="url" inputmode="url" autocomplete="off" placeholder="https://github.com/owner/repository"></div>
+      <div class="field"><label for="githubToken">GitHub token, optional for private repositories</label><input id="githubToken" type="password" autocomplete="off" placeholder="Leave blank for public repositories or when GITHUB_TOKEN is set on the server"></div>
+      <div class="btn-row"><button class="btn btn-accent" id="importGithub" type="button">Import GitHub packs</button></div>
+    </div>
+    <p class="hint" style="margin-top:14px">Only <code>https://github.com/owner/repository</code> links are accepted. A token entered here is used for this import request only and is not saved by the page or written into pack files.</p>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><h2>Installed packs</h2><span class="badge" id="count"></span></div><div id="list"></div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><h2>Private packs</h2></div>
+    <p class="hint">Packs marked private are never sent to the public page. Pull them into this browser once and they stay in local storage.</p>
+    <div class="btn-row"><button class="btn btn-accent" id="pull" type="button">Load private packs into this browser</button><button class="btn btn-danger" id="forget" type="button">Forget them again</button></div>
+  </section>
+
+  <section class="card logcard" id="logcard"><div class="card-head"><h2>Activity</h2></div><div class="log" id="log" aria-live="polite"></div></section>
+  <footer>Local uploads are capped at 512 KB per file. GitHub imports accept only GitHub repository links, use bounded downloads, and install only recognised Prompt Bench JSON packs. Nothing here executes pack content.</footer>
+</main>
+
+<script>
+"use strict";
+var BENCH="main";var PACK_VERSION="";var PACK_KEY="promptbench.packs.v2",THEME_KEY="promptbench.theme.v1";
+var el=function(id){return document.getElementById(id);},packs=[];
+function systemDark(){return !!(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)}
+function applyTheme(t){if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);else document.documentElement.removeAttribute("data-theme")}
+function currentTheme(){return document.documentElement.getAttribute("data-theme")||(systemDark()?"dark":"light")}
+try{applyTheme(localStorage.getItem(THEME_KEY))}catch(e){}
+function log(msg,bad){var t=new Date().toTimeString().slice(0,8);el("logcard").style.display="block";el("log").textContent+=t+"  "+(bad?"! ":"")+msg+"\n";el("log").scrollTop=el("log").scrollHeight}
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;")}
+function summarise(d){if(!d||typeof d!=="object")return"";var bits=[],n=function(k){return Array.isArray(d[k])?d[k].length:0};if(n("masters"))bits.push(n("masters")+" masters");if(n("people"))bits.push(n("people")+" cast");if(n("categories")){var items=0;d.categories.forEach(function(c){items+=(c.items||[]).length});bits.push(items+" modules")}if(n("dials"))bits.push(n("dials")+" dials");if(n("variation"))bits.push(n("variation")+" variation pools");if(n("fields"))bits.push(n("fields")+" fields");if(n("shared"))bits.push("shared text");if(d.wording)bits.push("wording");if(d.settings)bits.push("settings");if(n("castFields"))bits.push(n("castFields")+" cast fields");if(n("discipline"))bits.push(n("discipline")+" discipline rules");return bits.join(", ")}
+function render(){var h='<div class="table-scroll"><table><thead><tr><th>Pack</th><th>File</th><th></th></tr></thead><tbody>';packs.forEach(function(p){var d=p.data||{},tags="";if(d.private)tags+='<span class="tag priv">private</span>';tags+=p.source==="uploads"?'<span class="tag up">uploaded</span>':'<span class="tag">built in</span>';if(d._error)tags+='<span class="tag broken">broken</span>';h+='<tr><td><b>'+esc(d.pack||p.path)+'</b>'+tags+'<span class="sub">'+esc(summarise(d))+'</span></td><td class="path">'+esc(p.path)+'</td><td class="act">'+(p.source==="uploads"?'<button type="button" class="btn btn-sm btn-danger" data-rm="'+esc(p.path)+'">Remove</button>':'')+'</td></tr>'});h+='</tbody></table></div>';el("list").innerHTML=packs.length?h:'<p class="hint">No packs found.</p>';var priv=packs.filter(function(p){return p.data&&p.data.private}).length,mods=0;packs.forEach(function(p){((p.data&&p.data.categories)||[]).forEach(function(c){mods+=(c.items||[]).length})});el("count").textContent=packs.length+" files, "+mods+" modules, "+priv+" private";if(priv){el("privnote").style.display="block";el("privnote").textContent=priv+" private pack"+(priv===1?" is":"s are")+" installed and hidden from the public page."}else el("privnote").style.display="none"}
+function loadList(){fetch("api/packs?all=1&bench=main",{cache:"no-store"}).then(function(r){PACK_VERSION=r.headers.get("X-Pack-Version")||"";if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}).then(function(list){packs=list;render();log("Listed "+list.length+" packs.")}).catch(function(e){log("Could not list packs: "+e.message,true)})}
+function upload(name,obj){return fetch("api/upload",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({bench:BENCH,packVersion:PACK_VERSION,name:name,pack:obj})}).then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j}})})}
+function handleFiles(fileList){var files=[];for(var i=0;i<fileList.length;i++)if(/\.json$/i.test(fileList[i].name))files.push(fileList[i]);if(!files.length){log("No JSON files in that selection.",true);return}var queue=files.slice();(function next(){var f=queue.shift();if(!f){loadList();return}var r=new FileReader();r.onload=function(){var obj;try{obj=JSON.parse(r.result)}catch(e){log(f.name+" is not valid JSON, skipped.",true);return next()}upload(f.name,obj).then(function(res){if(res.ok&&res.j.ok)log("Installed "+res.j.saved+".");else log(f.name+" rejected: "+(res.j.error||"unknown"),true);next()}).catch(function(e){log(f.name+" failed: "+e.message,true);next()})};r.onerror=function(){log("Could not read "+f.name,true);next()};r.readAsText(f)})()}
+function importGithub(){var url=el("githubUrl").value.trim(),token=el("githubToken").value;if(!url){log("Paste a GitHub repository link first.",true);el("githubUrl").focus();return}var b=el("importGithub");b.disabled=true;b.textContent="Importing...";log("Importing packs from "+url+"...");fetch("api/import-github",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({bench:BENCH,packVersion:PACK_VERSION,url:url,token:token})}).then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j}})}).then(function(res){el("githubToken").value="";if(!res.ok||!res.j.ok){log("GitHub import failed: "+(res.j.error||"unknown error"),true);return}log("Imported "+res.j.installed.length+" pack file"+(res.j.installed.length===1?"":"s")+" from "+res.j.repository+" ("+res.j.branch+").");res.j.installed.forEach(function(x){log("Installed "+x.path+" as "+x.saved+".")});if(res.j.skipped&&res.j.skipped.length)log("Skipped "+res.j.skipped.length+" unrelated or invalid JSON file"+(res.j.skipped.length===1?"":"s")+".");loadList()}).catch(function(e){el("githubToken").value="";log("GitHub import failed: "+e.message,true)}).finally(function(){b.disabled=false;b.textContent="Import GitHub packs"})}
+el("theme").addEventListener("click",function(){var next=currentTheme()==="dark"?"light":"dark";applyTheme(next);try{localStorage.setItem(THEME_KEY,next)}catch(e){}});el("pick").addEventListener("click",function(){el("f").click()});el("pickFolder").addEventListener("click",function(){el("fdir").click()});el("f").addEventListener("change",function(e){handleFiles(e.target.files);e.target.value=""});el("fdir").addEventListener("change",function(e){handleFiles(e.target.files);e.target.value=""});el("refresh").addEventListener("click",loadList);el("importGithub").addEventListener("click",importGithub);el("githubUrl").addEventListener("keydown",function(e){if(e.key==="Enter")importGithub()});
+el("list").addEventListener("click",function(e){var b=e.target.closest("button[data-rm]");if(!b)return;var name=b.dataset.rm;if(!confirm("Remove "+name+" from the server?"))return;fetch("api/remove",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({bench:BENCH,packVersion:PACK_VERSION,name:name})}).then(function(r){return r.json()}).then(function(j){if(j.ok)log("Removed "+j.removed+".");else log("Could not remove: "+(j.error||"unknown"),true);loadList()}).catch(function(e){log("Remove failed: "+e.message,true)})});
+el("pull").addEventListener("click",function(){var priv=packs.filter(function(p){return p.data&&p.data.private});if(!priv.length){log("There are no private packs to load.",true);return}var store=[];try{store=JSON.parse(localStorage.getItem(PACK_KEY)||"[]")||[]}catch(e){store=[]}store=store.filter(function(s){return String(s.path||"").indexOf("private:")!==0});priv.forEach(function(p){store.push({name:(p.data.pack||p.path),path:"private:"+p.path,data:p.data})});try{localStorage.setItem(PACK_KEY,JSON.stringify(store));log("Loaded "+priv.length+" private pack"+(priv.length>1?"s":"")+" into this browser.")}catch(e){log("Could not save to this browser: "+e.message,true)}});
+el("forget").addEventListener("click",function(){var store=[];try{store=JSON.parse(localStorage.getItem(PACK_KEY)||"[]")||[]}catch(e){store=[]}var before=store.length;store=store.filter(function(s){return String(s.path||"").indexOf("private:")!==0});try{localStorage.setItem(PACK_KEY,JSON.stringify(store));var alsoCast=(typeof forgetRememberedCast==="function")&&forgetRememberedCast();log("Removed "+(before-store.length)+" private pack(s) from this browser."+(alsoCast?" The remembered cast was cleared too.":""))}catch(e){log("Could not update this browser: "+e.message,true)}});
+["dragenter","dragover"].forEach(function(ev){document.addEventListener(ev,function(e){e.preventDefault();document.body.classList.add("drag")})});["dragleave","drop"].forEach(function(ev){document.addEventListener(ev,function(e){e.preventDefault();document.body.classList.remove("drag")})});document.addEventListener("drop",function(e){if(e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files.length)handleFiles(e.dataTransfer.files)});
+loadList();
+</script>
+</body>
+</html>

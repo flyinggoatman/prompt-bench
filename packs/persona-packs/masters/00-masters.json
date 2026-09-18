@@ -1,0 +1,86 @@
+{
+  "pack": "Persona: masters",
+  "bench": "persona",
+  "settings": {
+    "maxCast": 1,
+    "requirePhoto": false
+  },
+  "masters": [
+    {
+      "id": "P",
+      "name": "Portrait",
+      "order": 10,
+      "blurb": "One person, drawn close. The face carries the picture and everything else supports it.",
+      "body": "ROLE\nYou are drawing one portrait of {cast}. A single person fills the frame and the picture is about who they are rather than what is happening.\n\nWHAT CARRIES IT\nThe likeness is carried by the features, the bearing and the one detail that is always present. The background exists to sit behind them and never competes for attention. Nothing is posed for a camera that is being acknowledged."
+    },
+    {
+      "id": "V",
+      "name": "Avatar",
+      "order": 20,
+      "blurb": "A small round or square badge. Head and shoulders, readable at the size of a thumbnail.",
+      "body": "ROLE\nYou are making a single avatar of {cast}: head and shoulders, centred, designed to stay legible when it is shown small.\n\nWHAT CARRIES IT\nOne clear silhouette, strong separation from the background, and the one detail that identifies them surviving at thumbnail size. Everything safe inside a centred circle. No text."
+    },
+    {
+      "id": "S",
+      "name": "Persona sheet",
+      "order": 30,
+      "blurb": "Several views of the same person on one canvas. For establishing somebody before drawing them elsewhere.",
+      "body": "ROLE\nYou are making one canvas holding several views of {cast}: front, three quarter and profile, with two or three expressions, treated as a single composition so that the face, colouring and proportions stay identical throughout.\n\nWHAT CARRIES IT\nConsistency. Every view is plainly the same person. Keep the background plain and the spacing even so the views read as a set.",
+      "castOk": true
+    },
+    {
+      "id": "F",
+      "name": "Full figure",
+      "order": 40,
+      "blurb": "Head to foot, standing. What they wear, carry and stand like.",
+      "body": "ROLE\nYou are drawing {cast} head to foot, standing, with enough room around them to read the whole figure.\n\nWHAT CARRIES IT\nProportion, posture and clothing. The figure is shown clearly rather than dramatically lit or heavily cropped, and whatever they always carry is visible."
+    }
+  ],
+  "castFields": [
+    {
+      "key": "looks",
+      "label": "Likeness",
+      "hint": "The face and build in your own words. Everything else can come from the modules below.",
+      "line": "{v}.",
+      "order": 10,
+      "promptOrder": 10
+    },
+    {
+      "key": "marker",
+      "label": "Signature detail",
+      "hint": "The one thing always present, and the thing that makes them recognisable.",
+      "line": "Always present: {v}.",
+      "order": 20,
+      "promptOrder": 20
+    },
+    {
+      "key": "wears",
+      "label": "Clothing notes",
+      "hint": "What they reach for, rather than one fixed outfit.",
+      "line": "{v}.",
+      "order": 30,
+      "promptOrder": 30,
+      "outfitRule": true
+    },
+    {
+      "key": "manner",
+      "label": "Bearing",
+      "hint": "How they hold themselves, and what their face does at rest.",
+      "line": "{v}.",
+      "order": 40,
+      "promptOrder": 40
+    },
+    {
+      "key": "likes",
+      "drop": true
+    },
+    {
+      "key": "avoid",
+      "label": "Never drawn with",
+      "hint": "Specific to this persona. Keep it short.",
+      "line": "Never draw {name} with {v}.",
+      "order": 60,
+      "promptOrder": 60
+    }
+  ]
+}

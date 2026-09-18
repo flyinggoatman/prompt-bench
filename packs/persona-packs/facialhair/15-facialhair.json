@@ -1,0 +1,50 @@
+{
+  "pack": "Persona: Facial hair",
+  "bench": "persona",
+  "categories": [
+    {
+      "key": "FACIALHAIR",
+      "label": "Facial hair",
+      "note": "Beard, moustache and stubble",
+      "order": 150,
+      "items": [
+        {
+          "m": "*",
+          "t": "Clean shaven."
+        },
+        {
+          "m": "*",
+          "t": "A day or two of stubble."
+        },
+        {
+          "m": "*",
+          "t": "A short trimmed beard."
+        },
+        {
+          "m": "*",
+          "t": "A full beard, neatly kept."
+        },
+        {
+          "m": "*",
+          "t": "A long beard, untrimmed."
+        },
+        {
+          "m": "*",
+          "t": "A moustache alone."
+        },
+        {
+          "m": "*",
+          "t": "A goatee."
+        },
+        {
+          "m": "*",
+          "t": "Sideburns worn long."
+        },
+        {
+          "m": "*",
+          "t": "A beard going grey before the hair does."
+        }
+      ]
+    }
+  ]
+}

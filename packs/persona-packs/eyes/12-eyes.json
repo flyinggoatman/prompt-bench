@@ -1,0 +1,70 @@
+{
+  "pack": "Persona: Eyes",
+  "bench": "persona",
+  "categories": [
+    {
+      "key": "EYES",
+      "label": "Eyes",
+      "note": "Colour, shape and gaze",
+      "order": 120,
+      "items": [
+        {
+          "m": "*",
+          "t": "Dark brown eyes."
+        },
+        {
+          "m": "*",
+          "t": "Light brown eyes with a warm ring near the pupil."
+        },
+        {
+          "m": "*",
+          "t": "Hazel eyes."
+        },
+        {
+          "m": "*",
+          "t": "Green eyes."
+        },
+        {
+          "m": "*",
+          "t": "Grey blue eyes."
+        },
+        {
+          "m": "*",
+          "t": "Deep blue eyes."
+        },
+        {
+          "m": "*",
+          "t": "Amber eyes."
+        },
+        {
+          "m": "*",
+          "t": "Two eyes of different colours, drawn as an ordinary fact about them."
+        },
+        {
+          "m": "*",
+          "t": "Almond shaped eyes."
+        },
+        {
+          "m": "*",
+          "t": "Round wide set eyes."
+        },
+        {
+          "m": "*",
+          "t": "Hooded eyes with a heavy lid."
+        },
+        {
+          "m": "*",
+          "t": "Eyes with a downward outer corner, which softens the expression."
+        },
+        {
+          "m": "*",
+          "t": "A direct gaze meeting the viewer."
+        },
+        {
+          "m": "*",
+          "t": "A gaze just past the viewer, thinking about something else."
+        }
+      ]
+    }
+  ]
+}

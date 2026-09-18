@@ -1,0 +1,25 @@
+{
+  "pack": "Persona: craft rules",
+  "bench": "persona",
+  "shared": [
+    {
+      "id": "personacore",
+      "label": "Persona craft",
+      "blocks": [
+        "LIKENESS\nThe person is drawn as a specific individual rather than a type. Whatever identifies them survives the style: keep the features, the colouring and the signature detail consistent, and let the drawing be stylised without becoming generic.",
+        "DIGNITY\nThe portrait is on the subject's side. Age, weight, marks, disability and difference are drawn accurately and without commentary, as ordinary facts about a person. Nothing about them is made a joke, a warning or a symbol.",
+        "CRAFT\nOne clear light. Edges that describe form. Colour that stays where the drawing puts it. Leave the marks of the tool visible. Render as though made by hand rather than generated."
+      ]
+    }
+  ],
+  "wording": {
+    "castSizeOne": "This image has exactly one subject: {cast}. Nobody else appears in it.",
+    "castSizeExact": "This image has exactly {N} subject{s}: {cast}. Nobody else appears in it.",
+    "thisImageHeading": "THIS PERSONA",
+    "castHeading": "THE PERSON",
+    "castWithoutPhotos": "Draw this person from the description below. They are a specific individual rather than a type, drawn as clearly stylised illustration, never photorealistic.",
+    "noPhotoOne": "No reference photograph is attached, and none is needed. {names} is built from the description above: the features, the colouring and the signature detail are the likeness. Do not ask for a photograph. Keep the result consistent if they are drawn again.",
+    "noPhotoMany": "No reference photographs are attached, and none are needed. {names} are built from the descriptions above: the features, the colouring and the signature detail are the likeness. Do not ask for photographs. Keep each of them consistent if drawn again.",
+    "castAnyone": "one person, yours to invent from the brief"
+  }
+}

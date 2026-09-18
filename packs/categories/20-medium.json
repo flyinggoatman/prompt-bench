@@ -1,0 +1,63 @@
+{
+  "pack": "Medium",
+  "categories": [
+    {
+      "key": "MEDIUM",
+      "label": "Medium",
+      "note": "The physical surface it was made on",
+      "order": 20,
+      "items": [
+        {
+          "m": "ABC",
+          "t": "Two colour risograph. Slight misregistration, overprint where the inks cross, coarse grain, paper tooth showing through."
+        },
+        {
+          "m": "ABC",
+          "t": "Hand pulled screenprint. Flat spot inks, uneven coverage, off registration, visible paper white."
+        },
+        {
+          "m": "ABC",
+          "t": "Coarse halftone on cheap newsprint, slight dot gain, limited ink."
+        },
+        {
+          "m": "ABC",
+          "t": "Marker and felt tip. Streaky fills, pooling at the edges, visible overlap where the pen doubled back.",
+          "castOk": true
+        },
+        {
+          "m": "ABC",
+          "t": "Ink over graphite. Pencil construction lines left showing, nothing erased."
+        },
+        {
+          "m": "ABC",
+          "t": "Bold flat cutout shapes. Limited saturated palette, clear silhouettes, one flat shadow tone, no gradients."
+        },
+        {
+          "m": "ABC",
+          "t": "Loose marker doodle on white. Single weight line, spot colour accents, deliberately imperfect."
+        },
+        {
+          "m": "ABC",
+          "t": "Indie comic ink. Uneven expressive line, flat spot colour, hatching only in shadow."
+        },
+        {
+          "m": "ABC",
+          "t": "Cut paper collage. Torn edges, mixed paper textures, slight shadow where pieces overlap.",
+          "castOk": true
+        },
+        {
+          "m": "ABC",
+          "t": "Matte gouache flats. Visible brush marks, dry edges, no gloss anywhere."
+        },
+        {
+          "m": "ABC",
+          "t": "Mid century print cartoon. Textured overprint, warm muted flats, simplified shapes."
+        },
+        {
+          "m": "ABC",
+          "t": "Ballpoint on cheap paper. Scribbled shadow, biro shine, scanned slightly crooked."
+        }
+      ]
+    }
+  ]
+}
