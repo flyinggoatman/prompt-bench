@@ -1,0 +1,42 @@
+{
+  "pack": "Persona: Kind",
+  "bench": "persona",
+  "categories": [
+    {
+      "key": "SPECIES",
+      "label": "Kind",
+      "note": "Human, or something else entirely",
+      "order": 100,
+      "items": [
+        {
+          "m": "*",
+          "t": "An ordinary human being."
+        },
+        {
+          "m": "*",
+          "t": "A human with one clearly non human feature, drawn matter of factly."
+        },
+        {
+          "m": "*",
+          "t": "An elf: taller, finer boned, long ears, otherwise unremarkable."
+        },
+        {
+          "m": "*",
+          "t": "A dwarf: shorter, broader, heavy brow, strong hands."
+        },
+        {
+          "m": "*",
+          "t": "An orc: heavy jaw, thick neck, tusks that sit naturally in the mouth."
+        },
+        {
+          "m": "*",
+          "t": "A beast folk: a recognisable animal head on a human frame, drawn as a person rather than a costume."
+        },
+        {
+          "m": "*",
+          "t": "An android: seams at the joints, matte surfaces, a face that still expresses."
+        }
+      ]
+    }
+  ]
+}

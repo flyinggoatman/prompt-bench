@@ -1,0 +1,168 @@
+{
+  "pack": "DLC2: Moods",
+  "categories": [
+    {
+      "key": "MOOD",
+      "items": [
+        {
+          "m": "ABD",
+          "t": "Relief that nobody is naming. The thing that might have gone wrong did not."
+        },
+        {
+          "m": "ABD",
+          "t": "Low grade mutiny. Two of them have decided something and have not told the rest.",
+          "needs": 3,
+          "alt": {
+            "1": "Low grade mutiny of one. A decision has been made and nobody has been told.",
+            "2": "Low grade mutiny. {1} has decided something and has not told {2}."
+          }
+        },
+        {
+          "m": "ABD",
+          "t": "Tenderness caught by accident, and immediately covered up with a joke."
+        },
+        {
+          "m": "ABD",
+          "t": "The specific tiredness of having been kind all day."
+        },
+        {
+          "m": "ABD",
+          "t": "Anticipation. Coats on, door not open yet, everyone slightly too pleased.",
+          "needs": 2,
+          "alt": {
+            "1": "Anticipation. Coat on, door not open yet, slightly too pleased about it."
+          }
+        },
+        {
+          "m": "ABD",
+          "t": "Genuine offence at something completely trivial."
+        },
+        {
+          "m": "ABD",
+          "t": "Solidarity in a bad situation. Nobody is enjoying it and nobody is leaving."
+        },
+        {
+          "m": "ABD",
+          "t": "Pride in somebody else, expressed by insulting them.",
+          "needs": 2,
+          "alt": {
+            "1": "Pride in something they made, expressed by pointing out everything wrong with it."
+          }
+        },
+        {
+          "m": "ABD",
+          "t": "The lull after laughing. Everyone still smiling at nothing in particular.",
+          "needs": 2,
+          "alt": {
+            "1": "The lull after laughing alone, still smiling at nothing in particular."
+          }
+        },
+        {
+          "m": "ABD",
+          "t": "Wary optimism. It is going well, which is suspicious."
+        },
+        {
+          "m": "ABD",
+          "t": "Being humoured, and knowing it, and allowing it."
+        },
+        {
+          "m": "ABD",
+          "t": "Comfortable silence broken by one person deciding to speak. Nobody wants them to."
+        },
+        {
+          "m": "ABD",
+          "t": "A slow realisation moving across the room one face at a time."
+        },
+        {
+          "m": "ABD",
+          "t": "Nostalgia for something that happened last week."
+        },
+        {
+          "m": "ABD",
+          "t": "Stubbornness meeting stubbornness at low volume."
+        },
+        {
+          "m": "ABD",
+          "t": "Being welcomed back into a room. Nothing said, space made."
+        },
+        {
+          "m": "ABD",
+          "t": "Doting on {4} to an unreasonable degree.",
+          "alt": {
+            "1": "Doting on something small and undeserving to an unreasonable degree.",
+            "2": "Doting on {2} to an unreasonable degree.",
+            "3": "Doting on {3} to a degree {2} finds excessive."
+          }
+        },
+        {
+          "m": "ABD",
+          "t": "Mild betrayal over food."
+        },
+        {
+          "m": "ABD",
+          "t": "The specific brightness of a good day that everyone knows will not last.",
+          "needs": 2,
+          "alt": {
+            "1": "The specific brightness of a good day that they know will not last."
+          }
+        },
+        {
+          "m": "ABD",
+          "t": "Nervous energy with no outlet. Somebody is bouncing a leg."
+        },
+        {
+          "m": "ABD",
+          "t": "Fondness expressed entirely through insult and understood perfectly."
+        },
+        {
+          "m": "ABD",
+          "t": "Shared embarrassment about something that happened in public."
+        },
+        {
+          "m": "ABD",
+          "t": "Determination without a plan."
+        },
+        {
+          "m": "ABD",
+          "t": "Reluctant admiration."
+        },
+        {
+          "m": "ABD",
+          "t": "The quiet of somebody being allowed to not talk."
+        },
+        {
+          "m": "ABD",
+          "t": "Everyone tired in a different way from everyone else.",
+          "needs": 2,
+          "alt": {
+            "1": "Tired in three different ways at once, each of them showing somewhere different."
+          }
+        },
+        {
+          "m": "ABD",
+          "t": "Suppressed laughter in a situation that does not allow it."
+        },
+        {
+          "m": "ABD",
+          "t": "Small ceremony. Something ordinary being treated as an occasion on purpose."
+        },
+        {
+          "m": "ABD",
+          "t": "Being talked out of something, badly, and going along with it."
+        },
+        {
+          "m": "ABD",
+          "t": "Contentment that is slightly smug about being contentment."
+        },
+        {
+          "m": "ABD",
+          "t": "The moment of deciding to go home."
+        },
+        {
+          "m": "ABD",
+          "t": "Loyalty being demonstrated without anyone acknowledging it."
+        }
+      ]
+    }
+  ]
+}

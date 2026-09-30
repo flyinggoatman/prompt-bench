@@ -1,0 +1,46 @@
+{
+  "pack": "Persona: Conditions",
+  "bench": "persona",
+  "categories": [
+    {
+      "key": "WEATHER",
+      "label": "Conditions",
+      "note": "What the air is doing",
+      "order": 250,
+      "items": [
+        {
+          "m": "*",
+          "t": "Still air, nothing moving."
+        },
+        {
+          "m": "*",
+          "t": "A light wind lifting the hair."
+        },
+        {
+          "m": "*",
+          "t": "Rain on the skin, recently arrived."
+        },
+        {
+          "m": "*",
+          "t": "Snow settling on the shoulders."
+        },
+        {
+          "m": "*",
+          "t": "Heat haze, and the shine that comes with it."
+        },
+        {
+          "m": "*",
+          "t": "Fog, softening everything behind them."
+        },
+        {
+          "m": "*",
+          "t": "Strong sun, hard shadows."
+        },
+        {
+          "m": "*",
+          "t": "Overcast, flat even light."
+        }
+      ]
+    }
+  ]
+}

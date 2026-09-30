@@ -1,0 +1,53 @@
+{
+  "pack": "DLC: Print finish",
+  "categories": [
+    {
+      "key": "FINISH",
+      "label": "Finish",
+      "note": "What has happened to the print since",
+      "order": 25,
+      "items": [
+        {
+          "m": "ABC",
+          "t": "Fresh off the press. Clean edges, full colour, one thumbprint in the margin."
+        },
+        {
+          "m": "ABC",
+          "t": "Pinned to a corkboard for a year. Sun faded on one side, pin holes in the corners."
+        },
+        {
+          "m": "ABC",
+          "t": "Folded into quarters and unfolded. Crease lines through the image, wear at the intersections."
+        },
+        {
+          "m": "ABC",
+          "t": "Photocopied twice. Contrast blown out, greys gone to speckle."
+        },
+        {
+          "m": "ABC",
+          "t": "Coffee ring in one corner, absorbed into the paper."
+        },
+        {
+          "m": "ABC",
+          "t": "Torn from a larger sheet. One ragged edge, three cut edges."
+        },
+        {
+          "m": "ABC",
+          "t": "Laminated badly. Air bubbles, one corner peeling."
+        },
+        {
+          "m": "ABC",
+          "t": "Scanned crooked. A sliver of the scanner lid visible along one edge."
+        },
+        {
+          "m": "ABC",
+          "t": "Stuck to a fridge. Magnet shadows at two corners, slightly curled at the bottom."
+        },
+        {
+          "m": "ABC",
+          "t": "Printed on the wrong paper. Ink sitting on top, slightly beaded."
+        }
+      ]
+    }
+  ]
+}

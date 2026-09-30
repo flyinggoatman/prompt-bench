@@ -1,0 +1,24 @@
+{
+  "pack": "Demo: locked extras",
+  "locked": true,
+  "unlock": "example",
+  "categories": [
+    {
+      "key": "SCENE",
+      "items": [
+        {
+          "m": "*",
+          "t": "A power cut has just started. {cast} {is} lit only by whatever torch or screen {they} happened to be holding."
+        },
+        {
+          "m": "*",
+          "t": "A delivery has arrived for the wrong address, and nobody can agree whether to open it."
+        },
+        {
+          "m": "*",
+          "t": "Somebody is attempting a recipe from a handwritten card that is missing its last line."
+        }
+      ]
+    }
+  ]
+}

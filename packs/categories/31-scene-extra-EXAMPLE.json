@@ -1,0 +1,23 @@
+{
+  "pack": "Scenes: example add on",
+  "categories": [
+    {
+      "key": "SCENE",
+      "items": [
+        {
+          "m": "AB",
+          "t": "Somebody has brought the wrong thing back from the shop and is defending the choice."
+        },
+        {
+          "m": "AB",
+          "t": "All {N} of them looking at one small object on a table, none of them touching it.",
+          "needs": 3,
+          "alt": {
+            "1": "Looking at one small object on a table, not touching it.",
+            "2": "Both of them looking at one small object on a table, neither touching it."
+          }
+        }
+      ]
+    }
+  ]
+}

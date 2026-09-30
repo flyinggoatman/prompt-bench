@@ -1,0 +1,41 @@
+{
+  "pack": "Mood",
+  "categories": [
+    {
+      "key": "MOOD",
+      "label": "Mood",
+      "note": "The emotional weather",
+      "order": 40,
+      "items": [
+        {
+          "m": "AB",
+          "t": "Quiet aftermath. Nobody is speaking, the crisis has passed, low energy affection."
+        },
+        {
+          "m": "AB",
+          "t": "Slow motion disaster. Something is going wrong and exactly one person has noticed."
+        },
+        {
+          "m": "AB",
+          "t": "A private joke. Mid laugh, at each other, not at the viewer.",
+          "needs": 2,
+          "alt": {
+            "1": "A private joke that nobody else would get. Mid laugh, and never at the viewer."
+          }
+        },
+        {
+          "m": "AB",
+          "t": "Overstimulation. Too much noise and light, one person retreating, another quietly shielding them."
+        },
+        {
+          "m": "AB",
+          "t": "Smug competence. Somebody has solved it and is being unbearable about it."
+        },
+        {
+          "m": "AB",
+          "t": "Companionable boredom. Nothing is happening and that is fine."
+        }
+      ]
+    }
+  ]
+}

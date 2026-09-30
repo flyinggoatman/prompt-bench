@@ -1,0 +1,33 @@
+{
+  "pack": "Text",
+  "categories": [
+    {
+      "key": "TEXT",
+      "label": "Text",
+      "note": "Words inside the image",
+      "order": 80,
+      "items": [
+        {
+          "m": "ABC",
+          "t": "No text anywhere in the image."
+        },
+        {
+          "m": "AB",
+          "t": "One speech bubble, four words maximum, hand lettered, from one character only."
+        },
+        {
+          "m": "ABC",
+          "t": "One hand lettered sign or label existing as an object in the scene, six words maximum. Not laid over the image."
+        },
+        {
+          "m": "AC",
+          "t": "The exact words \"POORLY TRAINED, HIGHLY SUPERVISED\" hand lettered once, worked into the scene as a physical object rather than a title bar. Spell it P-O-O-R-L-Y T-R-A-I-N-E-D H-I-G-H-L-Y S-U-P-E-R-V-I-S-E-D. No other text."
+        },
+        {
+          "m": "AC",
+          "t": "Invented job titles under each character, three words maximum each, hand lettered. Titles describe what a person does."
+        }
+      ]
+    }
+  ]
+}

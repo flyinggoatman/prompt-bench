@@ -1,0 +1,34 @@
+{
+  "pack": "DLC: More text options",
+  "categories": [
+    {
+      "key": "TEXT",
+      "items": [
+        {
+          "m": "ACD",
+          "t": "One word only, enormous, hand painted, filling the top third."
+        },
+        {
+          "m": "ACD",
+          "t": "A single sound effect hand lettered near the thing that made it, four letters maximum."
+        },
+        {
+          "m": "ACD",
+          "t": "Two speech bubbles in the same panel, both cut off at the bubble edge, three words each."
+        },
+        {
+          "m": "ACD",
+          "t": "A caption box in the bottom corner, five words, deadpan, hand lettered in capitals."
+        },
+        {
+          "m": "ACD",
+          "t": "A label on one object only, as if somebody had put a sticker on it, two words."
+        },
+        {
+          "m": "ACD",
+          "t": "The date, hand written, small, bottom right, nothing else."
+        }
+      ]
+    }
+  ]
+}

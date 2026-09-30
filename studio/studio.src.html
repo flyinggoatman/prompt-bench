@@ -1,0 +1,2372 @@
+<meta charset="utf-8">
+<title>Prompt Bench Studio</title>
+<meta name="description" content="Assemble image prompts that leave a model nothing to invent, and share them without the people in them.">
+<style>
+/* ============ tokens ============ */
+:root{
+  --ground:#e6e9ef; --panel:#f6f7fa; --panel-2:#eceff4; --raise:#ffffff;
+  --ink:#141824; --ink-2:#3a4152; --muted:#646c7e; --faint:#8a92a3;
+  --line:#d3d8e2; --line-2:#c2c8d4;
+  --pink:#d92a63; --pink-soft:#fbe1ea; --teal:#0b8a80; --teal-soft:#d8f1ee;
+  --warn:#a86a0c; --warn-soft:#fbefd6; --bad:#c42b39; --bad-soft:#fbe0e2; --ok:#1c8653; --ok-soft:#dcf2e6;
+  --paper:#fbfaf6; --paper-ink:#1b1d24; --paper-muted:#6d6f78; --paper-line:#e4e1d8;
+  --shadow:0 1px 0 rgba(20,24,36,.04), 0 8px 24px -12px rgba(20,24,36,.18);
+  --sheet-shadow:0 1px 0 rgba(0,0,0,.05), 0 18px 40px -18px rgba(20,24,36,.35);
+  --mono:ui-monospace,"SF Mono","Cascadia Mono","JetBrains Mono",Menlo,Consolas,monospace;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --r:10px; --r-sm:7px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0c0f16; --panel:#131824; --panel-2:#1a2030; --raise:#1f2638;
+    --ink:#e8ebf2; --ink-2:#c3c9d6; --muted:#8e97ab; --faint:#687086;
+    --line:#252d40; --line-2:#323b52;
+    --pink:#ff5e92; --pink-soft:#3a1827; --teal:#35d0c0; --teal-soft:#0f3431;
+    --warn:#f0bd4f; --warn-soft:#3a2c10; --bad:#ff6b77; --bad-soft:#3d161b; --ok:#4fd392; --ok-soft:#10301f;
+    --paper:#e4e1d8; --paper-ink:#17191f; --paper-muted:#5b5d66; --paper-line:#cdc9bd;
+    --shadow:0 1px 0 rgba(0,0,0,.3), 0 10px 30px -14px rgba(0,0,0,.7);
+    --sheet-shadow:0 20px 50px -20px rgba(0,0,0,.9);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0c0f16; --panel:#131824; --panel-2:#1a2030; --raise:#1f2638;
+  --ink:#e8ebf2; --ink-2:#c3c9d6; --muted:#8e97ab; --faint:#687086;
+  --line:#252d40; --line-2:#323b52;
+  --pink:#ff5e92; --pink-soft:#3a1827; --teal:#35d0c0; --teal-soft:#0f3431;
+  --warn:#f0bd4f; --warn-soft:#3a2c10; --bad:#ff6b77; --bad-soft:#3d161b; --ok:#4fd392; --ok-soft:#10301f;
+  --paper:#e4e1d8; --paper-ink:#17191f; --paper-muted:#5b5d66; --paper-line:#cdc9bd;
+  --shadow:0 1px 0 rgba(0,0,0,.3), 0 10px 30px -14px rgba(0,0,0,.7);
+  --sheet-shadow:0 20px 50px -20px rgba(0,0,0,.9);
+  color-scheme:dark;
+}
+
+/* ============ base ============ */
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font:14px/1.45 var(--sans);-webkit-font-smoothing:antialiased;overflow:hidden}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--teal);outline-offset:2px;border-radius:4px}
+::selection{background:var(--pink);color:#fff}
+.mono{font-family:var(--mono)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.eyebrow{font:600 10.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+
+/* ============ shell ============ */
+.shell{height:100%;display:grid;grid-template-rows:auto 1fr;min-height:0}
+.top{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--panel);min-width:0}
+.brand{display:flex;align-items:baseline;gap:10px;min-width:0;flex:none}
+.wordmark{font:900 18px/1 var(--sans);letter-spacing:-.02em;text-transform:uppercase;position:relative;white-space:nowrap;
+  text-shadow:1.5px 1px 0 color-mix(in srgb,var(--pink) 75%,transparent),-1px -.5px 0 color-mix(in srgb,var(--teal) 70%,transparent)}
+.wordmark b{font-weight:900;color:var(--pink)}
+.bench-switch{display:inline-flex;background:var(--panel-2);border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px}
+.bench-switch button{border:0;background:transparent;border-radius:999px;padding:5px 12px;font-weight:600;font-size:12.5px;color:var(--muted)}
+.bench-switch button[aria-pressed="true"]{background:var(--ink);color:var(--panel)}
+.top .spacer{flex:1}
+.palette-trigger{display:flex;align-items:center;gap:10px;min-width:0;flex:0 1 340px;border:1px solid var(--line);background:var(--raise);border-radius:999px;padding:6px 8px 6px 14px;color:var(--muted);text-align:left}
+.palette-trigger span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+kbd{font:600 10.5px/1 var(--mono);border:1px solid var(--line-2);border-bottom-width:2px;border-radius:5px;padding:3px 5px;background:var(--panel-2);color:var(--ink-2)}
+.iconbtn{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:9px;border:1px solid var(--line);background:var(--raise);color:var(--ink-2);flex:none}
+.iconbtn:hover{border-color:var(--line-2);color:var(--ink)}
+.iconbtn svg{width:17px;height:17px}
+.iconbtn[disabled]{opacity:.35;cursor:default}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--line);background:var(--raise);border-radius:9px;padding:7px 12px;font-weight:600;font-size:13px;white-space:nowrap}
+.btn:hover{border-color:var(--line-2)}
+.btn svg{width:15px;height:15px}
+.btn.primary{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+.btn.pink{background:var(--pink);border-color:var(--pink);color:#fff}
+.btn.ghost{background:transparent;border-color:transparent;color:var(--muted)}
+.btn.ghost:hover{color:var(--ink);background:var(--panel-2)}
+.btn.sm{padding:4px 9px;font-size:12px;border-radius:7px}
+.btn.danger{color:var(--bad)}
+.btn.ghost[aria-pressed="true"]{color:var(--teal);background:var(--teal-soft)}
+
+.main{display:grid;grid-template-columns:318px minmax(0,1fr) minmax(420px,34vw);min-height:0}
+.col{min-height:0;overflow:auto;overscroll-behavior:contain}
+.col-cast{border-right:1px solid var(--line);background:var(--panel)}
+.col-recipe{padding:18px 22px 80px}
+.col-proof{border-left:1px solid var(--line);background:var(--panel-2);display:flex;flex-direction:column;overflow:hidden}
+.mobnav{display:none}
+.show-sm{display:none!important}
+@media (max-width:760px){.show-sm{display:inline-grid!important}}
+
+@media (max-width:1180px){
+  .main{grid-template-columns:minmax(0,1fr) minmax(380px,42vw)}
+  .col-cast{display:none}
+  .col-recipe .cast-inline{display:block!important}
+}
+@media (max-width:760px){
+  body{overflow:hidden}
+  .top{padding:8px 12px;gap:8px;flex-wrap:wrap}
+  .palette-trigger{order:5;flex:1 1 100%}
+  .palette-trigger kbd{display:none}
+  .wordmark{font-size:16px}
+  .hide-sm{display:none!important}
+  .main{grid-template-columns:minmax(0,1fr);padding-bottom:calc(58px + env(safe-area-inset-bottom,0px))}
+  .col-recipe{padding:14px 16px 40px}
+  .main[data-view="recipe"] .col-proof{display:none}
+  .main[data-view="proof"] .col-recipe{display:none}
+  .col-proof{border-left:0}
+  .mobnav{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--panel);border-top:1px solid var(--line);padding:6px 10px calc(6px + env(safe-area-inset-bottom,0px));gap:6px}
+  .mobnav button{flex:1;border:0;background:transparent;border-radius:10px;padding:7px 4px;font-weight:700;font-size:12px;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px}
+  .mobnav button[aria-pressed="true"]{background:var(--panel-2);color:var(--ink)}
+  .mobnav .badge{font:700 10px/1 var(--mono)}
+}
+
+/* ============ cast rail ============ */
+.rail-head{padding:16px 16px 10px;position:sticky;top:0;background:var(--panel);z-index:2;border-bottom:1px solid var(--line)}
+.rail-title{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.rail-title h2{margin:0;font:800 15px/1.2 var(--sans);letter-spacing:-.01em}
+.count-dial{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:3px;margin-top:10px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:3px}
+.count-dial button{border:0;background:transparent;border-radius:7px;padding:6px 0;font:700 14px/1 var(--mono);color:var(--muted)}
+.count-dial button[aria-pressed="true"]{background:var(--ink);color:var(--panel)}
+.count-dial button:hover:not([aria-pressed="true"]){background:var(--raise);color:var(--ink)}
+.cast-statement{margin:10px 0 0;font:12px/1.45 var(--mono);color:var(--ink-2);border-left:3px solid var(--teal);padding:2px 0 2px 9px}
+.cast-body{padding:12px 12px 24px;display:flex;flex-direction:column;gap:8px}
+.slot{border:1px solid var(--line);border-radius:var(--r);background:var(--raise);overflow:hidden}
+.slot.off{opacity:.5;background:transparent;border-style:dashed}
+.slot-head{display:flex;align-items:center;gap:10px;width:100%;border:0;background:transparent;padding:9px 10px;text-align:left}
+.avatar{width:38px;height:38px;border-radius:50%;flex:none;display:grid;place-items:center;font:800 15px/1 var(--sans);color:#fff;background:var(--c,var(--pink));overflow:hidden;position:relative}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.avatar .kind{position:absolute;right:-2px;bottom:-2px;width:16px;height:16px;border-radius:50%;background:var(--raise);color:var(--ink);display:grid;place-items:center;font-size:9px;border:1px solid var(--line)}
+.slot-meta{flex:1;min-width:0}
+.slot-name{font-weight:700;display:flex;gap:6px;align-items:center}
+.slot-name .pid{font:600 10.5px/1 var(--mono);color:var(--faint)}
+.slot-sub{display:block;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dots{display:flex;gap:3px;margin-top:4px}
+.dots i{width:14px;height:3px;border-radius:2px;background:var(--line-2)}
+.dots i.on{background:var(--teal)}
+.dots i.photo.on{background:var(--pink)}
+.slot-body{padding:4px 12px 12px;display:grid;gap:10px;border-top:1px dashed var(--line)}
+.slot-body .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.field{display:grid;gap:4px}
+.field > span{font-weight:600;font-size:12px;color:var(--ink-2);display:flex;justify-content:space-between;gap:8px}
+.field > span em{font-style:normal;font-weight:400;color:var(--faint)}
+.field small{color:var(--muted);font-size:11.5px;line-height:1.4}
+input[type=text],input[type=search],textarea{width:100%;border:1px solid var(--line);background:var(--panel);border-radius:var(--r-sm);padding:7px 9px;outline:none;min-width:0}
+textarea{resize:vertical;min-height:54px;line-height:1.45}
+input[type=text]:focus,input[type=search]:focus,textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px color-mix(in srgb,var(--teal) 18%,transparent)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:0;background:transparent;padding:5px 10px;font-size:12px;font-weight:600;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--panel)}
+.photo-drop{display:flex;align-items:center;gap:10px;border:1px dashed var(--line-2);border-radius:var(--r-sm);padding:8px;color:var(--muted);font-size:12px;background:var(--panel)}
+.photo-drop img{width:44px;height:44px;border-radius:6px;object-fit:cover}
+.switchrow{display:flex;gap:10px;align-items:flex-start;padding:9px 10px;border:1px solid var(--line);border-radius:var(--r);background:var(--raise)}
+.switchrow b{display:block;font-size:13px}
+.switchrow small{display:block;color:var(--muted);font-size:11.5px;line-height:1.4;margin-top:2px}
+.tog{appearance:none;flex:none;width:34px;height:20px;border-radius:999px;background:var(--line-2);position:relative;margin:1px 0 0;cursor:pointer;transition:background .15s}
+.tog::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.3);transition:transform .15s}
+.tog:checked{background:var(--teal)}
+.tog:checked::after{transform:translateX(14px)}
+.cast-inline{display:none;margin-bottom:22px}
+.cast-inline .rail-head{position:static;background:transparent}
+
+/* ============ recipe ============ */
+.sec{margin:0 auto 26px;max-width:980px}
+.sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+.sec-head h2{margin:0;font:800 19px/1.15 var(--sans);letter-spacing:-.02em;text-wrap:balance}
+.sec-head .eyebrow{flex:none}
+.sec-head p{margin:0;color:var(--muted);font-size:12.5px;flex:1 1 260px}
+.sec-head .tools{display:flex;gap:6px;margin-left:auto}
+.masters{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
+.master{position:relative;text-align:left;border:1px solid var(--line);background:var(--raise);border-radius:var(--r);padding:12px 12px 12px;display:grid;gap:5px;align-content:start}
+.master:hover{border-color:var(--line-2)}
+.master b{font:800 15px/1.1 var(--sans);letter-spacing:-.01em}
+.master p{margin:0;font-size:12px;color:var(--muted);line-height:1.4}
+.master .fits{font:600 10.5px/1 var(--mono);color:var(--faint)}
+.master[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.master[aria-pressed="true"]::after{content:"ON PRESS";position:absolute;top:10px;right:10px;font:800 9.5px/1 var(--mono);letter-spacing:.12em;color:var(--pink);border:1.5px solid var(--pink);padding:3px 5px;border-radius:3px;transform:rotate(4deg)}
+.brief{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+.brief .field{background:var(--raise);border:1px solid var(--line);border-radius:var(--r);padding:10px}
+.brief .field.wide{grid-column:1/-1}
+.lanes{border:1px solid var(--line);border-radius:var(--r);background:var(--raise);overflow:hidden}
+.lane{display:grid;grid-template-columns:150px minmax(0,1fr) auto;gap:12px;align-items:start;padding:10px 12px;border-top:1px solid var(--line)}
+.lane:first-child{border-top:0}
+.lane-name b{display:block;font-weight:800;font-size:13.5px}
+.lane-name small{display:block;color:var(--muted);font-size:11.5px;line-height:1.35}
+.lane-name .cnt{font:600 10.5px/1 var(--mono);color:var(--faint);margin-top:4px;display:block}
+.lane-picks{display:flex;flex-wrap:wrap;gap:6px;min-height:30px;align-items:center}
+.lane-empty{color:var(--faint);font-size:12.5px;font-style:italic}
+.chip{display:inline-flex;align-items:flex-start;gap:6px;max-width:100%;border:1px solid var(--line-2);background:var(--panel);border-radius:8px;padding:5px 6px 5px 9px;font-size:12.5px;line-height:1.35}
+.chip .t{min-width:0}
+.chip .n{font:600 10px/1.35 var(--mono);color:var(--faint);margin-right:2px}
+.chip button{border:0;background:transparent;color:var(--muted);padding:0 2px;line-height:1;flex:none;border-radius:4px}
+.chip button:hover{color:var(--ink);background:var(--panel-2)}
+.chip button svg{width:13px;height:13px;display:block}
+.chip.locked{border-color:var(--teal);background:var(--teal-soft)}
+.chip.locked .lock{color:var(--teal)}
+.chip.held{border-style:dashed;opacity:.7}
+.chip.held .t{text-decoration:line-through;text-decoration-color:var(--bad)}
+.lane-tools{display:flex;gap:4px}
+.tok{display:inline-block;font:700 11.5px/1.2 var(--sans);padding:0 5px;border-radius:4px;background:var(--pink-soft);color:var(--pink);white-space:nowrap}
+.tok.none{background:var(--warn-soft);color:var(--warn)}
+@media (max-width:760px){
+  .lane{grid-template-columns:minmax(0,1fr) auto}
+  .lane-name{grid-column:1/2}
+  .lane-picks{grid-column:1/-1;grid-row:2}
+  .lane-tools{grid-column:2;grid-row:1}
+}
+.hold{background:var(--raise);border:1px solid var(--line);border-radius:var(--r);padding:12px;margin-top:10px}
+.hold-top{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
+.hold-top b{font-size:13px}
+.hold-scale{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin-top:6px;font:600 10px/1.2 var(--mono);color:var(--faint);text-align:center}
+.hold-scale span.on{color:var(--pink)}
+.said{font:12.5px/1.5 var(--mono);color:var(--ink-2);margin-top:8px;border-left:3px solid var(--line-2);padding-left:9px}
+.said.live{border-color:var(--pink)}
+input[type=range]{width:100%;accent-color:var(--pink);height:22px;margin:4px 0 0}
+.dials{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px}
+.dial{background:var(--raise);border:1px solid var(--line);border-radius:var(--r);padding:11px 12px;display:grid;gap:2px;align-content:start}
+.dial-top{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.dial-top b{font-size:13px}
+.dial-top output{font:800 15px/1 var(--mono);color:var(--pink);font-variant-numeric:tabular-nums}
+.dial .ends{display:flex;justify-content:space-between;font:600 10.5px/1 var(--mono);color:var(--faint);text-transform:uppercase;letter-spacing:.06em}
+.dial .said{font-size:11.5px;min-height:3em}
+.guards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px}
+.stepper{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-top:8px}
+.stepper button{border:0;background:var(--panel-2);width:30px;height:28px;font-weight:800}
+.stepper output{min-width:34px;text-align:center;font:800 14px/1 var(--mono)}
+.vary{display:flex;gap:12px;align-items:flex-start;background:var(--raise);border:1px solid var(--line);border-radius:var(--r);padding:12px;flex-wrap:wrap}
+.vary .lines{flex:1 1 300px;font:12.5px/1.55 var(--mono);color:var(--ink-2)}
+.seedbox{display:flex;align-items:center;gap:8px}
+.seedbox .seed{font:800 22px/1 var(--mono);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.note{font-size:12px;color:var(--muted)}
+.warnline{font-size:12px;color:var(--warn);margin-top:6px}
+
+/* ============ proof ============ */
+.proof-head{padding:10px 14px;display:flex;gap:8px;align-items:center;border-bottom:1px solid var(--line);background:var(--panel);flex-wrap:wrap}
+.tabs{display:inline-flex;gap:2px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:3px}
+.tabs button{border:0;background:transparent;padding:6px 11px;border-radius:7px;font-weight:700;font-size:12.5px;color:var(--muted);display:inline-flex;gap:6px;align-items:center}
+.tabs button[aria-selected="true"]{background:var(--raise);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.tabs button .dot{width:7px;height:7px;border-radius:50%;background:var(--teal)}
+.tabs button[data-tab="share"] .dot{background:var(--pink)}
+.proof-head .grow{flex:1}
+.guardbar{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--panel);cursor:pointer;width:100%;border-left:0;border-right:0;border-top:0;text-align:left}
+.ring{--p:80;--c:var(--ok);width:44px;height:44px;border-radius:50%;flex:none;display:grid;place-items:center;
+  background:conic-gradient(var(--c) calc(var(--p)*1%),var(--line) 0)}
+.ring span{width:34px;height:34px;border-radius:50%;background:var(--panel);display:grid;place-items:center;font:800 13px/1 var(--mono)}
+.guardbar .gtxt{flex:1;min-width:0}
+.guardbar .gtxt b{display:block;font-size:13.5px}
+.guardbar .gtxt small{display:block;color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pills{display:flex;gap:4px;flex:none}
+.pill{font:700 10.5px/1 var(--mono);padding:4px 6px;border-radius:5px}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.info{background:var(--panel-2);color:var(--muted)}
+.checks{border-bottom:1px solid var(--line);background:var(--panel);max-height:46%;overflow:auto;padding:4px 10px 10px}
+.check{display:grid;grid-template-columns:18px 1fr auto;gap:8px;padding:8px 4px;border-top:1px solid var(--line);align-items:start}
+.check:first-child{border-top:0}
+.check .ic{width:18px;height:18px;border-radius:5px;display:grid;place-items:center;font:800 11px/1 var(--mono);margin-top:1px}
+.check.bad .ic{background:var(--bad);color:#fff}
+.check.warn .ic{background:var(--warn);color:#fff}
+.check.ok .ic{background:var(--ok);color:#fff}
+.check.info .ic{background:var(--line-2);color:var(--ink)}
+.check b{font-size:12.5px;display:block}
+.check small{display:block;color:var(--muted);font-size:11.5px;line-height:1.4;margin-top:1px}
+.proof-scroll{flex:1;min-height:0;overflow:auto;padding:18px 16px 24px}
+.sheet{position:relative;background:var(--paper);color:var(--paper-ink);border-radius:3px;box-shadow:var(--sheet-shadow);padding:28px 22px 26px 22px;max-width:760px;margin:0 auto}
+.sheet::before,.sheet::after{content:"";position:absolute;width:18px;height:18px;background:
+  linear-gradient(var(--paper-ink),var(--paper-ink)) center/1px 100% no-repeat,
+  linear-gradient(var(--paper-ink),var(--paper-ink)) center/100% 1px no-repeat;opacity:.45}
+.sheet::before{top:7px;left:7px}
+.sheet::after{bottom:7px;right:7px}
+.slug{display:flex;justify-content:space-between;gap:10px;font:600 10px/1.3 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--paper-muted);border-bottom:1px solid var(--paper-line);padding-bottom:9px;margin-bottom:14px;flex-wrap:wrap}
+.slug .reg{display:inline-flex;gap:3px;align-items:center}
+.slug .reg i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.blk{position:relative;display:grid;grid-template-columns:62px minmax(0,1fr);gap:10px;padding:5px 0;border-radius:4px;cursor:pointer}
+.blk:hover{background:color-mix(in srgb,var(--paper-ink) 5%,transparent)}
+.blk .tag{font:700 9px/1.25 var(--mono);letter-spacing:.08em;text-transform:uppercase;text-align:right;padding:3px 7px 0 0;border-right:3px solid var(--tc);color:var(--tc);word-break:break-word}
+.blk .txt{font:12.5px/1.6 var(--mono);white-space:pre-wrap;word-wrap:break-word;min-width:0}
+.blk .txt .h{font-weight:800;letter-spacing:.04em}
+.blk .txt .ph{background:color-mix(in srgb,#d92a63 14%,transparent);color:#b0174b;border-radius:3px;padding:0 2px}
+.blk .txt .pid{background:color-mix(in srgb,#0b8a80 16%,transparent);color:#086b63;border-radius:3px;padding:0 2px;font-weight:700}
+.blk.gap{padding:0;height:8px;cursor:default}
+.blk.flash{animation:flash 1s ease}
+@keyframes flash{0%{background:color-mix(in srgb,#d92a63 25%,transparent)}100%{background:transparent}}
+.proof-foot{display:flex;gap:8px;padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);background:var(--panel);align-items:center;flex-wrap:wrap}
+.proof-foot .stats{font:600 11px/1.3 var(--mono);color:var(--muted);flex:1;min-width:120px;font-variant-numeric:tabular-nums}
+@media (max-width:760px){.proof-foot{padding-bottom:10px}}
+.report{background:var(--raise);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin:0 auto 14px;max-width:760px}
+.report h3{margin:0 0 2px;font:800 14px/1.2 var(--sans)}
+.report .sub{color:var(--muted);font-size:12px;margin:0 0 10px}
+.redact{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.redact div{border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--panel)}
+.redact b{display:block;font:800 18px/1.1 var(--mono);font-variant-numeric:tabular-nums}
+.redact small{color:var(--muted);font-size:11.5px}
+.swaps{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.swap{font:600 11.5px/1 var(--mono);border:1px solid var(--line);border-radius:6px;padding:5px 7px;background:var(--panel)}
+.swap s{color:var(--muted)}
+.swap span{color:var(--teal)}
+.scan{display:flex;gap:10px;align-items:center;margin-top:10px;padding:8px 10px;border-radius:8px;font-size:12.5px}
+.scan.ok{background:var(--ok-soft);color:var(--ok)}
+.scan.bad{background:var(--bad-soft);color:var(--bad)}
+.share-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+
+/* ============ overlays ============ */
+.veil{position:fixed;inset:0;background:rgba(8,10,16,.55);z-index:50;display:flex;align-items:flex-start;justify-content:center;padding:max(6vh,16px) 16px 16px;backdrop-filter:blur(2px)}
+.dialog{background:var(--panel);border:1px solid var(--line-2);border-radius:14px;box-shadow:0 30px 80px -20px rgba(0,0,0,.6);width:min(760px,100%);max-height:88vh;display:flex;flex-direction:column;overflow:hidden}
+.dialog.wide{width:min(1100px,100%);height:88vh}
+.dialog-head{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line)}
+.dialog-head h3{margin:0;font:800 16px/1.2 var(--sans);flex:1}
+.dialog-body{padding:14px;overflow:auto;min-height:0}
+.pal-input{border:0!important;border-bottom:1px solid var(--line)!important;border-radius:0!important;padding:16px 18px!important;font-size:16px!important;background:transparent!important;box-shadow:none!important}
+.pal-list{overflow:auto;padding:6px;min-height:0}
+.pal-item{display:grid;grid-template-columns:78px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 10px;border-radius:8px;cursor:pointer;border:0;background:transparent;width:100%;text-align:left}
+.pal-item[aria-selected="true"]{background:var(--panel-2);box-shadow:inset 3px 0 0 var(--pink)}
+.pal-item .k{font:700 10px/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.pal-item .v{font-size:13px;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.pal-item .s{font:700 10.5px/1 var(--mono);color:var(--teal)}
+.pal-item .s.off{color:var(--faint)}
+.pal-empty{padding:18px;color:var(--muted)}
+mark{background:color-mix(in srgb,var(--pink) 22%,transparent);color:inherit;border-radius:2px}
+.browser{display:grid;grid-template-columns:220px minmax(0,1fr);min-height:0;flex:1}
+.cats{border-right:1px solid var(--line);overflow:auto;padding:8px}
+.cats button{display:flex;width:100%;justify-content:space-between;gap:6px;border:0;background:transparent;border-radius:7px;padding:7px 9px;text-align:left;font-weight:600;font-size:13px;color:var(--ink-2)}
+.cats button[aria-pressed="true"]{background:var(--ink);color:var(--panel)}
+.cats button span{font:600 10.5px/1.6 var(--mono);opacity:.75}
+.cats .grp{font:700 10px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--faint);padding:10px 9px 6px}
+.cards-wrap{display:flex;flex-direction:column;min-height:0}
+.cards-tools{display:flex;gap:8px;padding:10px;border-bottom:1px solid var(--line);align-items:center;flex-wrap:wrap}
+.cards-tools input{flex:1 1 200px}
+.cards{overflow:auto;padding:10px;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px;align-content:start;min-height:0}
+.card{position:relative;text-align:left;border:1px solid var(--line);background:var(--raise);border-radius:9px;padding:10px 10px 30px;font-size:12.5px;line-height:1.45;display:block}
+.card:hover{border-color:var(--line-2)}
+.card[aria-pressed="true"]{border-color:var(--pink);box-shadow:inset 0 0 0 1px var(--pink);background:color-mix(in srgb,var(--pink) 6%,var(--raise))}
+.card .meta{position:absolute;left:10px;right:10px;bottom:8px;display:flex;gap:6px;align-items:center;font:600 10px/1 var(--mono);color:var(--faint)}
+.card .meta .tick{margin-left:auto;width:16px;height:16px;border-radius:4px;border:1.5px solid var(--line-2);display:grid;place-items:center;color:#fff}
+.card[aria-pressed="true"] .meta .tick{background:var(--pink);border-color:var(--pink)}
+.card[disabled]{opacity:.5;cursor:not-allowed}
+.card .why{color:var(--warn)}
+@media (max-width:760px){
+  .browser{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr)}
+  .cats{border-right:0;border-bottom:1px solid var(--line);display:flex;gap:4px;overflow-x:auto;padding:6px}
+  .cats button{width:auto;flex:none}
+  .cats .grp{display:none}
+  .dialog.wide{height:92vh}
+  .veil{padding:8px}
+}
+.list{display:grid;gap:6px}
+.list .item{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:var(--raise)}
+.list .item .grow{flex:1;min-width:0}
+.list .item b{display:block;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.list .item small{display:block;color:var(--muted);font-size:11.5px}
+.tagp{font:700 10px/1 var(--mono);padding:3px 5px;border-radius:4px;background:var(--panel-2);color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.tagp.priv{background:var(--pink-soft);color:var(--pink)}
+.tagp.srv{background:var(--teal-soft);color:var(--teal)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.cardimg{max-width:100%;border-radius:8px;border:1px solid var(--line);display:block;margin:0 auto}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--panel);padding:9px 14px;border-radius:9px;font-weight:600;font-size:13px;z-index:80;box-shadow:var(--shadow);max-width:calc(100% - 32px)}
+@media (max-width:760px){.toast{bottom:calc(72px + env(safe-area-inset-bottom,0px))}}
+.banner{display:flex;gap:10px;align-items:center;padding:8px 16px;background:var(--teal-soft);color:var(--ink);font-size:12.5px;border-bottom:1px solid var(--line)}
+.agent-skip{position:absolute;left:12px;top:-60px;z-index:100;background:var(--ink);color:var(--panel);padding:8px 12px;border-radius:8px;font-weight:700;text-decoration:none}
+.agent-skip:focus{top:8px}
+.briefbox{background:var(--raise);border:1px solid var(--line);border-radius:var(--r);padding:12px;display:grid;gap:10px}
+.briefbox textarea{font-size:14px}
+.decisions{display:flex;flex-wrap:wrap;gap:6px}
+.decision{font-size:12px;border:1px solid var(--line-2);border-radius:7px;padding:4px 8px;background:var(--panel);max-width:100%}
+.decision b{font:700 10px/1 var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--teal);margin-right:6px}
+.decision em{font-style:normal;color:var(--faint)}
+.checks-tools{display:flex;gap:6px;justify-content:flex-end;padding:8px 4px 2px;flex-wrap:wrap}
+.blk.changed .txt{background:color-mix(in srgb,#f2c14e 26%,transparent);border-radius:3px}
+.blk.changed .tag{color:#b0174b}
+.desk{position:fixed;inset:0;overflow:auto;background:var(--ground);z-index:20;padding-block:20px 80px;padding-inline:16px}
+.desk-inner{max-width:900px;margin:0 auto;display:grid;gap:18px}
+.desk-top{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.desk-top h1{margin:0;font:900 28px/1.05 var(--sans);letter-spacing:-.02em;flex:1 1 300px;text-wrap:balance}
+.desk-top p{margin:6px 0 0;color:var(--muted);max-width:62ch}
+.desk .card-d{background:var(--raise);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:grid;gap:12px}
+.desk h2{margin:0;font:800 16px/1.2 var(--sans)}
+.desk ol.how{margin:0;padding-left:20px;display:grid;gap:4px;color:var(--ink-2)}
+.desk .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.desk select{width:100%;border:1px solid var(--line);background:var(--panel);border-radius:var(--r-sm);padding:7px 9px}
+.desk input[type=number]{width:100%;border:1px solid var(--line);background:var(--panel);border-radius:var(--r-sm);padding:7px 9px}
+.desk .checks-row{display:flex;gap:16px;flex-wrap:wrap}
+.desk .checks-row label{display:flex;gap:8px;align-items:center;font-weight:600;font-size:13px}
+.desk textarea.out{font:12px/1.55 var(--mono);min-height:180px;background:var(--paper);color:var(--paper-ink)}
+.desk pre{margin:0;font:11.5px/1.5 var(--mono);white-space:pre-wrap;word-break:break-word;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-sm);padding:10px;max-height:340px;overflow:auto}
+.status{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:9px;font-weight:700}
+.status[data-ready="true"]{background:var(--ok-soft);color:var(--ok)}
+.status[data-ready="false"]{background:var(--warn-soft);color:var(--warn)}
+.gaplist{margin:0;padding-left:20px;display:grid;gap:6px}
+.gaplist li small{display:block;color:var(--muted);font:11px/1.4 var(--mono)}
+.gaplist li[data-level="blocker"]::marker{color:var(--bad)}
+.catalogue h3{margin:12px 0 4px;font:800 13px/1.2 var(--sans)}
+.catalogue ol{margin:0;padding-left:0;list-style:none;display:grid;gap:2px;font-size:12.5px}
+.catalogue li span{font:600 10.5px/1 var(--mono);color:var(--faint);margin-right:6px}
+.console{position:fixed;left:0;right:0;top:0;z-index:95;background:#0c0f16;color:#e8ebf2;border-bottom:3px solid #ff5e92;box-shadow:0 20px 60px -10px rgba(0,0,0,.7);padding:calc(14px + env(safe-area-inset-top,0px)) 16px 16px;font-family:var(--mono);animation:drop .18s ease-out}
+@keyframes drop{from{transform:translateY(-100%)}to{transform:none}}
+.console-inner{max-width:760px;margin:0 auto;display:grid;gap:8px}
+.console-row{display:flex;align-items:center;gap:10px}
+.console .prompt-sign{color:#35d0c0;font-weight:800;font-size:20px}
+.console input{flex:1;min-width:0;background:transparent!important;border:0!important;border-bottom:2px dashed #3a4460!important;border-radius:0!important;color:#fff;font:800 26px/1.2 var(--mono);letter-spacing:.35em;text-transform:uppercase;padding:4px 0!important;box-shadow:none!important;caret-color:#ff5e92}
+.console .hintline{font-size:11.5px;color:#8e97ab;letter-spacing:.04em}
+.console .msg{font-size:13px;min-height:1.4em}
+.console .msg.bad{color:#ff6b77}
+.console .msg.ok{color:#4fd392}
+.console.shake{animation:shake .35s}
+@keyframes shake{20%{transform:translateX(-10px)}40%{transform:translateX(9px)}60%{transform:translateX(-6px)}80%{transform:translateX(4px)}}
+.granted{position:fixed;inset:0;z-index:99;background:#0c0f16;display:grid;place-items:center;text-align:center;color:#f3f1ea;padding:24px;cursor:pointer}
+.granted h2{margin:0;font:900 clamp(34px,8vw,92px)/.95 var(--sans);letter-spacing:-.02em;text-transform:uppercase;text-shadow:4px 3px 0 rgba(255,94,146,.9),-3px -2px 0 rgba(53,208,192,.85);animation:jit .12s steps(2) 8}
+@keyframes jit{50%{text-shadow:-4px 2px 0 rgba(255,94,146,.9),3px -3px 0 rgba(53,208,192,.85);transform:translateX(2px)}}
+.granted ul{list-style:none;padding:0;margin:18px 0 0;font:600 14px/1.8 var(--mono);color:#35d0c0}
+.granted small{display:block;margin-top:14px;color:#8e97ab;font:12px var(--mono)}
+.pm-row{border:1px solid var(--line);border-radius:10px;padding:10px;display:grid;gap:8px;background:var(--raise)}
+.pm-row .row select{border:1px solid var(--line);background:var(--panel);border-radius:7px;padding:5px 8px;max-width:100%}
+.pm-masters{display:flex;flex-wrap:wrap;gap:10px;font-size:12.5px}
+.pm-masters label{display:flex;gap:5px;align-items:center}
+.pm-lint{font-size:12px;color:var(--warn)}
+.pm-lint.ok{color:var(--ok)}
+.sheetgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.vcard{border:1px solid var(--line);border-radius:10px;background:var(--raise);padding:12px;display:grid;gap:8px;align-content:start}
+.vcard h4{margin:0;font:800 14px/1.2 var(--sans);display:flex;justify-content:space-between;gap:8px}
+.vcard h4 span{font:700 11px/1.4 var(--mono);color:var(--pink)}
+.vcard ul{margin:0;padding-left:16px;font-size:12px;display:grid;gap:3px}
+.vcard .vl{font:11.5px/1.45 var(--mono);color:var(--muted)}
+.keys{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;align-items:center;font-size:13px}
+.viewlink{align-self:center;font:600 12px/1 var(--sans);color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:7px 10px;white-space:nowrap}
+.viewlink:hover{color:var(--ink);border-color:var(--ink)}
+.viewlink:focus-visible{outline:2px solid var(--pink);outline-offset:2px}
+.dropzone{position:fixed;inset:0;z-index:90;display:grid;place-items:center;background:color-mix(in srgb,var(--teal) 25%,rgba(0,0,0,.4));color:#fff;font:800 22px/1.2 var(--sans);pointer-events:none}
+</style>
+
+<a class="agent-skip" id="agentSkip" href="#agent">AI agent? Open the Agent desk: one form in, finished prompt out. Or call window.PromptBench.</a>
+<script type="application/json" id="pb-agent-manifest">{"schema":"prompt-bench.agent/1","desk":"#agent","api":"window.PromptBench"}</script>
+<div class="shell" id="shell">
+  <header class="top">
+    <div class="brand">
+      <a class="iconbtn" id="homeLink" href="/home" aria-label="Home: every bench and the admin pages" title="Home" style="display:none;align-self:center"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/></svg></a>
+      <script>if (/^https?:$/.test(location.protocol)) document.getElementById("homeLink").style.display = "";</script>
+      <span class="wordmark" aria-label="Prompt Bench Studio">Prompt Bench <b>Studio</b></span>
+      <a class="viewlink" id="classicLink" href="/classic" title="The Classic page, with its Workbench, Composer, Library and Guided layouts" style="display:none">Classic view</a>
+      <script>if (/^https?:$/.test(location.protocol)) document.getElementById("classicLink").style.display = "";</script>
+    </div>
+    <div class="bench-switch" role="group" aria-label="Bench">
+      <button type="button" id="benchMain" data-bench="main" aria-pressed="true">Scene</button>
+      <button type="button" id="benchPersona" data-bench="persona" aria-pressed="false">Persona</button>
+    </div>
+    <button type="button" class="palette-trigger" id="openPalette" aria-label="Search modules and commands">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+      <span id="palHint">Find any module, master or command</span><kbd>Ctrl K</kbd>
+    </button>
+    <span class="spacer"></span>
+    <button type="button" class="iconbtn" id="undoBtn" title="Undo (Ctrl Z)" aria-label="Undo" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg></button>
+    <button type="button" class="btn hide-sm" id="openDesk" title="A single form for AI agents and quick jobs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>Agent desk</button>
+    <button type="button" class="btn hide-sm" id="openSetups"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12v18l-6-4-6 4z"/></svg>Setups</button>
+    <button type="button" class="btn hide-sm" id="openPacks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/></svg>Packs <span class="mono" id="packCount" style="color:var(--muted)"></span></button>
+    <button type="button" class="iconbtn show-sm" id="moreBtn" aria-label="More: setups, packs, codes, agent desk" title="More"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg></button>
+    <button type="button" class="iconbtn" id="themeBtn" aria-label="Switch light or dark" title="Light or dark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+  </header>
+  <div id="bannerSlot"></div>
+
+  <div class="main" id="main" data-view="recipe">
+    <!-- ================= CAST ================= -->
+    <aside class="col col-cast" id="castRail" aria-label="Cast"></aside>
+
+    <!-- ================= RECIPE ================= -->
+    <section class="col col-recipe" id="recipe" aria-label="Recipe">
+      <div class="cast-inline sec" id="castInline"></div>
+
+      <div class="sec" id="sec-fromBrief">
+        <div class="sec-head"><span class="eyebrow">Start here</span><h2>From the client's words</h2><p>Paste what they asked for. It sets the master, cast size, lanes and dials the words can justify, keeps what you already chose, and turns the rest into questions.</p></div>
+        <div class="briefbox">
+          <label class="sr" for="briefIn">The client's words</label>
+          <textarea id="briefIn" rows="2" placeholder="A risograph poster of the three of us at the beach, pink and teal, no text"></textarea>
+          <div class="row"><button type="button" class="btn primary" id="briefGo">Read the brief</button><span class="note" id="briefNote">Explicit choices always win. Undo puts everything back.</span></div>
+          <div id="briefOut"></div>
+        </div>
+      </div>
+
+      <div class="sec" id="sec-master">
+        <div class="sec-head"><span class="eyebrow">Master</span><h2>What kind of picture</h2><p>One master per prompt. It is the role the model plays, and it adapts its wording to the size of your cast.</p></div>
+        <div class="masters" id="masters"></div>
+      </div>
+
+      <div class="sec" id="sec-brief">
+        <div class="sec-head"><span class="eyebrow">Brief</span><h2>In your words</h2><p>Free text, wrapped and placed by the packs. Keep it to what is true; the modules below handle the look.</p></div>
+        <div class="brief" id="brief"></div>
+      </div>
+
+      <div class="sec" id="sec-style">
+        <div class="sec-head"><span class="eyebrow">Printed first</span><h2>How it is drawn</h2><p>These lanes go to the top of the prompt, before anybody is described, so a face is drawn in the same hand as the room.</p>
+          <div class="tools"><button type="button" class="btn sm" data-roll="style"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/></svg>Roll style</button></div></div>
+        <div class="lanes" id="styleLanes"></div>
+        <div class="hold" id="holdBox"></div>
+      </div>
+
+      <div class="sec" id="sec-image">
+        <div class="sec-head"><span class="eyebrow">This image</span><h2>What is in it</h2><p id="imageNote">Stack as many as you like. Anything that needs more characters than your cast is held back and says so.</p>
+          <div class="tools"><button type="button" class="btn sm" data-roll="image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/></svg>Roll scene</button><button type="button" class="btn sm" id="browseAll">Browse all</button></div></div>
+        <div class="lanes" id="imageLanes"></div>
+      </div>
+
+      <div class="sec" id="sec-dials">
+        <div class="sec-head"><span class="eyebrow">Dials</span><h2>Degrees, not numbers</h2><p>Each position prints a sentence, shown under the slider exactly as the model will read it.</p></div>
+        <div class="dials" id="dials"></div>
+      </div>
+
+      <div class="sec" id="sec-guard">
+        <div class="sec-head"><span class="eyebrow">Guardrails</span><h2>How the model behaves</h2><p>The switches that decide whether it asks, how much it may invent and how carefully it counts.</p></div>
+        <div class="guards" id="guards"></div>
+      </div>
+
+      <div class="sec" id="sec-vary">
+        <div class="sec-head"><span class="eyebrow">Variation</span><h2>Controlled chance</h2><p>A seed picks from the variation pools. Same seed, same prompt, every time.</p></div>
+        <div class="vary" id="vary"></div>
+      </div>
+    </section>
+
+    <!-- ================= PROOF ================= -->
+    <section class="col col-proof" id="proof" aria-label="Prompt">
+      <div class="proof-head">
+        <div class="tabs" role="tablist" aria-label="Output">
+          <button type="button" role="tab" data-tab="prompt" aria-selected="true"><span class="dot"></span>Prompt</button>
+          <button type="button" role="tab" data-tab="followup" aria-selected="false">Follow-up</button>
+          <button type="button" role="tab" data-tab="share" aria-selected="false"><span class="dot"></span>Share</button>
+        </div>
+        <span class="grow"></span>
+        <button type="button" class="btn sm ghost" id="sheetBtn" title="Four variations side by side">4-up</button>
+        <button type="button" class="btn sm ghost" id="xrayBtn" aria-pressed="true" title="Show where each part of the prompt comes from">X-ray</button>
+      </div>
+      <button type="button" class="guardbar" id="guardBar" aria-expanded="false" aria-controls="checks">
+        <div class="ring" id="ring"><span id="ringNum">0</span></div>
+        <div class="gtxt"><b id="guardTitle">Hallucination guard</b><small id="guardSub"></small></div>
+        <div class="pills" id="guardPills"></div>
+      </button>
+      <div class="checks" id="checks" hidden></div>
+      <div class="proof-scroll" id="proofScroll">
+        <div id="shareReport"></div>
+        <article class="sheet" id="sheet" aria-live="polite"></article>
+      </div>
+      <div class="proof-foot">
+        <div class="stats" id="stats"></div>
+        <button type="button" class="btn" id="varyBtn" title="New variation seed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/></svg>Vary</button>
+        <button type="button" class="btn pink" id="copyBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span id="copyLabel">Copy prompt</span></button>
+      </div>
+    </section>
+  </div>
+
+  <nav class="mobnav" id="mobnav" aria-label="Views">
+    <button type="button" data-view="recipe" aria-pressed="true">Build<span class="badge" id="mnMods"></span></button>
+    <button type="button" data-view="proof" aria-pressed="false">Prompt<span class="badge" id="mnGuard"></span></button>
+  </nav>
+</div>
+
+<main class="desk" id="agentDesk" hidden aria-labelledby="deskTitle">
+  <div class="desk-inner">
+    <div class="desk-top">
+      <h1 id="deskTitle">Agent desk</h1>
+      <button type="button" class="btn" id="agent-exit">Back to the Studio</button>
+      <p>One form in, finished prompt out. Built for AI agents working from a client's words, and for anyone in a hurry. Same engine as the Studio: what you compose here is what the Studio shows.</p>
+    </div>
+    <section class="card-d" aria-labelledby="howTitle">
+      <h2 id="howTitle">How to use it</h2>
+      <ol class="how">
+        <li>Paste the client's request, untouched, into <b>Client's words</b>.</li>
+        <li>Add what you know for certain: the cast, one per line. Leave anything you do not know empty.</li>
+        <li>Press <b>Compose</b>. Empty lanes are filled only where the words justify it.</li>
+        <li>If the status says <b>not ready</b>, ask the client the questions listed, add the answers, and compose again.</li>
+        <li>Give <b>Prompt</b> to the image model with any reference photos. Give <b>Shareable</b> to anyone else.</li>
+      </ol>
+      <p class="note" style="margin:0">Scripted? <code>window.PromptBench.compose({ brief, cast, recipe })</code> returns the same result as JSON. <code>window.PromptBench.manifest()</code> describes every input.<span id="deskServerNote"></span></p>
+    </section>
+    <form class="card-d" id="agent-form" aria-labelledby="formTitle">
+      <h2 id="formTitle">The job</h2>
+      <div class="grid2">
+        <label class="field"><span>Bench</span><select id="agent-bench" name="bench"><option value="main">Scene: a picture with a cast of up to five</option><option value="persona">Persona: one portrait subject</option></select></label>
+        <label class="field"><span>Master <em>blank picks from the words</em></span><select id="agent-master" name="master"></select></label>
+      </div>
+      <label class="field"><span>Client's words</span><textarea id="agent-brief" name="brief" rows="4" placeholder="Paste the request exactly as the client wrote it."></textarea></label>
+      <label class="field"><span>Cast <em>one per line: Name | signifier | appearance | clothing | manner</em></span><textarea id="agent-cast" name="cast" rows="3" placeholder="Mara | yellow enamel flask | tall, late forties, cropped grey hair | chore jacket
+Biscuit (animal) | one ear that never stands up | scruffy tan lurcher
+Add +photo after a name when a reference photo will be attached. A JSON array also works."></textarea></label>
+      <div class="grid2">
+        <label class="field"><span>How many characters <em>blank: from the cast or the words</em></span><input type="number" id="agent-count" name="castCount" min="0" max="9" inputmode="numeric"></label>
+        <label class="field"><span>Who they are to each other <em>optional</em></span><textarea id="agent-context" name="context" rows="2" placeholder="Two friends who run a bike repair stall together."></textarea></label>
+      </div>
+      <label class="field"><span>Recipe JSON <em>optional: explicit master, modules, dials, fields</em></span><textarea id="agent-recipe-in" name="recipe" rows="3" class="mono" placeholder='{"modules":["Two colour risograph. Slight misregistration, overprint where the inks cross, coarse grain, paper tooth showing through."],"dials":{"energy":3}}'></textarea></label>
+      <div class="checks-row">
+        <label><input type="checkbox" id="agent-fill" checked> Fill empty lanes from the words</label>
+        <label><input type="checkbox" id="agent-discipline" checked> Anatomy and continuity rules</label>
+        <label><input type="checkbox" id="agent-ask" checked> Image model asks questions first</label>
+        <label><input type="checkbox" id="agent-keep"> Keep the Studio's cast</label>
+      </div>
+      <div class="row"><button type="submit" class="btn pink" id="agent-compose">Compose</button><span class="note" id="agent-note"></span></div>
+    </form>
+    <section class="card-d" id="agent-result" aria-labelledby="resTitle" aria-live="polite" hidden>
+      <h2 id="resTitle">Result</h2>
+      <div class="status" id="agent-status" data-ready="false"></div>
+      <label class="field"><span>Prompt <em>for the image model</em></span><textarea class="out" id="agent-prompt" readonly rows="10"></textarea></label>
+      <div class="row"><button type="button" class="btn primary" data-deskcopy="agent-prompt">Copy prompt</button><button type="button" class="btn" data-deskcopy="agent-questions">Copy questions</button><button type="button" class="btn" data-deskcopy="agent-shareable">Copy shareable</button><button type="button" class="btn" id="agent-open-studio">Open in the Studio</button></div>
+      <h2>Still open</h2>
+      <ol class="gaplist" id="agent-gaps"></ol>
+      <label class="field"><span>Questions for the client <em>ready to send</em></span><textarea id="agent-questions" readonly rows="5"></textarea></label>
+      <h2>Decided from the words</h2>
+      <ul class="gaplist" id="agent-decisions"></ul>
+      <label class="field"><span>Shareable <em>no names, no photos, no private packs</em></span><textarea class="out" id="agent-shareable" readonly rows="6"></textarea></label>
+      <label class="field"><span>Follow-up <em>for when the last image was nearly right</em></span><textarea class="out" id="agent-followup" readonly rows="4"></textarea></label>
+      <label class="field"><span>Recipe</span><pre id="agent-recipe"></pre></label>
+      <details><summary>Whole result as JSON</summary><pre id="agent-json"></pre></details>
+    </section>
+    <details class="card-d catalogue" id="agent-catalogue">
+      <summary><b>Vocabulary</b>: every master and module installed, with its number and needs</summary>
+      <div id="agent-catalogue-body"></div>
+    </details>
+  </div>
+</main>
+
+<input type="file" id="photoInput" accept="image/*" hidden>
+<input type="file" id="packFiles" accept=".json,application/json" multiple hidden>
+<input type="file" id="packFolder" webkitdirectory directory multiple hidden>
+<div id="overlay"></div>
+
+<script>
+/*@@DATA@@*/
+</script>
+<script>
+/*@@ENGINE@@*/
+</script>
+<script>
+/*@@AGENT@@*/
+</script>
+<script>
+"use strict";
+/* =====================================================================
+   Prompt Bench Studio
+   The prompt text is written by createBench(), the same engine the classic
+   page and the command line use. Everything below is interface: it reads
+   the engine's live state, changes it, and asks the engine to assemble.
+   ===================================================================== */
+
+var $ = function(s, r){ return (r||document).querySelector(s); };
+var $$ = function(s, r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); };
+function esc(s){ return String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function store(k, v){ try{ if(v === undefined) return JSON.parse(localStorage.getItem(k) || "null"); localStorage.setItem(k, JSON.stringify(v)); return true; }catch(e){ return v === undefined ? null : false; } }
+var FRAMED = (function(){ try{ return window.self !== window.top; }catch(e){ return true; } })();
+var NEG = /\b(do not|don't|never|avoid|avoiding|must not|should not|cannot|can't|refrain|no extra|without any)\b/i;
+var SLOT_COLORS = ["#d92a63","#0b8a80","#6a4bd6","#c77a0a","#2f6fd6","#8a3f9b","#1f8a5b","#b8452e","#476076"];
+
+var ICON = {
+  x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+  lock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
+  unlock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 7.5-2"/></svg>',
+  dice:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/></svg>',
+  plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" width="11" height="11"><path d="m5 12 5 5 9-10"/></svg>'
+};
+
+/* ---------------- benches ---------------- */
+var PROFILES = {
+  main: { bench:"main", name:"Scene", keyPrefix:"pbstudio.v1.main", borrow:null,
+          castTitle:"Cast", castNote:"Who recurs across your images. Photos stay on this device as a reminder of each slot; attach the real ones in the AI." },
+  persona: { bench:"persona", name:"Persona", keyPrefix:"pbstudio.v1.persona",
+          borrow:["MEDIUM","FINISH","PALETTE","LIGHT","SHAPE","FORMAT","STRUCTURE"],
+          castTitle:"The person", castNote:"One subject, built from the description and the modules. No photo is expected, though one still works." }
+};
+var LOCAL_KEY = "pbstudio.v1.localPacks";
+var THEME_KEY = "pbstudio.v1.theme";
+var UI_KEY = "pbstudio.v1.ui";
+var LEGACY_SETUPS = { main:"promptbench.setups.v1", persona:"personabench.setups.v1" };
+
+var sourcePacks = PB_DATA.packs.slice();       /* bundled, replaced by the server's list when served */
+var packSource = "bundled";                    /* "bundled" | "server" */
+var packScope = "public";
+var serverVersion = "";
+var localPacks = store(LOCAL_KEY) || [];
+if(!Array.isArray(localPacks)) localPacks = [];
+
+var B = {};         /* per-bench runtime: engine, ui, history */
+var cur = "main";
+var UI = Object.assign({ bench:"main", tab:"prompt", xray:true, view:"recipe", open:{} }, store(UI_KEY) || {});
+
+function allPackList(){ return sourcePacks.concat(localPacks); }
+
+function makeBench(key){
+  var prof = PROFILES[key];
+  var engine = createBench({ packs: allPackList(), profile: prof, builtIn: PB_DATA.builtIn[key] });
+  var b = { key:key, prof:prof, E:engine, hist:[], locks:{}, openSlot: 0, lastText:"" };
+  B[key] = b;
+  restoreBench(b);
+  /* Never on from a saved state alone: applyNsfw() turns it on once the
+     server has said this browser may. */
+  engine.setState({ nsfw:false, nsfwRealOk:false });
+  applyNsfw();
+  return b;
+}
+
+/* ---------------- engine helpers ---------------- */
+function E(){ return B[cur].E; }
+function P(){ return B[cur].E.peek; }
+function M(){ return P().model(); }
+function S(){ return P().state(); }
+function maxCast(){ return M().settings.maxCast; }
+function castN(){ return P().castSize(); }
+function masterId(){ return P().currentMasterId(); }
+function masterObj(){ var id = masterId(); return M().masters.filter(function(m){ return m.id === id; })[0] || null; }
+function styleKeys(){ var k = M().settings.styleFirst; return Array.isArray(k) ? k : ["MEDIUM","FINISH","PALETTE","LIGHT"]; }
+function inMaster(it){ var mid = masterId(); return mid ? P().suitsMaster(it, mid) : false; }
+function isOn(it){ return !!S().on[it.n]; }
+function slotName(i){ var p = S().cast[i] || {}; return (p.name || "").trim(); }
+
+/* Selections survive a pack change by wording, because numbers move. */
+function onTexts(){ var out = []; M().categories.forEach(function(c){ c.items.forEach(function(it){ if(S().on[it.n]) out.push(it.t); }); }); return out; }
+function applyOnTexts(list){
+  var want = {}; list.forEach(function(t){ want[t] = true; });
+  var on = {}; M().categories.forEach(function(c){ c.items.forEach(function(it){ if(want[it.t]) on[it.n] = true; }); });
+  S().on = on;
+}
+function ensureFieldDefaults(){
+  var st = S();
+  M().fields.forEach(function(f){ if(st.fields[f.id] === undefined && f["default"] !== undefined) st.fields[f.id] = f["default"]; });
+}
+
+/* ---------------- persistence ---------------- */
+function persist(){
+  var b = B[cur], st = S();
+  var save = JSON.parse(JSON.stringify(st));
+  save.onTexts = onTexts(); delete save.on;
+  save.seed = P().seed();
+  var ok = store(b.prof.keyPrefix + ".state", save);
+  if(!ok){
+    save.cast.forEach(function(p){ p.photo = ""; });
+    if(store(b.prof.keyPrefix + ".state", save)) toast("Saved without photos: they are too large for this browser's storage.");
+  }
+  store(b.prof.keyPrefix + ".locks", b.locks);
+  store(UI_KEY, UI);
+}
+function restoreBench(b){
+  var saved = store(b.prof.keyPrefix + ".state");
+  var st = b.E.peek.state();
+  if(saved){
+    var onT = saved.onTexts || [];
+    delete saved.onTexts;
+    var seed = saved.seed;
+    ["dials","fields","cast","castCount","master","discipline","strangers","castOpen","askQuestions","askCount","mediumHold"].forEach(function(k){
+      if(saved[k] !== undefined) st[k] = saved[k];
+    });
+    b.E.setState({ seed: seed || Math.floor(Math.random()*1000)+1 });
+    var keep = cur; cur = b.key; applyOnTexts(onT); cur = keep;
+    b.restored = true;
+  } else {
+    b.E.setState({ seed: Math.floor(Math.random()*1000)+1 });
+  }
+  b.locks = store(b.prof.keyPrefix + ".locks") || {};
+  var keep2 = cur; cur = b.key; ensureFieldDefaults();
+  /* A cast nobody has touched is filled from the packs, as the classic page does. */
+  if((M().people||[]).length && !st.cast.some(slotFilled)){ st.cast = []; st.castCount = null; b.E.setState({}); b.restored = true; }
+  cur = keep2;
+}
+
+/* ---------------- undo ---------------- */
+function snapshot(){
+  var st = JSON.parse(JSON.stringify(S()));
+  st.cast.forEach(function(p){ delete p.photo; });
+  st.onTexts = onTexts(); delete st.on; st.seed = P().seed();
+  return JSON.stringify(st);
+}
+var pendingSnap = null, snapTimer = null;
+function checkpoint(){
+  /* Called before a change. Rapid changes (typing, dragging) share one step. */
+  if(snapTimer) return;
+  pendingSnap = snapshot();
+  var h = B[cur].hist;
+  if(h[h.length-1] !== pendingSnap){ h.push(pendingSnap); if(h.length > 60) h.shift(); }
+  snapTimer = setTimeout(function(){ snapTimer = null; }, 700);
+  $("#undoBtn").disabled = !h.length;
+}
+function undo(){
+  var h = B[cur].hist; if(!h.length) return;
+  var snap = JSON.parse(h.pop()), st = S();
+  var photos = st.cast.map(function(p){ return p.photo; });
+  ["dials","fields","cast","castCount","master","discipline","strangers","castOpen","askQuestions","askCount","mediumHold"].forEach(function(k){ st[k] = snap[k]; });
+  st.cast.forEach(function(p, i){ p.photo = photos[i] || ""; });
+  E().setState({ seed: snap.seed });
+  applyOnTexts(snap.onTexts || []);
+  $("#undoBtn").disabled = !h.length;
+  renderAll(); toast("Undone");
+}
+
+/* ---------------- change pipeline ---------------- */
+var outTimer = null;
+function changed(opts){
+  opts = opts || {};
+  persist();
+  if(opts.all) renderAll();
+  else {
+    if(opts.cast) renderCast();
+    if(opts.lanes) renderLanes();
+    if(opts.masters) renderMasters();
+    if(opts.dials) renderDials();
+    if(opts.guards) renderGuards();
+    if(opts.hold) renderHold();
+    clearTimeout(outTimer);
+    outTimer = setTimeout(renderOutput, opts.now ? 0 : 60);
+  }
+}
+
+/* ================= CAST ================= */
+function slotFilled(p){ return !!((p.name||"").trim() || (p.desc||"").trim() || p.photo); }
+function monogram(p, i){
+  var n = (p.name||"").trim();
+  return n ? n.charAt(0).toUpperCase() : String(i+1);
+}
+function castStatement(){
+  var n = castN();
+  var names = []; for(var i=0;i<n;i++) names.push(slotName(i) || "somebody");
+  if(!n) return "No specific characters. Whoever appears is decided by the brief.";
+  var join = names.length === 1 ? names[0] : names.slice(0,-1).join(", ") + " and " + names[names.length-1];
+  if(S().castOpen) return "Starts with " + n + ": " + join + ". The model asks whether anybody else should appear.";
+  return "Exactly " + n + ": " + join + ". That list is complete." + (S().strangers ? " Strangers may fill the background." : " Nobody else is in the picture.");
+}
+function castHTML(){
+  var b = B[cur], st = S(), n = castN(), max = maxCast();
+  var h = '<div class="rail-head"><div class="rail-title"><h2>' + esc(b.prof.castTitle) + '</h2><span class="eyebrow">' + n + ' of ' + max + '</span></div>';
+  if(max > 1){
+    h += '<div class="count-dial" role="group" aria-label="How many characters">';
+    for(var c=0;c<=max;c++) h += '<button type="button" data-count="'+c+'" aria-pressed="'+(c===n)+'">'+c+'</button>';
+    h += '</div>';
+  } else {
+    h += '<div class="count-dial" role="group" aria-label="Subject"><button type="button" data-count="0" aria-pressed="'+(n===0)+'">Nobody set</button><button type="button" data-count="1" aria-pressed="'+(n===1)+'">One person</button></div>';
+  }
+  h += '<p class="cast-statement">' + esc(castStatement()) + '</p></div><div class="cast-body">';
+  var fields = castFieldsForUI();
+  for(var i=0;i<max;i++){
+    var p = st.cast[i] || {}, active = i < n, open = active && b.openSlot === i;
+    var filled = fields.filter(function(f){ return (p[f.key]||"").trim(); }).length;
+    var dots = '<div class="dots" aria-hidden="true"><i class="'+((p.name||"").trim()?"on":"")+'"></i>';
+    fields.forEach(function(f){ dots += '<i class="'+((p[f.key]||"").trim()?"on":"")+'"></i>'; });
+    if(P().requirePhoto()) dots += '<i class="photo '+(p.photo?"on":"")+'"></i>';
+    dots += '</div>';
+    var sub = (p.marker || p.looks || p.desc || "").trim() || (active ? "Empty slot. Open to describe." : "Off stage");
+    h += '<div class="slot'+(active?"":" off")+'" data-slot="'+i+'">'
+      +  '<button type="button" class="slot-head" data-openslot="'+i+'" aria-expanded="'+open+'">'
+      +  '<span class="avatar" style="--c:'+SLOT_COLORS[i%SLOT_COLORS.length]+'">'+(isImg(p.photo)?'<img alt="" src="'+esc(p.photo)+'">':esc(monogram(p,i)))
+      +  '<span class="kind" title="'+(p.kind==="animal"?"Animal":"Person")+'">'+(p.kind==="animal"?"🐾":"●")+'</span></span>'
+      +  '<span class="slot-meta"><span class="slot-name">'+esc((p.name||"").trim() || (active ? "Unnamed" : "Slot "+(i+1)))+' <span class="pid">{'+(i+1)+'}</span></span>'
+      +  '<span class="slot-sub">'+esc(sub)+'</span>'+(active?dots:"")+'</span></button>';
+    if(open) h += slotBody(p, i, fields);
+    h += '</div>';
+  }
+  h += '<label class="switchrow"><input type="checkbox" class="tog" data-sw="strangers" '+(st.strangers?"checked":"")+'><span><b>Strangers may appear</b><small>Unnamed background figures who never become characters. Off means everybody visible is in your cast.</small></span></label>';
+  h += '<label class="switchrow"><input type="checkbox" class="tog" data-sw="castOpen" '+(st.castOpen?"checked":"")+'><span><b>Ask about more characters</b><small>Off states the cast is complete, so the model never invents a Person_4.</small></span></label>';
+  var src = (M().people || []).filter(P().usable);
+  h += '<div class="row">' + (src.length ? '<button type="button" class="btn sm" data-castact="restore">Restore '+src.length+' from packs</button>' : '<button type="button" class="btn sm" data-castact="example">Try an example cast</button>')
+    +  '<button type="button" class="btn sm ghost danger" data-castact="empty">Empty every slot</button></div>';
+  h += '</div>';
+  return h;
+}
+function castFieldsForUI(){
+  return M().castFields.slice().sort(function(a,b){ return (a.order===undefined?999:a.order) - (b.order===undefined?999:b.order); });
+}
+function slotBody(p, i, fields){
+  var h = '<div class="slot-body">';
+  h += '<div class="row"><label class="field" style="flex:1 1 140px"><span>Name</span><input type="text" id="c'+i+'-name" data-ck="name" data-i="'+i+'" value="'+esc(p.name)+'" placeholder="How the prompt refers to them" autocomplete="off"></label>'
+    +  '<div class="seg" role="group" aria-label="Kind"><button type="button" data-kind="person" data-i="'+i+'" aria-pressed="'+(p.kind!=="animal")+'">Person</button><button type="button" data-kind="animal" data-i="'+i+'" aria-pressed="'+(p.kind==="animal")+'">Animal</button></div></div>';
+  h += '<div class="photo-drop">' + (isImg(p.photo) ? '<img alt="Reference for slot '+(i+1)+'" src="'+esc(p.photo)+'">' : '')
+    +  '<span style="flex:1">'+(p.photo ? 'Photo on this device only. The prompt says who it shows and that it is for identity, never for rendering.' : (P().requirePhoto() ? 'No photo. A named character without one makes the prompt ask for it, rather than guess a face.' : 'No photo needed. The face is built from the description.'))+'</span>'
+    +  '<button type="button" class="btn sm" data-photo="'+i+'">'+(p.photo?"Replace":"Add photo")+'</button>'
+    +  (p.photo ? '<button type="button" class="btn sm ghost" data-clearphoto="'+i+'">Remove</button>' : '') + '</div>';
+  fields.forEach(function(f){
+    if(p.kind === "animal" && f.outfitRule) return;
+    h += '<label class="field"><span>'+esc(f.label||f.key)+'</span><textarea rows="2" id="c'+i+'-'+esc(f.key)+'" data-ck="'+esc(f.key)+'" data-i="'+i+'" placeholder="'+esc(f.hint||"")+'">'+esc(p[f.key])+'</textarea></label>';
+  });
+  h += '<label class="field"><span>Written description <em>overrides the fields when filled</em></span><textarea rows="3" id="c'+i+'-desc" data-ck="desc" data-i="'+i+'" placeholder="Leave empty and it is composed from the fields above">'+esc(p.desc)+'</textarea></label>';
+  h += '<div class="row"><button type="button" class="btn sm" data-compose="'+i+'">Compose from fields</button>'
+    +  (cur === "persona" ? '<button type="button" class="btn sm" data-toscene="'+i+'" title="Copy this person into the first free slot of the Scene bench">Use in a scene</button>' : '')
+    +  '<button type="button" class="btn sm ghost danger" data-clearslot="'+i+'">Clear slot</button></div>';
+  return h + '</div>';
+}
+function renderCast(){
+  var html = castHTML();
+  var rail = $("#castRail"), inline = $("#castInline");
+  /* Only one copy is live at a time, so ids stay unique. */
+  if(window.matchMedia("(max-width:1180px)").matches){ rail.innerHTML = ""; inline.innerHTML = '<div class="lanes" style="padding:0">'+html+'</div>'; }
+  else { inline.innerHTML = ""; rail.innerHTML = html; }
+}
+var EXAMPLE_CAST = [
+  { name:"Mara", real:false, kind:"person", marker:"a yellow enamel tea flask, always within reach", looks:"Tall, late forties, cropped grey hair, reading glasses pushed up", wears:"Chore jacket, cord trousers, boots", manner:"Dry, patient, notices everything", likes:"crosswords, birds", avoid:"" },
+  { name:"Ollie", real:false, kind:"person", marker:"a lanyard of keys that jingles on every move", looks:"Short, twenties, curly red hair, freckles", wears:"Hoodie over a work polo, trainers", manner:"Talks with his hands, first to help", likes:"bikes, fixing things", avoid:"" },
+  { name:"Biscuit", real:false, kind:"animal", marker:"one ear that never stands up", looks:"Scruffy tan lurcher, long legs", wears:"", manner:"Patient, food motivated, leans on people", likes:"", avoid:"costumes" }
+];
+function castAct(kind){
+  checkpoint();
+  var st = S();
+  if(kind === "empty"){
+    st.cast = []; for(var i=0;i<maxCast();i++) st.cast.push(blankSlot());
+    toast("Every slot emptied. The count is unchanged.");
+  } else if(kind === "restore"){
+    st.cast = []; st.castCount = null; E().setState({});
+    toast("Cast restored from the packs.");
+  } else if(kind === "example"){
+    st.cast = []; for(var j=0;j<maxCast();j++) st.cast.push(blankSlot());
+    EXAMPLE_CAST.slice(0, maxCast()).forEach(function(p, i){ Object.keys(p).forEach(function(k){ if(k in st.cast[i] || k==="kind" || k==="real") st.cast[i][k] = p[k]; }); });
+    st.castCount = Math.min(maxCast(), EXAMPLE_CAST.length);
+    toast("Example cast loaded: invented people, safe to share.");
+  }
+  changed({all:true});
+}
+function isImg(v){ return typeof v === "string" && v.indexOf("data:") === 0; }
+function blankSlot(){ var p = { name:"", kind:"person", photo:"", desc:"" }; M().castFields.forEach(function(f){ p[f.key] = ""; }); return p; }
+
+/* ================= MASTERS ================= */
+function renderMasters(){
+  var mid = masterId(), n = castN();
+  $("#masters").innerHTML = M().masters.filter(P().usable).map(function(m){
+    var sizes = Object.keys(m.alt || {}).sort();
+    var fits = sizes.length ? "Rewrites itself for " + sizes.join(", ") + (sizes.length === 1 ? " character" : " characters") + (sizes.indexOf(String(n)) > -1 ? ": active" : "") : "One wording for every cast size";
+    return '<button type="button" class="master" data-master="'+esc(m.id)+'" aria-pressed="'+(m.id===mid)+'"><b>'+esc(m.name)+'</b><p>'+esc(m.blurb||"")+'</p><span class="fits">'+esc(fits)+'</span></button>';
+  }).join("") || '<p class="note">No master prompt is installed. Load a pack containing one.</p>';
+}
+
+/* ================= BRIEF ================= */
+function renderBrief(){
+  var st = S();
+  var list = M().fields.slice();
+  $("#brief").innerHTML = list.map(function(f){
+    var wide = f.section === "CONTEXT" || (f.rows||0) >= 3;
+    var where = f.attachTo ? "joins the standing rules" : (f.section ? "prints under " + f.section : "");
+    return '<label class="field'+(wide?" wide":"")+'"><span>'+esc(f.label||f.id)+' <em>'+esc(where)+(f.carryToFollowUp?", kept in follow-ups":"")+'</em></span>'
+      + '<textarea id="f-'+esc(f.id)+'" data-field="'+esc(f.id)+'" rows="'+(f.rows||2)+'" placeholder="'+esc(f.placeholder||"")+'">'+esc(st.fields[f.id]||"")+'</textarea>'
+      + (f.hint ? '<small>'+esc(f.hint)+'</small>' : '') + '<div class="warnline" data-negfor="'+esc(f.id)+'" hidden></div></label>';
+  }).join("");
+  updateNegWarnings();
+}
+function updateNegWarnings(){
+  $$("[data-negfor]").forEach(function(el){
+    var id = el.getAttribute("data-negfor");
+    var f = M().fields.filter(function(x){ return x.id === id; })[0];
+    var v = (S().fields[id]||"");
+    var m = !f || f.attachTo ? null : v.match(NEG);
+    el.hidden = !m;
+    if(m) el.textContent = 'Phrased as a ban ("' + m[0] + '"). A named thing tends to appear; describe what fills that space instead.';
+  });
+}
+
+/* ================= LANES ================= */
+function tokenHTML(text){
+  /* Character tokens become pills showing who they resolve to. */
+  var n = castN();
+  var marked = String(text).replace(/\{([1-9])\}/g, function(w, d){ return "\u0001" + d + "\u0002"; });
+  var filled = P().fill(marked);
+  return esc(filled).replace(/\u0001(\d)\u0002/g, function(w, d){
+    var i = +d, nm = i <= n ? (slotName(i-1) || "somebody") : "somebody";
+    return '<span class="tok'+(i<=n && slotName(i-1) ? "" : " none")+'" title="Character {'+d+'}">'+esc(nm)+'</span>';
+  });
+}
+function laneStats(c){
+  var avail = 0, held = 0;
+  c.items.forEach(function(it){ if(!inMaster(it)) return; if(P().fitsCast(it)) avail++; else held++; });
+  return { avail:avail, held:held };
+}
+function laneHTML(c){
+  var picks = c.items.filter(function(it){ return isOn(it) && inMaster(it); });
+  var st = laneStats(c), locks = B[cur].locks;
+  if(!st.avail && !st.held && !picks.length) return "";
+  var h = '<div class="lane" data-lane="'+esc(c.key)+'"><div class="lane-name"><b>'+esc(c.label)+'</b><small>'+esc(c.note||"")+'</small><span class="cnt">'+st.avail+' fit'+(st.held?' · '+st.held+' held':'')+'</span></div><div class="lane-picks">';
+  if(!picks.length) h += '<span class="lane-empty">Nothing chosen. The model decides this part itself.</span>';
+  picks.forEach(function(it){
+    var fits = P().fitsCast(it), locked = !!locks[it.t];
+    h += '<span class="chip'+(locked?" locked":"")+(fits?"":" held")+'" title="'+(fits?"":"Held back: this cast is too small for it, so it is not in the prompt")+'">'
+      +  '<button type="button" class="lock" data-lock="'+it.n+'" aria-label="'+(locked?"Unlock":"Lock")+' this module" title="'+(locked?"Locked: rolls keep it":"Lock so rolls keep it")+'">'+(locked?ICON.lock:ICON.unlock)+'</button>'
+      +  '<span class="t"><span class="n">'+it.n+'</span> '+tokenHTML(P().textOf(it))+'</span>'
+      +  '<button type="button" data-off="'+it.n+'" aria-label="Remove">'+ICON.x+'</button></span>';
+  });
+  h += '</div><div class="lane-tools"><button type="button" class="iconbtn" data-rolllane="'+esc(c.key)+'" title="Roll a random '+esc(c.label.toLowerCase())+'" aria-label="Roll '+esc(c.label)+'">'+ICON.dice+'</button><button type="button" class="iconbtn" data-browse="'+esc(c.key)+'" title="Browse '+esc(c.label)+'" aria-label="Browse '+esc(c.label)+'">'+ICON.plus+'</button></div></div>';
+  return h;
+}
+function renderLanes(){
+  var sk = styleKeys(), style = "", rest = "";
+  M().categories.forEach(function(c){
+    var html = laneHTML(c);
+    if(sk.indexOf(c.key) > -1) style += html; else rest += html;
+  });
+  $("#styleLanes").innerHTML = style || '<div class="lane"><span class="lane-empty">No style categories are installed for this master.</span></div>';
+  $("#imageLanes").innerHTML = rest || '<div class="lane"><span class="lane-empty">No other categories are installed for this master.</span></div>';
+  var hidden = 0; M().categories.forEach(function(c){ hidden += laneStats(c).held; });
+  $("#imageNote").textContent = hidden
+    ? hidden + " module" + (hidden===1?" is":"s are") + " held back because they need more characters than your cast of " + castN() + ", or strangers. Raise the count and they return."
+    : "Stack as many as you like. Anything that needs more characters than your cast is held back and says so.";
+}
+function toggleModule(n, force){
+  checkpoint();
+  var st = S();
+  var on = force === undefined ? !st.on[n] : force;
+  if(on) st.on[n] = true; else delete st.on[n];
+  changed({ lanes:true, cast:false });
+}
+function itemByN(n){ var f = null; M().categories.forEach(function(c){ c.items.forEach(function(it){ if(it.n === +n) f = it; }); }); return f; }
+function catByKey(k){ return M().categories.filter(function(c){ return c.key === k; })[0]; }
+function rollLane(key, quiet){
+  var c = catByKey(key); if(!c) return false;
+  var locks = B[cur].locks, st = S();
+  var pool = c.items.filter(function(it){ return inMaster(it) && P().fitsCast(it) && !st.on[it.n]; });
+  var locked = c.items.filter(function(it){ return st.on[it.n] && locks[it.t]; });
+  if(locked.length && !quiet) { /* a locked lane keeps its pick and gains nothing */ }
+  if(locked.length) return false;
+  if(!pool.length) return false;
+  c.items.forEach(function(it){ if(st.on[it.n] && !locks[it.t]) delete st.on[it.n]; });
+  var pick = pool[Math.floor(Math.random()*pool.length)];
+  st.on[pick.n] = true;
+  return true;
+}
+var ROLL_DEFAULT = { style:["MEDIUM","PALETTE"], image:["FORMAT","SCENE","MOOD","FRAMING"] };
+function rollGroup(group){
+  checkpoint();
+  var sk = styleKeys(), st = S(), n = 0;
+  M().categories.forEach(function(c){
+    var isStyle = sk.indexOf(c.key) > -1;
+    if((group === "style") !== isStyle) return;
+    var has = c.items.some(function(it){ return st.on[it.n] && inMaster(it); });
+    if(has || ROLL_DEFAULT[group].indexOf(c.key) > -1 || (cur === "persona" && group === "image" && M().categories.indexOf(c) < 6)){
+      if(rollLane(c.key, true)) n++;
+    }
+  });
+  changed({ lanes:true });
+  toast(n ? "Rolled " + n + " lane" + (n===1?"":"s") + ". Locked picks stayed put." : "Nothing to roll: every lane is locked or empty of options.");
+}
+
+/* ================= STYLE HOLD ================= */
+var HOLD_ZONES = [["Reference governs",0,1],["Reference leads",2,3],["Even",4,5],["Medium leads",6,8],["Medium absolute",9,10]];
+function renderHold(){
+  var st = S(), v = st.mediumHold === undefined ? 8 : st.mediumHold;
+  $("#holdBox").innerHTML = '<div class="hold-top"><b>Photo against medium</b><span class="mono" id="holdZone" style="font-size:12px;color:var(--pink)"></span></div>'
+    + '<input type="range" id="holdRange" min="0" max="10" step="1" value="'+v+'" aria-label="How far a reference photo may decide how a face is drawn">'
+    + '<div class="hold-scale" id="holdScale">' + HOLD_ZONES.map(function(z){ return '<span>'+z[0]+'</span>'; }).join("") + '</div>'
+    + '<div class="said'+(P().hasReference()?" live":"")+'" id="holdSaid"></div>'
+    + (P().hasReference() ? '' : '<div class="note" style="margin-top:6px">No photo is attached to any active slot, so the medium decides everything. Add one and this starts to matter.</div>');
+  updateHold();
+}
+function updateHold(){
+  var st = S(), v = st.mediumHold === undefined ? 8 : st.mediumHold;
+  var key = P().hasReference() ? P().mediumHoldKey() : "mediumNoReference";
+  var zone = HOLD_ZONES.filter(function(z){ return v >= z[1] && v <= z[2]; })[0];
+  $("#holdZone").textContent = zone ? zone[0] : "";
+  $$("#holdScale span").forEach(function(sp, i){ sp.className = HOLD_ZONES[i] === zone ? "on" : ""; });
+  $("#holdSaid").textContent = P().fill(M().wording[key] || "");
+}
+
+/* ================= DIALS ================= */
+function renderDials(){
+  var st = S();
+  $("#dials").innerHTML = M().dials.map(function(d){
+    var v = st.dials[d.id], min = d.min === undefined ? 0 : d.min, max = d.max === undefined ? 10 : d.max;
+    return '<div class="dial"><div class="dial-top"><b>'+esc(d.label)+'</b><output id="dv-'+esc(d.id)+'">'+v+'</output></div>'
+      + '<input type="range" id="d-'+esc(d.id)+'" data-dial="'+esc(d.id)+'" min="'+min+'" max="'+max+'" value="'+v+'" aria-label="'+esc(d.label)+'">'
+      + '<div class="ends"><span>'+esc(d.lo||min)+'</span><span>'+esc(d.hi||max)+'</span></div>'
+      + '<div class="said" id="ds-'+esc(d.id)+'">'+esc(P().dialText(d, v))+'</div>'
+      + (d.carryToFollowUp ? '<span class="note">Kept in follow-ups</span>' : '') + '</div>';
+  }).join("") || '<p class="note">No dials installed.</p>';
+}
+
+/* ================= GUARDRAILS ================= */
+function renderGuards(){
+  var st = S(), s = M().settings, neg = P().negativeRuleIds();
+  var ask = st.askQuestions !== false;
+  var q = Math.max(s.minQuestions||1, Math.min(s.maxQuestions||8, st.askCount||s.defaultQuestions||4));
+  var h = '';
+  h += '<div class="switchrow" style="display:block"><label class="row" style="align-items:flex-start;flex-wrap:nowrap"><input type="checkbox" class="tog" data-sw="askQuestions" '+(ask?"checked":"")+'><span><b>Interview me before drawing</b><small>'+(ask
+      ? 'The prompt opens by asking exactly this many questions in one go, using the platform\'s own choice buttons. A model told to ask "if unclear" guesses instead.'
+      : 'The prompt says ask nothing and decide everything the brief leaves open. It draws in the first reply.')+'</small></span></label>'
+    + (ask ? '<div class="stepper" aria-label="How many questions"><button type="button" data-ask="-1" aria-label="Fewer">−</button><output>'+q+'</output><button type="button" data-ask="1" aria-label="More">+</button></div>' : '') + '</div>';
+  h += '<div class="switchrow" style="display:block"><label class="row" style="align-items:flex-start;flex-wrap:nowrap"><input type="checkbox" class="tog" data-sw="discipline" '+(st.discipline?"checked":"")+'><span><b>Anatomy and continuity</b><small>Adds '+M().discipline.length+' rules for limbs, hands, faces, object counts, fit and scale, light and panel continuity. Each says what the picture shows, never what to avoid, and stands aside for established differences.</small></span></label>'
+    + (neg.length ? '<div class="warnline">'+neg.length+' rule'+(neg.length===1?" is":"s are")+' phrased as a ban ('+esc(neg.join(", "))+'). That wording can summon the mistake it names.</div>' : '') + '</div>';
+  $("#guards").innerHTML = h;
+}
+
+/* ================= VARIATION ================= */
+function renderVary(varyLines){
+  var pools = M().variation, use = M().settings.variationPools;
+  $("#vary").innerHTML = '<div class="seedbox"><div><span class="eyebrow">Seed</span><div class="seed">'+P().seed()+'</div></div><button type="button" class="btn" data-vary="1">'+ICON.dice+' New seed</button></div>'
+    + '<div class="lines">' + (use && pools.length
+      ? (varyLines ? esc(varyLines) : '<span class="note">No variation line this time.</span>') + '<div class="note" style="margin-top:6px;font-family:var(--sans)">Draws one line from '+Math.min(use, pools.length)+' of '+pools.length+' pools: '+esc(pools.map(function(p){ return p.id; }).join(", "))+'.</div>'
+      : '<span class="note">Variation is switched off by the packs.</span>') + '</div>';
+}
+
+/* ================= OUTPUT ================= */
+var TAGS = {
+  ask:{l:"Ask", c:"#0b8a80", to:"#sec-guard"}, master:{l:"Role", c:"#d92a63", to:"#sec-master"},
+  size:{l:"Cast size", c:"#6a4bd6", to:"cast"}, brief:{l:"Brief", c:"#476076", to:"#sec-brief"},
+  style:{l:"Style", c:"#0b8a80", to:"#sec-style"}, hold:{l:"Photo vs medium", c:"#0b8a80", to:"#holdBox"},
+  rules:{l:"Rules", c:"#6d6f78", to:"#sec-brief"}, cast:{l:"Cast", c:"#d92a63", to:"cast"},
+  image:{l:"This image", c:"#c77a0a", to:"#sec-image"}, dials:{l:"Dials", c:"#2f6fd6", to:"#sec-dials"},
+  vary:{l:"Variation", c:"#8a3f9b", to:"#sec-vary"}, also:{l:"Also", c:"#476076", to:"#sec-brief"},
+  details:{l:"Details", c:"#1f8a5b", to:"#sec-guard"}, share:{l:"How to run", c:"#d92a63", to:"share"},
+  follow:{l:"Follow-up", c:"#c77a0a", to:"#sec-image"}
+};
+function classify(text, mode){
+  var w = M().wording, heads = {};
+  heads[w.askHeading] = "ask"; heads.CONTEXT = "brief"; heads[w.styleHeading] = "style"; heads[w.castHeading] = "cast";
+  heads[w.thisImageHeading] = "image"; heads[w.dialsHeading] = "dials"; heads[w.variationHeading] = "vary";
+  heads[w.disciplineHeading] = "details"; heads.ROLE = "master";
+  ["HOW TO RUN THIS PROMPT","WHEN TO ASK","WHO IS IN THE IMAGE","FILLING IN FROM WHAT YOU ALREADY KNOW"].forEach(function(k){ heads[k] = "share"; });
+  M().fields.forEach(function(f){ if(f.section && !heads[f.section]) heads[f.section] = "also"; });
+  M().shared.forEach(function(s){ (s.blocks||[]).forEach(function(b){ var first = String(b).split("\n")[0]; if(/^[A-Z][A-Z ,'&-]+$/.test(first) && !heads[first]) heads[first] = "rules"; }); });
+  var holdLines = ["mediumNoReference","mediumAbsolute","mediumLeads","mediumEven","mediumReferenceLeads","mediumReferenceGoverns"]
+    .map(function(k){ return String(w[k]||"").slice(0,32); }).filter(Boolean);
+  var out = [], tag = null;
+  text.split(/\n\s*\n/).forEach(function(b){
+    var first = b.split("\n")[0].trim(), t = null;
+    if(heads[first]) t = heads[first];
+    else if(/^WHAT CARRIES/.test(first)) t = "master";
+    else if(/^(This image has|This image starts|No specific characters)/.test(first)) t = "size";
+    else if(holdLines.some(function(h){ return first.indexOf(h) === 0; })) t = "hold";
+    else if(tag === "ask") t = mode === "followup" ? "follow" : "master";
+    else if(tag === "hold") t = "rules";
+    if(t) tag = t;
+    out.push({ tag: tag || "master", text: b });
+  });
+  return out;
+}
+var copiedBlocks = {};
+function renderSheetHTML(text, mode){
+  var blocks = classify(text, mode), last = null, h = "", seen = copiedBlocks[cur + ":" + mode];
+  blocks.forEach(function(bk, i){
+    var T = TAGS[bk.tag] || TAGS.rules;
+    var body = esc(bk.text)
+      .replace(/^([A-Z][A-Z ,'&-]{2,})$/gm, '<span class="h">$1</span>');
+    if(mode === "share") body = body.replace(/\[[^\]\n]*\]/g, '<span class="ph">$&</span>').replace(/\bPerson_\d\b/g, '<span class="pid">$&</span>');
+    var showTag = UI.xray && bk.tag !== last;
+    var changedB = seen && !seen[bk.text.trim()];
+    h += '<div class="blk'+(changedB?" changed":"")+'" data-tag="'+bk.tag+'" data-b="'+i+'"'+(changedB?' title="Changed since you last copied"':'')+' style="--tc:'+(UI.xray?T.c:"transparent")+'"><div class="tag">'+(showTag?esc(T.l):"")+'</div><div class="txt">'+body+'</div></div>';
+    last = bk.tag;
+  });
+  return h;
+}
+function currentText(mode){ return E().assemble(mode === "share" ? "shareable" : mode === "followup" ? "followup" : "prompt"); }
+var lastOut = { prompt:"", share:"" };
+function renderOutput(){
+  var mode = UI.tab, text = currentText(mode);
+  var prompt = mode === "prompt" ? text : E().assemble("prompt");
+  var share = mode === "share" ? text : E().assemble("shareable");
+  lastOut = { prompt: prompt, share: share, text: text };
+  var words = (text.match(/\S+/g) || []).length;
+  var labels = { prompt:"Proof · full prompt", followup:"Proof · follow-up edit", share:"Proof · shareable, names removed" };
+  var seenB = copiedBlocks[cur + ":" + mode], changedN = 0;
+  if(seenB) text.split(/\n\s*\n/).forEach(function(b){ if(!seenB[b.trim()]) changedN++; });
+  $("#sheet").innerHTML = '<div class="slug"><span>'+labels[mode]+(seenB ? (changedN ? ' · '+changedN+' changed since copy' : ' · as copied') : '')+'</span><span class="reg"><i style="background:#d92a63"></i><i style="background:#0b8a80"></i> '+esc(B[cur].prof.name)+' · '+esc((masterObj()||{}).name||"no master")+' · seed '+P().seed()+'</span></div>' + renderSheetHTML(text, mode);
+  $("#stats").textContent = words.toLocaleString() + " words · " + text.length.toLocaleString() + " characters";
+  $("#copyLabel").textContent = mode === "share" ? "Copy shareable" : mode === "followup" ? "Copy follow-up" : "Copy prompt";
+  var m = prompt.match(new RegExp("(?:^|\\n)" + M().wording.variationHeading + "\\n([^\\n]+)"));
+  renderVary(m ? m[1] : "");
+  renderShareReport(mode === "share");
+  renderGuard();
+  var sel = 0; M().categories.forEach(function(c){ c.items.forEach(function(it){ if(S().on[it.n] && inMaster(it) && P().fitsCast(it)) sel++; }); });
+  $("#mnMods").textContent = sel ? " · " + sel : "";
+}
+
+/* ================= SHARE ================= */
+function privateHeld(){ var all = P().allPacks().length, pub = P().publicPacks().length; return all - pub; }
+function leakTerms(){
+  var st = S(), terms = [];
+  st.cast.forEach(function(p){
+    var nm = (p.name||"").trim(); if(nm.length >= 3) terms.push({ t: nm, why: "name" });
+  });
+  return terms;
+}
+function leakScan(text){
+  var hits = [];
+  leakTerms().forEach(function(x){
+    var re = new RegExp("\\b" + x.t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b", "i");
+    if(re.test(text)) hits.push(x.t);
+  });
+  /* Anything typed into a text box is never meant to travel. Check the longer ones verbatim. */
+  M().fields.forEach(function(f){
+    var v = (S().fields[f.id]||"").trim();
+    if(v.length >= 24 && text.indexOf(v) > -1) hits.push((f.label||f.id) + " text");
+  });
+  S().cast.forEach(function(p){
+    castFieldsForUI().concat([{key:"desc"}]).forEach(function(f){
+      var v = (p[f.key]||"").trim().replace(/[.\s]+$/, "");
+      if(v.length >= 16 && text.indexOf(v) > -1) hits.push("a cast description");
+    });
+  });
+  return hits.filter(function(h, i, a){ return a.indexOf(h) === i; });
+}
+function shareFacts(){
+  var st = S(), n = castN(), swaps = [], photos = 0, typed = 0, descs = 0;
+  for(var i=0;i<n;i++){
+    var p = st.cast[i] || {};
+    swaps.push({ from: (p.name||"").trim() || "unnamed", to: "Person_" + (i+1), animal: p.kind === "animal" });
+    if(p.photo) photos++;
+    castFieldsForUI().forEach(function(f){ if((p[f.key]||"").trim()) descs++; });
+    if((p.desc||"").trim()) descs++;
+  }
+  M().fields.forEach(function(f){ if((st.fields[f.id]||"").trim()) typed++; });
+  return { swaps:swaps, photos:photos, typed:typed, descs:descs, priv:privateHeld() };
+}
+function renderShareReport(show){
+  var box = $("#shareReport");
+  if(!show){ box.innerHTML = ""; return; }
+  var f = shareFacts(), hits = leakScan(lastOut.share), blocked = /^This master prompt comes from a pack marked private/.test(lastOut.share);
+  box.innerHTML = '<section class="report" aria-label="What sharing removes"><h3>Safe to post</h3><p class="sub">This version is built for strangers. It keeps the craft and drops the people: each character becomes a blank form the next person fills in.</p>'
+    + '<div class="redact"><div><b>'+f.swaps.length+'</b><small>names swapped for Person_N</small></div><div><b>'+f.descs+'</b><small>cast details left out</small></div><div><b>'+f.photos+'</b><small>photos never mentioned</small></div><div><b>'+f.typed+'</b><small>text boxes left out</small></div><div><b>'+f.priv+'</b><small>private pack'+(f.priv===1?"":"s")+' held back</small></div></div>'
+    + (f.swaps.length ? '<div class="swaps">' + f.swaps.map(function(s){ return '<span class="swap"><s>'+esc(s.from)+'</s> → <span>'+s.to+'</span>'+(s.animal?' (animal)':'')+'</span>'; }).join("") + '</div>' : '')
+    + (blocked ? '<div class="scan bad"><b>Nothing to share.</b> This master only exists in a private pack. Pick a public master.</div>'
+       : hits.length ? '<div class="scan bad"><b>Check before posting.</b> Found: '+esc(hits.join(", "))+'. A module or pack wording may name somebody.</div>'
+       : '<div class="scan ok"><b>Leak scan clean.</b> None of your cast names or typed text appears in this version.</div>')
+    + '<div class="share-actions"><button type="button" class="btn pink" data-share="copy">Copy shareable prompt</button><button type="button" class="btn" data-share="caption">Copy post caption</button><button type="button" class="btn" data-share="card">Make a recipe card</button><button type="button" class="btn" data-share="link">Copy recipe link</button></div>'
+    + '</section>';
+}
+function postCaption(){
+  var mo = masterObj(), picks = [];
+  ["FORMAT","MEDIUM","PALETTE","MOOD","FRAMING"].forEach(function(k){
+    var c = catByKey(k); if(!c) return;
+    var it = c.items.filter(function(x){ return S().on[x.n] && inMaster(x) && P().fitsCast(x); })[0];
+    if(it) picks.push(c.label + ": " + shortText(it.t, 70));
+  });
+  return "Image prompt recipe" + (mo ? " (" + mo.name + ")" : "") + "\n" + picks.map(function(p){ return "• " + p; }).join("\n")
+    + "\nCast: " + (castN() ? castN() + " blank character" + (castN()===1?"":"s") + " for you to fill in" : "none, the brief carries it")
+    + "\nPaste the prompt into your image AI; it asks for what it needs rather than guessing.";
+}
+function shortText(t, n){ t = P().fill(String(t).replace(/\{([1-9])\}/g, "Person_$1")).split(/(?<=\.)\s/)[0]; return t.length > n ? t.slice(0, n-1).replace(/\s+\S*$/, "") + "…" : t; }
+function publicRecipe(){
+  var r = E().toRecipe("");
+  delete r.cast; delete r.fields; r.name = "shared recipe";
+  return r;
+}
+function encodeRecipe(obj){ return btoa(unescape(encodeURIComponent(JSON.stringify(obj)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""); }
+function decodeRecipe(text){ var p = text.replace(/-/g,"+").replace(/_/g,"/"); while(p.length % 4) p += "="; return JSON.parse(decodeURIComponent(escape(atob(p)))); }
+function recipeLink(r){ var base = /^https?:/.test(location.protocol) && !FRAMED ? location.href.split("#")[0] : "prompt-bench-studio.html"; return base + "#recipe=" + encodeRecipe(r); }
+
+function drawCard(){
+  var W = 1080, H = 1350, cv = document.createElement("canvas"); cv.width = W; cv.height = H;
+  var g = cv.getContext("2d"), mo = masterObj();
+  g.fillStyle = "#11141c"; g.fillRect(0,0,W,H);
+  /* riso grain */
+  for(var i=0;i<9000;i++){ g.fillStyle = "rgba(255,255,255," + (Math.random()*0.035) + ")"; g.fillRect(Math.random()*W, Math.random()*H, 2, 2); }
+  var sans = "800 {s}px system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif", mono = "600 {s}px ui-monospace,Menlo,Consolas,monospace";
+  function F(t, s){ return t.replace("{s}", s); }
+  function wrap(text, x, y, maxW, lh, font, color, maxLines){
+    g.font = font; g.fillStyle = color; var words = text.split(" "), line = "", lines = 0;
+    for(var k=0;k<words.length;k++){
+      var test = line ? line + " " + words[k] : words[k];
+      if(g.measureText(test).width > maxW && line){ g.fillText(line, x, y); y += lh; line = words[k]; if(++lines >= maxLines-1){ var rest = words.slice(k).join(" "); while(g.measureText(rest + "…").width > maxW && rest.length) rest = rest.slice(0,-1); g.fillText(rest + (rest.length < words.slice(k).join(" ").length ? "…" : ""), x, y); return y + lh; } }
+      else line = test;
+    }
+    if(line){ g.fillText(line, x, y); y += lh; }
+    return y;
+  }
+  g.font = F(mono, 26); g.fillStyle = "#35d0c0"; g.fillText("IMAGE PROMPT RECIPE", 80, 120);
+  var title = (mo ? mo.name : "Prompt").toUpperCase();
+  g.font = F(sans, 150);
+  g.fillStyle = "rgba(255,94,146,.85)"; g.fillText(title, 86, 290);
+  g.fillStyle = "rgba(53,208,192,.8)"; g.fillText(title, 78, 284);
+  g.fillStyle = "#f3f1ea"; g.fillText(title, 80, 286);
+  var y = 380;
+  ["FORMAT","MEDIUM","FINISH","PALETTE","LIGHT","MOOD","FRAMING","SCENE"].forEach(function(k){
+    if(y > 1000) return;
+    var c = catByKey(k); if(!c) return;
+    var it = c.items.filter(function(x){ return S().on[x.n] && inMaster(x) && P().fitsCast(x); })[0];
+    if(!it) return;
+    g.font = F(mono, 22); g.fillStyle = "#ff5e92"; g.fillText(c.label.toUpperCase(), 80, y);
+    y = wrap(shortText(it.t, 110), 80, y + 40, W - 160, 42, F("500 {s}px system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif", 32), "#e8ebf2", 2) + 22;
+  });
+  var n = castN(), cy = 1110;
+  g.font = F(mono, 22); g.fillStyle = "#8e97ab"; g.fillText("CAST", 80, cy - 20);
+  if(!n){ g.font = F(sans, 30); g.fillStyle = "#e8ebf2"; g.fillText("Nobody set. The brief carries it.", 80, cy + 26); }
+  for(var j=0;j<n;j++){
+    var x = 80 + j * 190; if(x > W - 200) break;
+    g.strokeStyle = SLOT_COLORS[j % SLOT_COLORS.length]; g.lineWidth = 4; g.setLineDash([10,8]);
+    g.beginPath(); g.arc(x + 44, cy + 30, 40, 0, Math.PI*2); g.stroke(); g.setLineDash([]);
+    g.font = F(sans, 30); g.fillStyle = "#e8ebf2"; g.textAlign = "center"; g.fillText("?", x + 44, cy + 41);
+    g.font = F(mono, 20); g.fillStyle = "#c3c9d6"; g.fillText("Person_" + (j+1), x + 44, cy + 104); g.textAlign = "left";
+  }
+  var badges = [n ? "Cast fixed at " + n : "No cast", "Style before people", S().askQuestions !== false ? "Asks first" : "Draws first"];
+  if(S().discipline) badges.push("Anatomy checks");
+  var bx = 80; g.font = F(mono, 20);
+  badges.forEach(function(b){ var w = g.measureText(b).width + 28; g.strokeStyle = "#35d0c0"; g.lineWidth = 2; g.strokeRect(bx, 1250, w, 40); g.fillStyle = "#35d0c0"; g.fillText(b, bx + 14, 1277); bx += w + 12; });
+  return cv.toDataURL("image/png");
+}
+
+/* ================= GUARD ================= */
+var GAP_LEVEL = { blocker:"bad", should:"warn", could:"info", note:"info" };
+function gapFix(g){
+  var p = (g.fill && g.fill.path) || "", m = p.match(/^cast\[(\d+)\]/);
+  if(g.id === "held") return { label:"Untick", fn:function(){ checkpoint(); var st = S(); M().categories.forEach(function(c){ c.items.forEach(function(it){ if(st.on[it.n] && inMaster(it) && !P().fitsCast(it)) delete st.on[it.n]; }); }); changed({lanes:true}); } };
+  if(m) return { label:"Open slot " + (+m[1]+1), fn:function(){ openSlot(+m[1]); } };
+  if(p === "castCount") return { label:"Cast", fn:function(){ jump("cast"); } };
+  if(p === "modules" && g.fill.category) return { label: g.about === "conflict" ? "Review" : "Choose", fn:function(){ openBrowser(g.fill.category); } };
+  if(p.indexOf("fields.") === 0) return { label:"Edit", fn:function(){ jump("#f-" + p.slice(7), true); } };
+  if(p === "dials.words") return { label:"Set " + g.fill.example, fn:function(){ checkpoint(); S().dials.words = g.fill.example; changed({dials:true}); } };
+  return null;
+}
+function guardChecks(){
+  var out = [], st = S(), n = castN(), mid = masterId(), m = M();
+  function add(level, title, detail, fix){ out.push({ level:level, title:title, detail:detail||"", fix:fix||null }); }
+  if(!masterObj()) add("bad", "No master prompt", "Load a pack with a master. Without one there is no prompt.");
+  if(n) add(st.castOpen ? "info" : "ok", st.castOpen ? "Cast left open" : "Cast is locked at " + n,
+    st.castOpen ? "The model is told to ask whether anybody else should appear." : "The prompt names every character and says the list is complete, so the model has nobody to invent.");
+  /* Everything a client or an agent would be asked about comes from the same
+     gaps() the agent interface reports, so the ring and the API agree. */
+  B[cur].A.gaps().forEach(function(g){
+    if(g.level === "could" && g.about === "cast") return;
+    var detail = g.options && g.options.length ? "For example: " + g.options.slice(0, 3).map(function(o){ return shortText(o.text, 44); }).join(" / ") : "";
+    add(GAP_LEVEL[g.level] || "info", g.question, detail, gapFix(g));
+  });
+  var otherOn = 0, tokenGap = [];
+  m.categories.forEach(function(c){ c.items.forEach(function(it){
+    if(!st.on[it.n]) return;
+    if(!P().suitsMaster(it, mid)){ otherOn++; return; }
+    if(!P().fitsCast(it)) return;
+    String(P().textOf(it)).replace(/\{([1-9])\}/g, function(w, d){ if(+d <= n && !slotName(+d-1)) tokenGap.push(it); return w; });
+  }); });
+  if(otherOn) add("info", otherOn + " ticked module" + (otherOn===1?" belongs":"s belong") + " to another master", "Kept for when you switch back. They are not in this prompt.");
+  if(tokenGap.length) add("warn", "A module refers to an unnamed character", "\"" + shortText(tokenGap[0].t, 60) + "\" will say \"somebody\".", { label:"Open slot", fn:function(){ var mm = String(tokenGap[0].t).match(/\{([1-9])\}/); openSlot(mm ? +mm[1]-1 : 0); } });
+  var avoidF = m.fields.filter(function(f){ return f.attachTo && f.limit; })[0];
+  if(avoidF){ var items = (st.fields[avoidF.id]||"").split(/[,\n]/).filter(function(s){ return s.trim(); }); if(items.length > avoidF.limit) add("info", "Only " + avoidF.limit + " keep-out items are used", items.length + " were typed; the rest are dropped on purpose."); }
+  if(st.discipline){ var neg = P().negativeRuleIds(); if(neg.length) add("warn", "Anatomy rules phrased as bans", neg.join(", ")); else add("ok", "Anatomy and continuity rules on", m.discipline.length + " positively phrased rules: bodies, counts, fit, scale, light, continuity."); }
+  else add("info", "Anatomy and continuity is off", "Turn it on when a model adds limbs, doubles objects or drifts between panels.", { label:"Turn on", fn:function(){ checkpoint(); st.discipline = true; changed({guards:true}); } });
+  if(P().hasReference() && (st.mediumHold||0) <= 3) add("info", "The photo leads the face", "Risk of a photographic face pasted into a drawing. Slide toward the medium if that happens.", { label:"Adjust", fn:function(){ jump("#holdBox"); } });
+  add("ok", "Style is printed before people", "The medium and palette are set before any face is described.");
+  if(st.askQuestions !== false) add("ok", "Asks " + (st.askCount||4) + " questions before drawing", "Gaps become questions, not guesses.");
+  var hits = leakScan(lastOut.share || E().assemble("shareable"));
+  if(/^This master prompt comes from a pack marked private/.test(lastOut.share)) add("bad", "Nothing to share with this master", "It lives in a private pack.");
+  else if(hits.length) add("bad", "Shareable version mentions: " + hits.join(", "), "A pack or module wording names somebody. Check before posting.", { label:"See share", fn:function(){ setTab("share"); } });
+  else add("ok", "Shareable version is clean", "No cast name or typed text reaches it.");
+  var rank = { bad:0, warn:1, info:2, ok:3 };
+  out.sort(function(a,b){ return rank[a.level] - rank[b.level]; });
+  return out;
+}
+var guardOpen = false, guardFixes = [];
+function renderGuard(){
+  var list = guardChecks(), bad = 0, warn = 0, ok = 0, info = 0;
+  list.forEach(function(c){ if(c.level==="bad") bad++; else if(c.level==="warn") warn++; else if(c.level==="ok") ok++; else info++; });
+  var score = Math.max(0, 100 - bad*25 - warn*6);
+  var col = bad ? "var(--bad)" : warn ? "var(--warn)" : "var(--ok)";
+  var ring = $("#ring"); ring.style.setProperty("--p", score); ring.style.setProperty("--c", col);
+  $("#ringNum").textContent = score;
+  $("#guardTitle").textContent = bad ? "Contradictions to fix" : warn ? "A few gaps a model could fill in" : "Nothing left to guess";
+  var top = list.filter(function(c){ return c.level === "bad" || c.level === "warn"; })[0];
+  $("#guardSub").textContent = top ? top.title : ok + " checks pass. Tap to see them.";
+  $("#guardPills").innerHTML = (bad?'<span class="pill bad">'+bad+'</span>':'') + (warn?'<span class="pill warn">'+warn+'</span>':'') + '<span class="pill ok">'+ok+'</span>';
+  $("#mnGuard").textContent = " · " + score;
+  guardFixes = [];
+  var qs = B[cur].A.questions();
+  $("#checks").innerHTML = (qs ? '<div class="checks-tools"><button type="button" class="btn sm" id="copyQuestions">Copy questions for the client</button></div>' : '') + list.map(function(c){
+    var fx = ""; if(c.fix){ guardFixes.push(c.fix.fn); fx = '<button type="button" class="btn sm" data-fix="'+(guardFixes.length-1)+'">'+esc(c.fix.label)+'</button>'; }
+    var ic = { bad:"!", warn:"?", ok:"✓", info:"i" }[c.level];
+    return '<div class="check '+c.level+'"><span class="ic">'+ic+'</span><div><b>'+esc(c.title)+'</b>'+(c.detail?'<small>'+esc(c.detail)+'</small>':'')+'</div>'+fx+'</div>';
+  }).join("");
+}
+
+/* ================= NAV / JUMP ================= */
+function isNarrow(){ return window.matchMedia("(max-width:760px)").matches; }
+function setView(v){ UI.view = v; $("#main").setAttribute("data-view", v); $$("#mobnav button").forEach(function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-view") === v); }); store(UI_KEY, UI); }
+function jump(sel, focus){
+  if(sel === "cast"){ openSlot(B[cur].openSlot || 0); return; }
+  if(sel === "share"){ setTab("share"); return; }
+  if(isNarrow()) setView("recipe");
+  var el = $(sel); if(!el) return;
+  el.scrollIntoView({ behavior:"smooth", block:"start" });
+  if(focus && el.focus) setTimeout(function(){ el.focus(); }, 300);
+}
+function openSlot(i){
+  B[cur].openSlot = i; renderCast();
+  if(isNarrow()) setView("recipe");
+  var el = $('[data-slot="'+i+'"]'); if(el) el.scrollIntoView({ behavior:"smooth", block:"center" });
+  var inp = $("#c"+i+"-name"); if(inp) setTimeout(function(){ inp.focus(); }, 250);
+}
+function setTab(t, quiet){ UI.tab = t; $$('.tabs [role="tab"]').forEach(function(b){ b.setAttribute("aria-selected", b.getAttribute("data-tab") === t); }); if(isNarrow() && !quiet) setView("proof"); store(UI_KEY, UI); if(!quiet) renderOutput(); }
+
+/* ================= RENDER ALL ================= */
+function renderAll(){
+  document.documentElement.setAttribute("data-bench", cur);
+  $$(".bench-switch button").forEach(function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-bench") === cur); });
+  renderCast(); renderMasters(); renderBrief(); renderLanes(); renderHold(); renderDials(); renderGuards(); renderOutput();
+  $("#undoBtn").disabled = !B[cur].hist.length;
+  $("#packCount").textContent = allPackList().length;
+  $("#palHint").textContent = "Find any of " + M().count + " modules, a master or a command";
+}
+
+/* ================= OVERLAYS ================= */
+var overlayClose = null;
+function openOverlay(html, cls, onClose){
+  closeOverlay();
+  var ov = $("#overlay");
+  ov.innerHTML = '<div class="veil" data-veil><div class="dialog '+(cls||"")+'" role="dialog" aria-modal="true">'+html+'</div></div>';
+  overlayClose = onClose || null;
+  return $(".dialog", ov);
+}
+function closeOverlay(){ var ov = $("#overlay"); if(ov.innerHTML){ ov.innerHTML = ""; if(overlayClose) overlayClose(); overlayClose = null; } }
+
+/* ---- module browser ---- */
+var BR = { cat:null, q:"", filter:"all" };
+function openBrowser(cat){
+  BR.cat = cat || BR.cat || (M().categories[0]||{}).key; BR.q = "";
+  var d = openOverlay('<div class="dialog-head"><h3>Modules</h3><span class="note" id="brCount"></span><button type="button" class="iconbtn" data-close aria-label="Close">'+ICON.x+'</button></div>'
+    + '<div class="browser"><nav class="cats" id="brCats" aria-label="Categories"></nav><div class="cards-wrap"><div class="cards-tools"><input type="search" id="brSearch" placeholder="Search every category" autocomplete="off">'
+    + '<div class="seg" role="group" aria-label="Show"><button type="button" data-brf="all" aria-pressed="true">All</button><button type="button" data-brf="on" aria-pressed="false">Chosen</button></div></div><div class="cards" id="brCards"></div></div></div>', "wide", function(){ renderLanes(); });
+  renderBrowser();
+  setTimeout(function(){ if(!isNarrow()) $("#brSearch").focus(); }, 30);
+}
+function renderBrowser(){
+  var sk = styleKeys(), st = S();
+  var catsH = '<div class="grp">Printed first</div>', restH = '<div class="grp">This image</div>';
+  M().categories.forEach(function(c){
+    var s = laneStats(c); if(!s.avail && !s.held) return;
+    var on = c.items.filter(function(it){ return st.on[it.n] && inMaster(it); }).length;
+    var b = '<button type="button" data-brcat="'+esc(c.key)+'" aria-pressed="'+(!BR.q && BR.cat===c.key)+'">'+esc(c.label)+'<span>'+(on?on+"/":"")+s.avail+'</span></button>';
+    if(sk.indexOf(c.key) > -1) catsH += b; else restH += b;
+  });
+  $("#brCats").innerHTML = catsH + restH;
+  var q = BR.q.trim().toLowerCase(), words = q ? q.split(/\s+/) : [], shown = 0, hiddenOther = 0, cards = "";
+  M().categories.forEach(function(c){
+    if(!q && c.key !== BR.cat) return;
+    c.items.forEach(function(it){
+      if(!inMaster(it)){ hiddenOther++; return; }
+      var txt = P().textOf(it), low = (c.label + " " + txt + " " + it.n).toLowerCase();
+      if(words.length && !words.every(function(w){ return low.indexOf(w) > -1; })) return;
+      if(BR.filter === "on" && !st.on[it.n]) return;
+      var fits = P().fitsCast(it), on = !!st.on[it.n];
+      var why = fits ? "" : (it.strangers === true && !st.strangers ? "brings in strangers" : "needs " + P().needsOf(it) + " characters");
+      var body = tokenHTML(txt);
+      if(words.length) words.forEach(function(w){ if(w.length > 1) body = body.replace(new RegExp("(?![^<]*>)(" + w.replace(/[.*+?^${}()|[\]\\]/g,"\\$&") + ")", "gi"), "<mark>$1</mark>"); });
+      cards += '<button type="button" class="card" data-card="'+it.n+'" aria-pressed="'+on+'"'+(fits||on?"":" disabled")+'>'+body
+        + '<span class="meta"><span>#'+it.n+'</span>'+(q?'<span>'+esc(c.label)+'</span>':'')+(why?'<span class="why">'+esc(why)+'</span>':'')+(it.alt?'<span title="Has wording for smaller casts">adapts</span>':'')+'<span class="tick">'+(on?ICON.check:"")+'</span></span></button>';
+      shown++;
+    });
+  });
+  $("#brCards").innerHTML = cards || '<p class="pal-empty">Nothing matches. Try fewer words.</p>';
+  $("#brCount").textContent = shown + " shown";
+}
+
+/* ---- command palette ---- */
+var PAL = { items:[], sel:0 };
+function paletteActions(){
+  var a = [
+    { k:"Action", v:"Copy the prompt", run:function(){ copyNow("prompt"); } },
+    { k:"Action", v:"Copy the shareable version", run:function(){ copyNow("share"); } },
+    { k:"Action", v:"New variation seed", run:function(){ newSeed(); } },
+    { k:"Action", v:"Roll the style lanes", run:function(){ rollGroup("style"); } },
+    { k:"Action", v:"Roll the scene lanes", run:function(){ rollGroup("image"); } },
+    { k:"Action", v:"Open the module browser", run:function(){ openBrowser(); } },
+    { k:"Action", v:"Save or load a setup", run:function(){ openSetups(); } },
+    { k:"Action", v:"Manage packs", run:function(){ openPacks(); } },
+    { k:"Action", v:"Show the follow-up edit", run:function(){ setTab("followup"); } },
+    { k:"Action", v:"Switch to the " + (cur === "main" ? "Persona" : "Scene") + " bench", run:function(){ switchBench(cur === "main" ? "persona" : "main"); } },
+    { k:"Action", v:(S().discipline ? "Turn off" : "Turn on") + " anatomy and continuity", run:function(){ checkpoint(); S().discipline = !S().discipline; changed({guards:true}); } },
+    { k:"Action", v:"Switch light or dark", run:function(){ cycleTheme(); } },
+    { k:"Action", v:"Enter an unlock code", run:function(){ setTimeout(openConsole, 20); } },
+    { k:"Action", v:"Make a pack of your own modules", run:function(){ setTimeout(function(){ openPackMaker(); }, 20); } },
+    { k:"Action", v:"Contact sheet: four variations side by side", run:function(){ setTimeout(openContactSheet, 20); } },
+    { k:"Action", v:"Open the Agent desk", run:function(){ setTimeout(openDesk, 20); } },
+    { k:"Action", v:"Keyboard shortcuts", run:function(){ setTimeout(openKeys, 20); } }
+  ];
+  M().masters.filter(P().usable).forEach(function(m){ a.push({ k:"Master", v:m.name + ": " + (m.blurb||""), run:function(){ setMaster(m.id); } }); });
+  for(var i=0;i<=maxCast();i++) (function(i){ a.push({ k:"Cast", v:"Set cast to " + i, run:function(){ setCount(i); } }); })(i);
+  return a;
+}
+function openPalette(){
+  var d = openOverlay('<label class="sr" for="palIn">Search</label><input type="search" id="palIn" class="pal-input" placeholder="Type a module, a master or a command. Numbers jump to a module." autocomplete="off"><div class="pal-list" id="palList" role="listbox"></div>');
+  PAL.sel = 0; renderPalette("");
+  $("#palIn").focus();
+}
+function renderPalette(q){
+  q = q.trim().toLowerCase();
+  var words = q ? q.split(/\s+/) : [], st = S(), items = [];
+  var acts = paletteActions().filter(function(a){ var low = (a.k + " " + a.v).toLowerCase(); return words.every(function(w){ return low.indexOf(w) > -1; }); });
+  items = items.concat(q ? acts.slice(0, 6) : acts.slice(0, 8));
+  if(q){
+    var num = /^\d+$/.test(q) ? +q : null;
+    M().categories.forEach(function(c){ c.items.forEach(function(it){
+      if(!inMaster(it)) return;
+      var txt = P().textOf(it), low = (c.label + " " + txt).toLowerCase();
+      if(num !== null ? it.n !== num : !words.every(function(w){ return low.indexOf(w) > -1; })) return;
+      items.push({ k:c.label, v:txt, it:it, run:function(){ if(P().fitsCast(it) || st.on[it.n]) toggleModule(it.n); else toast("Held back: needs " + P().needsOf(it) + " characters."); } });
+    }); });
+  }
+  PAL.items = items.slice(0, 60);
+  if(PAL.sel >= PAL.items.length) PAL.sel = 0;
+  $("#palList").innerHTML = PAL.items.map(function(x, i){
+    var s = x.it ? (st.on[x.it.n] ? '<span class="s">ON</span>' : P().fitsCast(x.it) ? '<span class="s off">#'+x.it.n+'</span>' : '<span class="s off">held</span>') : '';
+    var v = x.it ? tokenHTML(x.v) : esc(x.v);
+    return '<button type="button" class="pal-item" role="option" data-pi="'+i+'" aria-selected="'+(i===PAL.sel)+'"><span class="k">'+esc(x.k)+'</span><span class="v">'+v+'</span>'+s+'</button>';
+  }).join("") || '<p class="pal-empty">Nothing matches.</p>';
+}
+function runPalette(i){ var x = PAL.items[i]; if(!x) return; var keepOpen = !!x.it; x.run(); if(keepOpen){ renderPalette($("#palIn").value); } else closeOverlay(); }
+
+/* ---- setups ---- */
+function setupKey(){ return B[cur].prof.keyPrefix + ".setups"; }
+function getSetups(){ var s = store(setupKey()); return Array.isArray(s) ? s : []; }
+function legacySetups(){
+  var s = store(LEGACY_SETUPS[cur]); if(!Array.isArray(s)) return [];
+  return s.map(function(x){ return { name:x.name, legacy:true, recipe:{ recipe:1, bench:cur, name:x.name, master:x.master, modules:x.mods||[], dials:x.dials||{}, fields:x.fields||{}, discipline:!!x.discipline, strangers:!!x.strangers, castOpen:!!x.castOpen, askQuestions:x.askQuestions, askCount:x.askCount, mediumHold:x.mediumHold } }; });
+}
+function openSetups(){
+  openOverlay('<div class="dialog-head"><h3>Setups</h3><button type="button" class="iconbtn" data-close aria-label="Close">'+ICON.x+'</button></div><div class="dialog-body" id="setupBody"></div>');
+  renderSetups();
+}
+function renderSetups(){
+  var list = getSetups(), leg = legacySetups();
+  var h = '<p class="note" style="margin-top:0">A setup keeps the master, modules, dials, text boxes and switches. It never keeps your cast or photos, and it finds modules by wording, so it survives pack changes.</p>'
+    + '<div class="row" style="margin-bottom:12px"><input type="text" id="setupName" placeholder="Name this setup" style="flex:1 1 200px"><button type="button" class="btn primary" data-set="save">Save</button><button type="button" class="btn" data-set="link">Copy link</button></div><div class="list">';
+  h += list.map(function(s, i){ return '<div class="item"><div class="grow"><b>'+esc(s.name)+'</b><small>'+(s.recipe.modules||[]).length+' modules · '+esc(s.recipe.master||"")+(s.saved?' · '+new Date(s.saved).toLocaleDateString():'')+'</small></div><button type="button" class="btn sm" data-set="load" data-i="'+i+'">Load</button><button type="button" class="btn sm ghost danger" data-set="del" data-i="'+i+'">Delete</button></div>'; }).join("");
+  h += leg.map(function(s, i){ return '<div class="item"><div class="grow"><b>'+esc(s.name)+'</b><small>From the classic page · '+(s.recipe.modules||[]).length+' modules</small></div><button type="button" class="btn sm" data-set="loadleg" data-i="'+i+'">Load</button></div>'; }).join("");
+  if(!list.length && !leg.length) h += '<p class="note">Nothing saved yet.</p>';
+  var hist = store(HIST_KEY); if(!Array.isArray(hist)) hist = [];
+  hist = hist.filter(function(x){ return x.bench === cur; });
+  h += '</div><h4 style="margin:18px 0 6px">Recently copied</h4><div class="list">' + (hist.length ? hist.map(function(x, i){
+      return '<div class="item"><div class="grow"><b>'+esc(x.master || "Prompt")+' · '+esc({prompt:"full prompt",followup:"follow-up",share:"shareable"}[x.mode]||x.mode)+'</b><small>'+new Date(x.at).toLocaleString()+' · '+x.words+' words · '+(x.recipe.modules||[]).length+' modules</small></div><button type="button" class="btn sm" data-hist="load" data-at="'+x.at+'">Load</button><button type="button" class="btn sm ghost" data-hist="copy" data-at="'+x.at+'">Copy text</button></div>';
+    }).join("") : '<p class="note">Every prompt you copy lands here, with the setup that made it.</p>') + '</div>';
+  h += '<h4 style="margin:18px 0 6px">Open a recipe</h4><p class="note" style="margin:0 0 8px">Paste a recipe link or recipe JSON somebody shared. It sets up everything except the cast, which stays yours.</p><textarea id="recipeIn" rows="3" placeholder="https://…#recipe=… or {&quot;recipe&quot;:1,…}"></textarea><div class="row" style="margin-top:8px"><button type="button" class="btn" data-set="import">Open recipe</button><button type="button" class="btn ghost" data-set="copyjson">Copy this setup as JSON</button></div>';
+  $("#setupBody").innerHTML = h;
+}
+function applyRecipe(r, label){
+  if(!r || typeof r !== "object"){ toast("That is not a recipe."); return false; }
+  if(r.bench && r.bench !== cur){ switchBench(r.bench); }
+  checkpoint();
+  var clean = JSON.parse(JSON.stringify(r)); delete clean.cast;
+  var res = E().fromRecipe(clean);
+  ensureFieldDefaults();
+  changed({all:true});
+  var msg = "Opened " + (label || "recipe") + ": " + res.applied + " of " + res.asked + " modules applied.";
+  if(res.notInstalled.length) msg += " " + res.notInstalled.length + " not installed.";
+  if(res.tooFewCharacters.length) msg += " " + res.tooFewCharacters.length + " need a bigger cast.";
+  toast(msg);
+  return true;
+}
+
+/* ---- packs ---- */
+function openPacks(){
+  openOverlay('<div class="dialog-head"><h3>Packs</h3><button type="button" class="iconbtn" data-close aria-label="Close">'+ICON.x+'</button></div><div class="dialog-body" id="packBody"></div>');
+  renderPacks();
+}
+function renderPacks(){
+  var list = allPackList(), scoped = P().allPacks();
+  var h = '<p class="note" style="margin-top:0">Everything the bench knows lives in JSON packs. '
+    + (packSource === "server" ? "These came from your server" + (packScope === "private" ? ", signed in, so private packs are included." : ". Sign in on the admin page to include private packs.") : "The full pack library is built into this file. Served from your Prompt Bench server, it reads the server's packs instead, private cast included when signed in.")
+    + ' This bench uses ' + scoped.length + ' of them' + (B[cur].prof.borrow ? ", borrowing only the style categories from the scene packs" : "") + '.</p>'
+    + unlockPanelHTML()
+    + '<div class="row" style="margin-bottom:12px"><button type="button" class="btn primary" data-pk="files">Load files</button><button type="button" class="btn" data-pk="make">Make a pack</button><button type="button" class="btn" data-pk="folder">Load folder</button><button type="button" class="btn" data-pk="export">Export merged</button>'
+    + (localPacks.length ? '<button type="button" class="btn ghost danger" data-pk="clear">Forget my '+localPacks.length+' loaded</button>' : '') + '</div><p class="note">You can also drop JSON files anywhere on the page.</p><div class="list">';
+  var usedPaths = {}; scoped.forEach(function(p){ usedPaths[p.path] = p.borrowed ? "borrowed" : "used"; });
+  h += list.map(function(p, i){
+    var d = p.data || {}, bits = [];
+    ["masters","categories","dials","variation","fields","people","castFields","discipline"].forEach(function(k){ if(Array.isArray(d[k]) && d[k].length) bits.push(d[k].length + " " + k); });
+    if(d.wording) bits.push("wording"); if(d.settings) bits.push("settings");
+    var local = i >= sourcePacks.length, use = usedPaths[p.path];
+    return '<div class="item"><div class="grow"><b>'+esc(p.name || p.path)+'</b><small>'+esc(p.path)+' · '+esc(bits.join(", ")||"empty")+'</small></div>'
+      + (d.private ? '<span class="tagp priv">private</span>' : '') + (local ? '<span class="tagp">yours</span>' : packSource==="server" ? '<span class="tagp srv">server</span>' : '')
+      + '<span class="tagp">'+(use === "borrowed" ? "borrowed" : use ? "in use" : "other bench")+'</span>'
+      + (local ? '<button type="button" class="btn sm ghost" data-pk="edit" data-i="'+(i-sourcePacks.length)+'">Edit</button><button type="button" class="btn sm ghost danger" data-pk="drop" data-i="'+(i-sourcePacks.length)+'">Remove</button>' : '') + '</div>';
+  }).join("");
+  $("#packBody").innerHTML = h + '</div>';
+}
+function reloadEngines(){
+  Object.keys(B).forEach(function(k){
+    var keep = cur; cur = k;
+    var t = onTexts(); B[k].E.setPacks(allPackList()); applyOnTexts(t); ensureFieldDefaults();
+    cur = keep;
+  });
+  applyNsfw();
+  renderAll();
+}
+function readPackFiles(files){
+  var arr = Array.prototype.slice.call(files).filter(function(f){ return /\.json$/i.test(f.name); });
+  if(!arr.length){ toast("No JSON files in that selection."); return; }
+  var done = 0, added = 0, bad = [];
+  arr.forEach(function(f){
+    var r = new FileReader();
+    r.onload = function(){
+      try{
+        var data = JSON.parse(r.result);
+        if(!data || typeof data !== "object" || Array.isArray(data)) throw new Error("not a pack");
+        var path = f.webkitRelativePath || f.name;
+        localPacks = localPacks.filter(function(p){ return p.path !== path; });
+        localPacks.push({ name: data.pack || f.name, path: path, data: data }); added++;
+      }catch(e){ bad.push(f.name); }
+      if(++done === arr.length){
+        localPacks.sort(function(a,b){ return a.path < b.path ? -1 : 1; });
+        if(!store(LOCAL_KEY, localPacks)) toast("Loaded, but too large to remember after a reload.");
+        reloadEngines(); if($("#packBody")) renderPacks();
+        toast("Loaded " + added + " pack" + (added===1?"":"s") + (bad.length ? ". Could not read: " + bad.join(", ") : "."));
+      }
+    };
+    r.readAsText(f);
+  });
+}
+function mergedExport(){
+  var m = M();
+  return { pack:"Merged export (" + B[cur].prof.name + ")", masters:m.masters, shared:m.shared,
+    categories:m.categories.map(function(c){ return { key:c.key, label:c.label, note:c.note, order:c.order, items:c.items.map(function(it){ var o = {}; Object.keys(it).forEach(function(k){ if(k !== "n" && k !== "cat") o[k] = it[k]; }); return o; }) }; }),
+    dials:m.dials, variation:m.variation, fields:m.fields, castFields:m.castFields, discipline:m.discipline, wording:m.wording, settings:m.settings };
+}
+function offerFile(name, text, type){
+  if(!FRAMED){
+    try{ var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([text], {type:type||"application/json"})); a.download = name; document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 500); return; }catch(e){}
+  }
+  openOverlay('<div class="dialog-head"><h3>'+esc(name)+'</h3><button type="button" class="iconbtn" data-close aria-label="Close">'+ICON.x+'</button></div><div class="dialog-body"><p class="note" style="margin-top:0">This viewer cannot save files, so here is the content to copy.</p><textarea id="exportText" rows="16" class="mono" style="font-size:11.5px">'+esc(text)+'</textarea><div class="row" style="margin-top:8px"><button type="button" class="btn primary" id="exportCopy">Copy</button></div></div>');
+  $("#exportCopy").onclick = function(){ copyText(text, $("#exportText")); };
+}
+
+/* ================= ACTIONS ================= */
+function toast(msg){
+  var t = $("#toastEl"); if(t) t.remove();
+  t = document.createElement("div"); t.id = "toastEl"; t.className = "toast"; t.setAttribute("role","status"); t.textContent = msg;
+  document.body.appendChild(t); clearTimeout(toast.tm); toast.tm = setTimeout(function(){ t.remove(); }, 3200);
+}
+function copyText(text, fallbackEl, done){
+  function fb(){
+    var ta = fallbackEl || document.createElement("textarea");
+    if(!fallbackEl){ ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); }
+    ta.focus(); ta.select();
+    var ok = false; try{ ok = document.execCommand("copy"); }catch(e){}
+    if(!fallbackEl) ta.remove();
+    toast(ok ? (done || "Copied") : "Selected. Press Ctrl C to copy.");
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(function(){ toast(done || "Copied"); }, fb); }
+  else fb();
+}
+var HIST_KEY = "pbstudio.v1.history";
+function recordCopy(mode, text){
+  var marks = {}; text.split(/\n\s*\n/).forEach(function(b){ marks[b.trim()] = true; });
+  copiedBlocks[cur + ":" + mode] = marks;
+  var h = store(HIST_KEY); if(!Array.isArray(h)) h = [];
+  var r = E().toRecipe(""); delete r.cast; r.modules = onTexts();
+  h.unshift({ at: Date.now(), bench: cur, mode: mode, words: (text.match(/\S+/g)||[]).length, master: (masterObj()||{}).name || "", recipe: r, text: text });
+  h = h.slice(0, 25);
+  if(!store(HIST_KEY, h)) store(HIST_KEY, h.slice(0, 6));
+  setTimeout(renderOutput, 30);
+}
+function copyNow(mode){
+  mode = mode || UI.tab;
+  var text = currentText(mode);
+  recordCopy(mode, text);
+  copyText(text, null, (mode||UI.tab) === "share" ? "Shareable prompt copied: no names, no photos, no private packs." : "Copied " + (text.match(/\S+/g)||[]).length + " words.");
+}
+function newSeed(){ checkpoint(); E().setState({ seed: Math.floor(Math.random()*9000)+1 }); changed({}); flashTag("vary"); }
+function flashTag(tag){ setTimeout(function(){ $$('.blk[data-tag="'+tag+'"]').forEach(function(b){ b.classList.remove("flash"); void b.offsetWidth; b.classList.add("flash"); }); }, 90); }
+function setMaster(id){ checkpoint(); S().master = id; changed({ masters:true, lanes:true }); flashTag("master"); }
+function setCount(n){ checkpoint(); S().castCount = n; if(B[cur].openSlot >= n) B[cur].openSlot = Math.max(0, n-1); changed({ cast:true, lanes:true, masters:true, hold:true }); flashTag("size"); }
+function switchBench(k){ if(k === cur || !B[k]) return; cur = k; UI.bench = k; store(UI_KEY, UI); closeOverlay(); renderAll(); }
+function cycleTheme(){
+  var root = document.documentElement, now = root.getAttribute("data-theme");
+  var dark = now ? now === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+  var next = dark ? "light" : "dark"; root.setAttribute("data-theme", next); store(THEME_KEY, next);
+}
+
+/* ================= EVENTS ================= */
+document.addEventListener("click", function(e){
+  var t = e.target, x;
+  if(t.closest("[data-close]") || t.hasAttribute("data-veil")){ closeOverlay(); return; }
+  if((x = t.closest("[data-bench]")) && x.closest(".bench-switch")){ switchBench(x.getAttribute("data-bench")); return; }
+  if((x = t.closest("[data-count]"))){ setCount(+x.getAttribute("data-count")); return; }
+  if((x = t.closest("[data-openslot]"))){ var i = +x.getAttribute("data-openslot"); if(i >= castN()){ setCount(i+1); B[cur].openSlot = i; renderCast(); return; } B[cur].openSlot = B[cur].openSlot === i ? -1 : i; renderCast(); return; }
+  if((x = t.closest("[data-kind]"))){ checkpoint(); S().cast[+x.getAttribute("data-i")].kind = x.getAttribute("data-kind"); changed({ cast:true }); return; }
+  if((x = t.closest("[data-photo]"))){ photoTarget = +x.getAttribute("data-photo"); $("#photoInput").click(); return; }
+  if((x = t.closest("[data-clearphoto]"))){ checkpoint(); S().cast[+x.getAttribute("data-clearphoto")].photo = ""; changed({ cast:true, hold:true }); return; }
+  if((x = t.closest("[data-clearslot]"))){ checkpoint(); var ci = +x.getAttribute("data-clearslot"); S().cast[ci] = blankSlot(); changed({ cast:true, lanes:true }); return; }
+  if((x = t.closest("[data-compose]"))){ checkpoint(); var k = +x.getAttribute("data-compose"), p = S().cast[k]; var d = P().composeDescription(p); if(!d){ toast("Give them a name first."); return; } p.desc = d; changed({ cast:true }); toast("Composed. Edit it freely; it now overrides the fields."); return; }
+  if((x = t.closest("[data-castact]"))){ castAct(x.getAttribute("data-castact")); return; }
+  if((x = t.closest("[data-master]"))){ setMaster(x.getAttribute("data-master")); return; }
+  if((x = t.closest("[data-off]"))){ toggleModule(+x.getAttribute("data-off"), false); return; }
+  if((x = t.closest("[data-lock]"))){ var it = itemByN(x.getAttribute("data-lock")); if(it){ var L = B[cur].locks; if(L[it.t]) delete L[it.t]; else L[it.t] = true; persist(); renderLanes(); } return; }
+  if((x = t.closest("[data-rolllane]"))){ checkpoint(); var ok = rollLane(x.getAttribute("data-rolllane")); changed({ lanes:true }); if(!ok) toast("This lane is locked, or nothing else fits."); return; }
+  if((x = t.closest("[data-roll]"))){ rollGroup(x.getAttribute("data-roll")); return; }
+  if((x = t.closest("[data-browse]"))){ openBrowser(x.getAttribute("data-browse")); return; }
+  if(t.closest("#browseAll")){ openBrowser(); return; }
+  if((x = t.closest("[data-brcat]"))){ BR.cat = x.getAttribute("data-brcat"); BR.q = ""; $("#brSearch").value = ""; renderBrowser(); $("#brCards").scrollTop = 0; return; }
+  if((x = t.closest("[data-brf]"))){ BR.filter = x.getAttribute("data-brf"); $$("[data-brf]").forEach(function(b){ b.setAttribute("aria-pressed", b === x); }); renderBrowser(); return; }
+  if((x = t.closest("[data-card]"))){ if(x.disabled) return; toggleModule(+x.getAttribute("data-card")); renderBrowser(); return; }
+  if((x = t.closest("[data-pi]"))){ runPalette(+x.getAttribute("data-pi")); return; }
+  if((x = t.closest("[data-ask]"))){ checkpoint(); var s = M().settings; S().askCount = Math.max(s.minQuestions||1, Math.min(s.maxQuestions||8, (S().askCount||4) + (+x.getAttribute("data-ask")))); changed({ guards:true }); flashTag("ask"); return; }
+  if((x = t.closest("[data-vary]"))){ newSeed(); return; }
+  if((x = t.closest("[data-take]"))){ var tk = (window._takes || [])[+x.getAttribute("data-i")]; if(!tk) return;
+    if(x.getAttribute("data-take") === "copy") copyText(tk.text, null, "Copied take " + (+x.getAttribute("data-i") + 1) + ".");
+    else { applyRecipe(tk.recipe, "take " + (+x.getAttribute("data-i") + 1)); closeOverlay(); }
+    return; }
+  if((x = t.closest("[data-pmdel]"))){ PM.rows.splice(+x.getAttribute("data-pmdel"), 1); if(!PM.rows.length) PM.rows.push(pmBlankRow()); renderPackMaker(); return; }
+  if((x = t.closest("[data-pmact]"))){ pmAction(x.getAttribute("data-pmact")); return; }
+  if(t.closest("#copyQuestions")){ copyText(B[cur].A.questions(), null, "Questions copied, ready to send to the client."); return; }
+  if((x = t.closest("[data-toscene]"))){ toScene(+x.getAttribute("data-toscene")); return; }
+  if((x = t.closest("[data-deskcopy]"))){ var ta = $("#" + x.getAttribute("data-deskcopy")); copyText(ta.value, ta); return; }
+  if((x = t.closest("[data-hist]"))){
+    var hh = (store(HIST_KEY) || []).filter(function(y){ return String(y.at) === x.getAttribute("data-at"); })[0];
+    if(!hh) return;
+    if(x.getAttribute("data-hist") === "copy") copyText(hh.text, null, "Copied the prompt as it was then.");
+    else { applyRecipe(hh.recipe, "the copied setup"); closeOverlay(); }
+    return;
+  }
+  if((x = t.closest("[data-fix]"))){ var fn = guardFixes[+x.getAttribute("data-fix")]; if(fn) fn(); return; }
+  if((x = t.closest('.tabs [role="tab"]'))){ setTab(x.getAttribute("data-tab")); return; }
+  if((x = t.closest(".blk[data-tag]"))){ var T = TAGS[x.getAttribute("data-tag")]; if(T && T.to){ if(T.to === "cast") jump("cast"); else if(T.to === "share") return; else jump(T.to); } return; }
+  if((x = t.closest("[data-view]")) && x.closest("#mobnav")){ setView(x.getAttribute("data-view")); return; }
+  if((x = t.closest("[data-share]"))){
+    var a = x.getAttribute("data-share");
+    if(a === "copy") copyNow("share");
+    else if(a === "caption") copyText(postCaption() + "\n\n" + lastOut.share, null, "Caption and prompt copied, ready to post.");
+    else if(a === "link"){ var link = recipeLink(publicRecipe()); var hits = leakScan(link + JSON.stringify(publicRecipe())); copyText(link, null, hits.length ? "Copied, but it mentions " + hits.join(", ") : "Recipe link copied: no cast, no text boxes."); }
+    else if(a === "card"){
+      var url = drawCard();
+      openOverlay('<div class="dialog-head"><h3>Recipe card</h3><button type="button" class="iconbtn" data-close aria-label="Close">'+ICON.x+'</button></div><div class="dialog-body"><p class="note" style="margin-top:0">1080 × 1350, sized for a feed post. It shows the choices and blank cast slots, never a name. '+(FRAMED?'Right-click or long-press the image to save it.':'')+'</p><img class="cardimg" src="'+url+'" alt="Recipe card showing the master, the style choices and blank cast slots"><div class="row" style="margin-top:10px">'+(FRAMED?'':'<button type="button" class="btn primary" id="cardSave">Save PNG</button>')+'<button type="button" class="btn" id="cardCaption">Copy caption with prompt</button></div></div>');
+      var cs = $("#cardSave"); if(cs) cs.onclick = function(){ var aa = document.createElement("a"); aa.href = url; aa.download = "prompt-recipe.png"; document.body.appendChild(aa); aa.click(); aa.remove(); };
+      $("#cardCaption").onclick = function(){ copyText(postCaption() + "\n\n" + lastOut.share, null, "Caption and prompt copied."); };
+    }
+    return;
+  }
+  if((x = t.closest("[data-set]"))){
+    var act = x.getAttribute("data-set"), list = getSetups();
+    if(act === "save"){ var nm = ($("#setupName").value||"").trim(); if(!nm){ toast("Give the setup a name."); $("#setupName").focus(); return; }
+      var r = E().toRecipe(nm); delete r.cast; r.modules = onTexts(); var ex = list.filter(function(s){ return s.name === nm; })[0];
+      if(ex){ ex.recipe = r; ex.saved = Date.now(); } else list.push({ name:nm, recipe:r, saved:Date.now() });
+      store(setupKey(), list) ? toast('Saved "' + nm + '" with ' + r.modules.length + " modules.") : toast("Storage is full; not saved."); renderSetups(); }
+    else if(act === "load"){ applyRecipe(list[+x.getAttribute("data-i")].recipe, '"' + list[+x.getAttribute("data-i")].name + '"'); closeOverlay(); }
+    else if(act === "loadleg"){ var lg = legacySetups()[+x.getAttribute("data-i")]; applyRecipe(lg.recipe, '"' + lg.name + '"'); closeOverlay(); }
+    else if(act === "del"){ if(x.getAttribute("data-armed")){ list.splice(+x.getAttribute("data-i"), 1); store(setupKey(), list); renderSetups(); } else { x.setAttribute("data-armed","1"); x.textContent = "Press again"; } }
+    else if(act === "link"){ var rr = E().toRecipe(($("#setupName").value||"").trim()); delete rr.cast; copyText(recipeLink(rr), null, "Link copied. It carries your text boxes but never the cast."); }
+    else if(act === "copyjson"){ var rj = E().toRecipe(""); delete rj.cast; copyText(JSON.stringify(rj, null, 2), null, "Recipe JSON copied."); }
+    else if(act === "import"){ var raw = ($("#recipeIn").value||"").trim(); try{ var rec = raw.indexOf("#recipe=") > -1 ? decodeRecipe(raw.split("#recipe=")[1].trim()) : JSON.parse(raw); if(applyRecipe(rec, "a shared recipe")) closeOverlay(); }catch(err){ toast("Could not read that. Paste the whole link or the whole JSON."); } }
+    return;
+  }
+  if((x = t.closest("[data-pk]"))){
+    var pk = x.getAttribute("data-pk");
+    if(pk === "files") $("#packFiles").click();
+    else if(pk === "folder") $("#packFolder").click();
+    else if(pk === "export") offerFile("prompt-bench-merged-" + cur + ".json", JSON.stringify(mergedExport(), null, 2));
+    else if(pk === "clear"){ if(x.getAttribute("data-armed")){ localPacks = []; store(LOCAL_KEY, localPacks); reloadEngines(); renderPacks(); toast("Your loaded packs are forgotten."); } else { x.setAttribute("data-armed","1"); x.textContent = "Press again to forget"; } }
+    else if(pk === "make") openPackMaker();
+    else if(pk === "edit") openPackMaker(+x.getAttribute("data-i"));
+    else if(pk === "code") openConsole();
+    else if(pk === "lock") lockAgain();
+    else if(pk === "drop"){ localPacks.splice(+x.getAttribute("data-i"), 1); store(LOCAL_KEY, localPacks); reloadEngines(); renderPacks(); }
+    return;
+  }
+});
+$("#openPalette").addEventListener("click", openPalette);
+$("#openSetups").addEventListener("click", openSetups);
+$("#openPacks").addEventListener("click", openPacks);
+$("#themeBtn").addEventListener("click", cycleTheme);
+$("#undoBtn").addEventListener("click", undo);
+$("#copyBtn").addEventListener("click", function(){ copyNow(); });
+$("#varyBtn").addEventListener("click", newSeed);
+$("#sheetBtn").addEventListener("click", openContactSheet);
+$("#moreBtn").addEventListener("click", function(){ openPalette(); });
+$("#xrayBtn").addEventListener("click", function(){ UI.xray = !UI.xray; this.setAttribute("aria-pressed", UI.xray); store(UI_KEY, UI); renderOutput(); });
+$("#guardBar").addEventListener("click", function(){ guardOpen = !guardOpen; $("#checks").hidden = !guardOpen; this.setAttribute("aria-expanded", guardOpen); });
+
+document.addEventListener("input", function(e){
+  var t = e.target, st = S();
+  if(t.id === "palIn"){ PAL.sel = 0; renderPalette(t.value); return; }
+  if(t.id === "brSearch"){ BR.q = t.value; renderBrowser(); return; }
+  if(t.hasAttribute("data-ck")){
+    checkpoint();
+    var i = +t.getAttribute("data-i"), k = t.getAttribute("data-ck");
+    st.cast[i][k] = t.value;
+    /* A slot edited by hand is somebody new as far as anyone can tell, so it
+       stops counting as fictional until a pack says otherwise. */
+    delete st.cast[i].real;
+    persist(); clearTimeout(outTimer); outTimer = setTimeout(function(){ renderOutput(); if(k === "name"){ renderLanes(); refreshSlotHead(i); $$(".cast-statement").forEach(function(el){ el.textContent = castStatement(); }); } else refreshSlotHead(i); }, 140);
+    return;
+  }
+  if(t.hasAttribute("data-field")){ checkpoint(); st.fields[t.getAttribute("data-field")] = t.value; updateNegWarnings(); changed({}); return; }
+  if(t.hasAttribute("data-dial")){
+    checkpoint(); var id = t.getAttribute("data-dial"), v = +t.value; st.dials[id] = v;
+    var d = M().dials.filter(function(x){ return x.id === id; })[0];
+    $("#dv-" + id).textContent = v; $("#ds-" + id).textContent = P().dialText(d, v);
+    changed({}); return;
+  }
+  if(t.id === "holdRange"){ checkpoint(); st.mediumHold = +t.value; updateHold(); changed({}); return; }
+});
+function refreshSlotHead(i){
+  var slot = $('[data-slot="'+i+'"]'); if(!slot) return;
+  var p = S().cast[i], nameEl = $(".slot-name", slot), av = $(".avatar", slot), sub = $(".slot-sub", slot);
+  if(nameEl) nameEl.firstChild.nodeValue = ((p.name||"").trim() || "Unnamed") + " ";
+  if(av && !p.photo) av.firstChild.nodeValue = monogram(p, i);
+  if(sub) sub.textContent = (p.marker || p.looks || p.desc || "").trim() || "Empty slot. Open to describe.";
+  var dots = $$(".dots i", slot), fields = castFieldsForUI().filter(function(f){ return true; });
+  if(dots.length){ dots[0].className = (p.name||"").trim() ? "on" : ""; fields.forEach(function(f, j){ if(dots[j+1] && !dots[j+1].classList.contains("photo")) dots[j+1].className = (p[f.key]||"").trim() ? "on" : ""; }); }
+}
+document.addEventListener("change", function(e){
+  var t = e.target;
+  if(t.hasAttribute("data-sw")){ checkpoint(); S()[t.getAttribute("data-sw")] = t.checked; changed({ cast:true, lanes:true, guards:true }); return; }
+});
+var photoTarget = -1;
+$("#photoInput").addEventListener("change", function(){
+  var f = this.files && this.files[0]; this.value = ""; if(!f || photoTarget < 0) return;
+  var img = new Image(), r = new FileReader();
+  r.onload = function(){ img.onload = function(){
+    /* Shrunk to a thumbnail: it is a reminder of who the slot is, not the reference the AI sees. */
+    var s = 256, c = document.createElement("canvas"), sc = Math.min(1, s / Math.max(img.width, img.height));
+    c.width = Math.round(img.width*sc); c.height = Math.round(img.height*sc); c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+    checkpoint(); S().cast[photoTarget].photo = c.toDataURL("image/jpeg", .82); changed({ cast:true, hold:true });
+    toast("Photo added. Attach the real photo in the AI; the prompt now says it is there.");
+  }; img.src = r.result; };
+  r.readAsDataURL(f);
+});
+$("#packFiles").addEventListener("change", function(){ readPackFiles(this.files); this.value = ""; });
+$("#packFolder").addEventListener("change", function(){ readPackFiles(this.files); this.value = ""; });
+var dragDepth = 0;
+window.addEventListener("dragenter", function(e){ if(!e.dataTransfer || Array.prototype.indexOf.call(e.dataTransfer.types||[], "Files") < 0) return; e.preventDefault(); if(++dragDepth === 1){ var z = document.createElement("div"); z.id = "dropZ"; z.className = "dropzone"; z.textContent = "Drop JSON packs to load them"; document.body.appendChild(z); } });
+window.addEventListener("dragleave", function(){ if(--dragDepth <= 0){ dragDepth = 0; var z = $("#dropZ"); if(z) z.remove(); } });
+window.addEventListener("dragover", function(e){ e.preventDefault(); });
+window.addEventListener("drop", function(e){ e.preventDefault(); dragDepth = 0; var z = $("#dropZ"); if(z) z.remove(); if(e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) readPackFiles(e.dataTransfer.files); });
+
+document.addEventListener("keydown", function(e){
+  var t = e.target, tag = (t && t.tagName || "").toLowerCase(), typing = tag === "input" || tag === "textarea";
+  var mod = e.metaKey || e.ctrlKey;
+  if(e.key === "Escape" && $("#codeConsole")){ closeConsole(); return; }
+  if(e.key === "Escape" && $("#overlay").innerHTML){ closeOverlay(); return; }
+  if(e.key === "Escape" && deskOpen() && !typing){ closeDesk(); return; }
+  if(t && t.id === "palIn"){
+    if(e.key === "ArrowDown" || e.key === "ArrowUp"){ e.preventDefault(); PAL.sel = (PAL.sel + (e.key === "ArrowDown" ? 1 : -1) + PAL.items.length) % Math.max(1, PAL.items.length); $$(".pal-item").forEach(function(b, i){ b.setAttribute("aria-selected", i === PAL.sel); if(i === PAL.sel) b.scrollIntoView({block:"nearest"}); }); return; }
+    if(e.key === "Enter"){ e.preventDefault(); runPalette(PAL.sel); return; }
+  }
+  if(mod && (e.key === "k" || e.key === "K")){ e.preventDefault(); openPalette(); return; }
+  if(e.key === "/" && !typing && !mod){ e.preventDefault(); openPalette(); return; }
+  if((e.key === "`" || e.key === "~") && !typing && !mod){ e.preventDefault(); openConsole(); return; }
+  if(e.key === "?" && !typing && !mod){ e.preventDefault(); openKeys(); return; }
+  if(mod && e.key === "Enter"){ e.preventDefault(); copyNow(); return; }
+  if(mod && e.shiftKey && (e.key === "c" || e.key === "C")){ e.preventDefault(); copyNow(); return; }
+  if(mod && !e.shiftKey && (e.key === "z" || e.key === "Z") && !typing){ e.preventDefault(); undo(); return; }
+});
+window.addEventListener("resize", (function(){ var wasNarrow = null; return function(){ var n = window.matchMedia("(max-width:1180px)").matches; if(n !== wasNarrow){ wasNarrow = n; if(B[cur]) renderCast(); } }; })());
+
+/* ================= UNLOCK CODES ================= */
+/* A code is checked by the server, never by this page: the page holds no code
+   and no hidden pack. A right code sets a signed cookie for 180 days, and the
+   server then includes the private packs that code's group names. Opened from
+   a file or a preview with no server, one demo code opens an invented pack so
+   the flow can be seen. */
+var UNLOCK = { available: false, groups: [], packs: [], nsfw: false, realOverride: false };
+
+/* ---------------- NSFW ----------------
+   The server decides whether this browser may see NSFW content at all (a code
+   that opens it, or the owner signed in). This browser then decides whether to
+   show it: a consent box first, then the switch. The engine keeps NSFW away
+   from real people whatever is ticked here; only the owner's admin switch
+   lifts that, for testing the block. Agents never see any of it. */
+var NSFW_KEY = "pbstudio.v1.nsfw";
+var NSFWP = Object.assign({ consent:false, on:false }, store(NSFW_KEY) || {});
+function nsfwWanted(){ return !!(UNLOCK.nsfw && NSFWP.consent && NSFWP.on); }
+function applyNsfw(){
+  var st = { nsfw: nsfwWanted(), nsfwRealOk: !!(UNLOCK.nsfw && UNLOCK.realOverride) };
+  Object.keys(B).forEach(function(k){ B[k].E.setState(st); });
+}
+function nsfwPanelHTML(){
+  if(!UNLOCK.nsfw) return "";
+  var blocked = nsfwWanted() && P().nsfwBlocked();
+  var status = !nsfwWanted() ? "Off. Nothing marked NSFW is shown or added to prompts."
+    : blocked ? "Paused: the cast includes a real person, and NSFW content is never used with real people. Use fictional characters only, or turn this off."
+    : UNLOCK.realOverride ? "On, with the admin override: the real-person block is lifted in this browser for testing."
+    : "On. NSFW content is shown and used, with fictional characters only.";
+  return '<div class="switchrow" style="margin-bottom:12px;display:block"><b>NSFW content</b>'
+    + '<small>This browser holds a code or sign-in that includes NSFW content. It stays hidden until you choose to show it.</small>'
+    + '<label style="display:flex;gap:8px;align-items:flex-start;margin-top:8px"><input type="checkbox" data-nsfw="consent"'+(NSFWP.consent?" checked":"")+'>'
+    + '<span>I understand what this content depicts, and everyone depicted (or whoever speaks for them) knows about it and has consented.</span></label>'
+    + '<label style="display:flex;gap:8px;align-items:center;margin-top:6px"><input type="checkbox" data-nsfw="on"'+(NSFWP.on?" checked":"")+(NSFWP.consent?"":" disabled")+'>'
+    + '<span>Show NSFW content</span></label>'
+    + '<small role="status" style="display:block;margin-top:6px">'+esc(status)+'</small></div>';
+}
+document.addEventListener("change", function(e){
+  var t = e.target;
+  if(!t || !t.hasAttribute || !t.hasAttribute("data-nsfw")) return;
+  NSFWP[t.getAttribute("data-nsfw")] = !!t.checked;
+  if(!NSFWP.consent) NSFWP.on = false;
+  store(NSFW_KEY, NSFWP);
+  applyNsfw(); renderAll();
+  if($("#packBody")) renderPacks();
+  if(nsfwWanted() && P().nsfwBlocked()) toast("NSFW is paused: the cast includes a real person.");
+});
+var DEMO_CODE = "RISO42";
+var DEMO_PACK = { name: "Demo: The Night Shift", path: "demo/night-shift.json", data: {
+  pack: "Demo: The Night Shift", people: [
+    { id:"p1", name:"Ines", real:false, kind:"person", marker:"a head torch pushed up into her hair, always switched on", looks:"Short, fifties, silver bob, laugh lines", wears:"Hi-vis tabard over a cardigan", manner:"Runs the shift like a quiz host", likes:"crosswords, bad coffee" },
+    { id:"p2", name:"Dex", real:false, kind:"person", marker:"a clipboard he never writes on", looks:"Very tall, twenties, shaved head, round face", wears:"Navy fleece, cargo trousers", manner:"Earnest, apologises to furniture", likes:"trains, lists" },
+    { id:"p3", name:"Moth", real:false, kind:"animal", marker:"one white sock on the left front paw", looks:"Sleek black cat, huge green eyes", wears:"", manner:"Supervises from the highest shelf", likes:"" } ] } };
+function haveServer(){ return packSource === "server"; }
+function unlockPanelHTML(){
+  if(!haveServer()){
+    var demoOn = localPacks.some(function(p){ return p.path === DEMO_PACK.path; });
+    return '<div class="switchrow" style="margin-bottom:12px;display:block"><b>Unlock codes</b><small>Codes are checked by your Prompt Bench server, so they work when the Studio is opened from it. Here, the demo code <span class="mono">'+DEMO_CODE+'</span> opens an invented cast so you can see how it feels. Press <kbd>`</kbd> anywhere to type one.</small><div class="row" style="margin-top:8px"><button type="button" class="btn sm" data-pk="code">Enter a code</button>'+(demoOn ? '<button type="button" class="btn sm ghost" data-pk="lock">Lock the demo again</button>' : '')+'</div></div>';
+  }
+  if(!UNLOCK.available && !UNLOCK.groups.length) return nsfwPanelHTML();
+  return '<div class="switchrow" style="margin-bottom:12px;display:block"><b>'+(UNLOCK.groups.length ? 'Unlocked in this browser: ' + esc(UNLOCK.packs.join(", ") || UNLOCK.groups.join(", ")) : 'Hidden packs')+'</b><small>'
+    + (UNLOCK.groups.length ? 'This browser keeps them for 180 days without signing in. Locking again removes them from this browser only.' : 'Some packs on this server open with a code. Press <kbd>`</kbd> anywhere, or:')
+    + '</small><div class="row" style="margin-top:8px"><button type="button" class="btn sm" data-pk="code">'+(UNLOCK.groups.length ? 'Enter another code' : 'Enter a code')+'</button>'
+    + (UNLOCK.groups.length ? '<button type="button" class="btn sm ghost danger" data-pk="lock">Lock again</button>' : '') + '</div></div>'
+    + nsfwPanelHTML();
+}
+function refreshUnlock(){
+  if(!/^https?:$/.test(location.protocol)) return Promise.resolve();
+  return fetch("api/unlock", { cache:"no-store", credentials:"same-origin" }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
+    if(j){ UNLOCK = { available: !!j.available, groups: j.unlocked || [], packs: j.packs || [],
+                      nsfw: !!j.nsfw, realOverride: !!j.realOverride }; }
+    if(Object.keys(B).length){ applyNsfw(); renderAll(); if($("#packBody")) renderPacks(); }
+  }).catch(function(){});
+}
+function openConsole(){
+  closeOverlay(); closeConsole();
+  var c = document.createElement("div"); c.className = "console"; c.id = "codeConsole"; c.setAttribute("role", "dialog"); c.setAttribute("aria-label", "Unlock code");
+  c.innerHTML = '<div class="console-inner"><div class="hintline">PROMPT BENCH // ENTER CODE // ESC TO CLOSE</div><div class="console-row"><span class="prompt-sign" aria-hidden="true">&gt;</span><label class="sr" for="codeIn">Unlock code</label><input id="codeIn" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="32" inputmode="text"></div><div class="msg" id="codeMsg" aria-live="polite"></div></div>';
+  document.body.appendChild(c);
+  var inp = $("#codeIn"); inp.focus();
+  inp.addEventListener("keydown", function(e){ if(e.key === "Enter"){ e.preventDefault(); submitCode(inp.value); } });
+}
+function closeConsole(){ var c = $("#codeConsole"); if(c) c.remove(); }
+function codeFail(msg){
+  var c = $("#codeConsole"); if(!c) return;
+  $("#codeMsg").className = "msg bad"; $("#codeMsg").textContent = msg;
+  c.classList.remove("shake"); void c.offsetWidth; c.classList.add("shake");
+  $("#codeIn").select();
+}
+function submitCode(raw){
+  var code = String(raw || "").replace(/[^A-Za-z0-9]/g, "").toUpperCase();
+  if(code.length < 4){ codeFail("ACCESS DENIED // TOO SHORT"); return; }
+  $("#codeMsg").className = "msg"; $("#codeMsg").textContent = "CHECKING…";
+  if(!/^https?:$/.test(location.protocol) || !haveServer()){
+    if(code !== DEMO_CODE){ codeFail("ACCESS DENIED // CODES ARE CHECKED BY YOUR SERVER. THE DEMO CODE HERE IS " + DEMO_CODE); return; }
+    localPacks = localPacks.filter(function(p){ return p.path !== DEMO_PACK.path; }).concat([JSON.parse(JSON.stringify(DEMO_PACK))]);
+    store(LOCAL_KEY, localPacks);
+    afterUnlock(["demo"], [DEMO_PACK.name]);
+    return;
+  }
+  fetch("api/unlock", { method:"POST", credentials:"same-origin", headers:{ "Content-Type":"application/json" }, body: JSON.stringify({ code: code }) })
+    .then(function(r){ return r.json().then(function(j){ return { status: r.status, j: j }; }); })
+    .then(function(res){
+      if(!res.j.ok){ codeFail("ACCESS DENIED // " + String(res.j.error || "that code does not open anything").toUpperCase()); return; }
+      UNLOCK = { available: true, groups: res.j.unlocked || [], packs: res.j.packs || [],
+                 nsfw: UNLOCK.nsfw || (res.j.unlocked || []).indexOf("nsfw") > -1, realOverride: UNLOCK.realOverride };
+      tryServer().then(function(){ afterUnlock(res.j.unlocked, res.j.packs); });
+    })
+    .catch(function(){ codeFail("ACCESS DENIED // THE SERVER DID NOT ANSWER"); });
+}
+function reseedUntouched(){
+  Object.keys(B).forEach(function(k){
+    var keep = cur; cur = k;
+    var st = S();
+    if((M().people||[]).length && !st.cast.some(function(p){ return slotFilled(p) && !EXAMPLE_CAST.some(function(x){ return x.name === p.name; }); })){
+      st.cast = []; st.castCount = null; E().setState({}); persist();
+    }
+    cur = keep;
+  });
+}
+function afterUnlock(groups, names){
+  closeConsole(); closeOverlay();
+  reloadEngines(); reseedUntouched(); renderAll();
+  var g = document.createElement("div"); g.className = "granted"; g.setAttribute("role", "status");
+  g.innerHTML = '<div><h2>Access<br>granted</h2><ul>' + (names || []).map(function(n){ return '<li>+ ' + esc(n) + '</li>'; }).join("") + '</ul><small>'+(groups && groups[0] === "demo" ? 'Demo pack loaded into this browser. Your cast slots now hold it if they were empty.' : 'Remembered in this browser for 180 days. Packs → Lock again undoes it.')+'</small></div>';
+  document.body.appendChild(g);
+  var gone = function(){ if(g.parentNode) g.remove(); };
+  g.addEventListener("click", gone);
+  setTimeout(gone, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 2600 : 2200);
+}
+function lockAgain(){
+  if(!haveServer()){
+    localPacks = localPacks.filter(function(p){ return p.path !== DEMO_PACK.path; }); store(LOCAL_KEY, localPacks);
+    reloadEngines(); renderPacks(); toast("Demo pack removed."); return;
+  }
+  fetch("api/unlock/forget", { method:"POST", credentials:"same-origin", headers:{ "Content-Type":"application/json" }, body:"{}" }).then(function(){
+    UNLOCK.groups = []; UNLOCK.packs = []; UNLOCK.nsfw = false;
+    return tryServer().then(refreshUnlock);
+  }).then(function(){ reloadEngines(); if($("#packBody")) renderPacks(); toast("Locked again. The hidden packs are gone from this browser."); });
+}
+
+/* ================= PACK MAKER ================= */
+var PM = null;
+function pmBlankRow(){ return { cat: (M().categories[0]||{}).key || "SCENE", newKey:"", newLabel:"", newNote:"", t:"", m:"*", needs:"", alt1:"" }; }
+function openPackMaker(editIndex){
+  PM = { name:"My modules", bench: cur, priv:false, group:"", rows:[pmBlankRow()], editing: null, extra: {} };
+  if(editIndex !== undefined && localPacks[editIndex]){
+    var lp = localPacks[editIndex], d = lp.data || {};
+    PM.editing = editIndex; PM.name = d.pack || lp.name; PM.priv = !!d.private; PM.group = d.unlock || ""; PM.bench = d.bench || cur;
+    Object.keys(d).forEach(function(k){ if(["pack","bench","private","unlock","categories"].indexOf(k) < 0) PM.extra[k] = d[k]; });
+    PM.rows = [];
+    (d.categories || []).forEach(function(c){
+      var known = !!catByKey(c.key);
+      (c.items || []).forEach(function(it){
+        PM.rows.push({ cat: known ? c.key : "__new", newKey: known ? "" : c.key, newLabel: known ? "" : (c.label||""), newNote: known ? "" : (c.note||""),
+                       t: it.t || "", m: it.m || "*", needs: it.needs === undefined ? "" : String(it.needs), alt1: it.alt && it.alt["1"] ? it.alt["1"] : "" });
+      });
+    });
+    if(!PM.rows.length) PM.rows = [pmBlankRow()];
+  }
+  openOverlay('<div class="dialog-head"><h3>'+(PM.editing === null ? 'Make a pack' : 'Edit pack')+'</h3><button type="button" class="iconbtn" data-close aria-label="Close">'+ICON.x+'</button></div><div class="dialog-body" id="pmBody"></div>', "wide");
+  renderPackMaker();
+}
+function pmLint(r){
+  var out = [], t = (r.t || "").trim();
+  if(!t) return { ok:false, text:"Write the module first." };
+  var neg = t.match(NEG);
+  if(neg) out.push('Phrased as a ban ("' + neg[0] + '"). Say what is there instead.');
+  var high = 0; t.replace(/\{([1-9])\}/g, function(w, d){ high = Math.max(high, +d); return w; });
+  if(high > maxCast()) out.push("Uses {" + high + "} but this bench allows " + maxCast() + " characters.");
+  var need = r.needs !== "" ? +r.needs : high;
+  if(need > 1 && !r.alt1.trim()) out.push("Needs " + need + " characters. Add wording for one so it survives a small cast.");
+  var dup = false; M().categories.forEach(function(c){ c.items.forEach(function(it){ if(it.t === t) dup = true; }); });
+  if(dup && PM.editing === null) out.push("This exact wording is already installed; it would only widen its masters.");
+  if(/\b(beautiful|stunning|amazing|masterpiece|8k|4k|hyper ?realistic|trending)\b/i.test(t)) out.push("Praise words tell a model nothing about what to draw. Name the material, the light or the object.");
+  return out.length ? { ok:false, text: out.join(" ") } : { ok:true, text: "Reads well: positive, concrete, " + (need ? "needs " + need + " character" + (need===1?"":"s") : "no characters needed") + "." };
+}
+function renderPackMaker(){
+  var ms = M().masters, cats = M().categories;
+  var h = '<p class="note" style="margin-top:0">Write modules as what is in the picture, never what is not. Use {1} to {'+maxCast()+'} for characters, and they become the right names or Person_1 in the shareable version.</p>'
+    + '<div class="grid2" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:12px">'
+    + '<label class="field"><span>Pack name</span><input type="text" id="pm-name" value="'+esc(PM.name)+'"></label>'
+    + '<label class="field"><span>Hidden pack <em>needs a code or sign-in</em></span><span class="row"><input type="checkbox" class="tog" id="pm-private" '+(PM.priv?"checked":"")+'><input type="text" id="pm-group" placeholder="unlock group, e.g. cast" value="'+esc(PM.group)+'" '+(PM.priv?"":"disabled")+' style="flex:1"></span></label></div>'
+    + '<div style="display:grid;gap:10px">';
+  PM.rows.forEach(function(r, i){
+    var lint = pmLint(r);
+    h += '<div class="pm-row"><div class="row"><select data-pm="cat" data-i="'+i+'" aria-label="Category">' + cats.map(function(c){ return '<option value="'+esc(c.key)+'"'+(r.cat===c.key?" selected":"")+'>'+esc(c.label)+'</option>'; }).join("") + '<option value="__new"'+(r.cat==="__new"?" selected":"")+'>New category…</option></select>'
+      + (r.cat === "__new" ? '<input type="text" data-pm="newLabel" data-i="'+i+'" placeholder="Category name, e.g. Weather" value="'+esc(r.newLabel)+'" style="flex:1 1 160px"><input type="text" data-pm="newNote" data-i="'+i+'" placeholder="What it decides" value="'+esc(r.newNote)+'" style="flex:1 1 160px">' : '')
+      + '<button type="button" class="btn sm ghost danger" data-pmdel="'+i+'" style="margin-left:auto">Remove</button></div>'
+      + '<textarea data-pm="t" data-i="'+i+'" rows="2" placeholder="{1} is holding the only umbrella and pretending not to notice the rain.">'+esc(r.t)+'</textarea>'
+      + '<div class="pm-masters"><label><input type="checkbox" data-pmm="*" data-i="'+i+'" '+(r.m.indexOf("*")>-1?"checked":"")+'> Every master</label>'
+      + ms.map(function(m){ return '<label><input type="checkbox" data-pmm="'+esc(m.id)+'" data-i="'+i+'" '+(r.m.indexOf("*")<0 && r.m.indexOf(m.id)>-1?"checked":"")+(r.m.indexOf("*")>-1?" disabled":"")+'> '+esc(m.name)+'</label>'; }).join("") + '</div>'
+      + '<textarea data-pm="alt1" data-i="'+i+'" rows="1" placeholder="Optional: the same idea for a single character">'+esc(r.alt1)+'</textarea>'
+      + '<div class="pm-lint'+(lint.ok?" ok":"")+'" data-pmlint="'+i+'">'+esc(lint.text)+'</div></div>';
+  });
+  h += '</div><div class="row" style="margin-top:12px"><button type="button" class="btn" data-pmact="add">Add another module</button><span style="flex:1"></span>'
+    + '<button type="button" class="btn" data-pmact="copy">Copy JSON</button><button type="button" class="btn" data-pmact="file">Save file</button>'
+    + (haveServer() ? '<button type="button" class="btn" data-pmact="server">Install on the server</button>' : '')
+    + '<button type="button" class="btn primary" data-pmact="local">'+(PM.editing === null ? 'Add to this browser' : 'Save changes')+'</button></div><p class="note" id="pmNote"></p>';
+  $("#pmBody").innerHTML = h;
+}
+function pmPack(){
+  var byKey = {}, order = [];
+  PM.rows.forEach(function(r){
+    var t = (r.t || "").trim(); if(!t) return;
+    var key = r.cat === "__new" ? (r.newLabel || "Custom").toUpperCase().replace(/[^A-Z0-9]+/g, "_").replace(/^_|_$/g, "") || "CUSTOM" : r.cat;
+    if(!byKey[key]){ byKey[key] = { key: key, items: [] }; if(r.cat === "__new"){ byKey[key].label = r.newLabel || key; byKey[key].note = r.newNote || ""; byKey[key].order = 900; } order.push(key); }
+    var it = { m: r.m || "*", t: t };
+    if(r.needs !== "") it.needs = +r.needs;
+    if(r.alt1.trim()) it.alt = { "1": r.alt1.trim() };
+    byKey[key].items.push(it);
+  });
+  var d = { pack: PM.name || "My modules" };
+  if(PM.bench === "persona") d.bench = "persona";
+  if(PM.priv){ d["private"] = true; if(PM.group.trim()) d.unlock = PM.group.trim(); }
+  Object.keys(PM.extra).forEach(function(k){ d[k] = PM.extra[k]; });
+  d.categories = order.map(function(k){ return byKey[k]; });
+  return d;
+}
+function pmSync(el){
+  var i = +el.getAttribute("data-i"), r = PM.rows[i]; if(!r) return;
+  if(el.hasAttribute("data-pm")){ r[el.getAttribute("data-pm")] = el.value; if(el.getAttribute("data-pm") === "cat"){ renderPackMaker(); return; } }
+  if(el.hasAttribute("data-pmm")){
+    var id = el.getAttribute("data-pmm");
+    if(id === "*"){ r.m = el.checked ? "*" : M().masters.map(function(m){ return m.id; }).join(""); renderPackMaker(); return; }
+    var set = r.m.replace("*", "");
+    set = el.checked ? (set.indexOf(id) < 0 ? set + id : set) : set.replace(id, "");
+    r.m = set || "*";
+  }
+  var l = pmLint(r), lintEl = $('[data-pmlint="'+i+'"]');
+  if(lintEl){ lintEl.className = "pm-lint" + (l.ok ? " ok" : ""); lintEl.textContent = l.text; }
+}
+function pmAction(a){
+  var d = pmPack(), json = JSON.stringify(d, null, 2), count = 0;
+  d.categories.forEach(function(c){ count += c.items.length; });
+  if(a === "add"){ PM.rows.push(pmBlankRow()); renderPackMaker(); return; }
+  if(!count){ $("#pmNote").textContent = "Write at least one module first."; return; }
+  var fname = (PM.name || "my-modules").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") + ".json";
+  if(a === "copy") copyText(json, null, "Pack JSON copied: " + count + " module" + (count===1?"":"s") + ".");
+  else if(a === "file") offerFile(fname, json);
+  else if(a === "local"){
+    var entry = { name: d.pack, path: "made/" + fname, data: d };
+    if(PM.editing !== null) localPacks[PM.editing] = entry;
+    else { localPacks = localPacks.filter(function(p){ return p.path !== entry.path; }); localPacks.push(entry); }
+    store(LOCAL_KEY, localPacks); closeOverlay(); reloadEngines();
+    toast(count + " module" + (count===1?"":"s") + " added. They are in the lanes now, tagged with their own numbers.");
+  }
+  else if(a === "server"){
+    fetch("api/upload", { method:"POST", credentials:"same-origin", headers:{ "Content-Type":"application/json" }, body: JSON.stringify({ bench: PM.bench, name: fname, pack: d }) })
+      .then(function(r){ return r.json().then(function(j){ return { status: r.status, j: j }; }, function(){ return { status: r.status, j: {} }; }); })
+      .then(function(res){
+        if(res.status === 401) $("#pmNote").textContent = "Sign in on the admin page first, then press this again.";
+        else if(!res.j.ok) $("#pmNote").textContent = "The server refused it: " + (res.j.error || res.status);
+        else { $("#pmNote").textContent = "Installed as uploads/" + res.j.saved + ". Everyone using this server now has it."; tryServer().then(reloadEngines); }
+      }).catch(function(){ $("#pmNote").textContent = "Could not reach the server."; });
+  }
+}
+document.addEventListener("input", function(e){ if(PM && e.target.closest && e.target.closest("#pmBody")){
+  if(e.target.id === "pm-name") PM.name = e.target.value;
+  else if(e.target.id === "pm-group") PM.group = e.target.value;
+  else pmSync(e.target);
+} });
+document.addEventListener("change", function(e){ if(PM && e.target.closest && e.target.closest("#pmBody")){
+  if(e.target.id === "pm-private"){ PM.priv = e.target.checked; renderPackMaker(); }
+  else if(e.target.hasAttribute("data-pmm") || e.target.getAttribute("data-pm") === "cat") pmSync(e.target);
+} });
+
+/* ================= CONTACT SHEET ================= */
+/* Four takes on the current setup, each a full recipe: a new seed, and the
+   lanes you have not locked rolled again. Nothing on screen changes until one
+   is chosen. */
+function openContactSheet(){
+  var st = S(), baseOn = onTexts(), baseSeed = P().seed(), locks = B[cur].locks, sk = styleKeys();
+  var takes = [];
+  for(var i = 0; i < 4; i++){
+    applyOnTexts(baseOn);
+    E().setState({ seed: Math.floor(Math.random() * 9000) + 1 });
+    if(i > 0) M().categories.forEach(function(c){
+      var has = c.items.some(function(it){ return st.on[it.n] && inMaster(it) && !locks[it.t]; });
+      if(has) rollLane(c.key, true);
+    });
+    var text = E().assemble("prompt"), mods = onTexts();
+    var r = E().toRecipe(""); delete r.cast; r.modules = mods;
+    var changedMods = mods.filter(function(t){ return baseOn.indexOf(t) < 0; });
+    var vm = text.match(new RegExp("(?:^|\\n)" + M().wording.variationHeading + "\\n([^\\n]+)"));
+    takes.push({ recipe: r, text: text, changed: changedMods, vary: vm ? vm[1] : "", seed: P().seed(), words: (text.match(/\S+/g)||[]).length });
+  }
+  applyOnTexts(baseOn); E().setState({ seed: baseSeed });
+  window._takes = takes;
+  openOverlay('<div class="dialog-head"><h3>Contact sheet</h3><span class="note">Take 1 keeps your picks; takes 2 to 4 reroll the lanes you have not locked.</span><button type="button" class="iconbtn" data-close aria-label="Close">'+ICON.x+'</button></div><div class="dialog-body"><div class="sheetgrid">'
+    + takes.map(function(t, i){
+      return '<article class="vcard"><h4>Take '+(i+1)+' <span>seed '+t.seed+'</span></h4>'
+        + (t.changed.length ? '<ul>' + t.changed.map(function(x){ var it = null; M().categories.forEach(function(c){ c.items.forEach(function(y){ if(y.t === x) it = { c: c.label }; }); }); return '<li><b>'+esc(it ? it.c : "")+'</b> '+esc(shortText(x, 80))+'</li>'; }).join("") + '</ul>' : '<p class="note" style="margin:0">Your picks, a new variation.</p>')
+        + (t.vary ? '<div class="vl">'+esc(t.vary)+'</div>' : '')
+        + '<div class="row"><button type="button" class="btn sm primary" data-take="use" data-i="'+i+'">Use this</button><button type="button" class="btn sm" data-take="copy" data-i="'+i+'">Copy prompt</button></div></article>';
+    }).join("") + '</div></div>', "wide");
+}
+
+/* ================= SHORTCUTS ================= */
+function openKeys(){
+  var rows = [["Ctrl K  or  /","Find any module, master or command"],["Ctrl Enter","Copy the prompt"],["Ctrl Z","Undo"],["`","Enter an unlock code"],["?","This list"],["Esc","Close whatever is open"]];
+  openOverlay('<div class="dialog-head"><h3>Keyboard</h3><button type="button" class="iconbtn" data-close aria-label="Close">'+ICON.x+'</button></div><div class="dialog-body"><div class="keys">' + rows.map(function(r){ return '<kbd>'+esc(r[0])+'</kbd><span>'+esc(r[1])+'</span>'; }).join("") + '</div></div>');
+}
+
+/* ================= AGENTS ================= */
+/* The agent layer (tools/bench-agent.js) sits on each bench's live engine, so
+   a brief read here, a compose from the Agent desk and a call to
+   window.PromptBench all change exactly what the Studio shows. */
+function pageBase(){ return /^https?:$/.test(location.protocol) && !FRAMED ? location.href.split("#")[0].split("?")[0] : ""; }
+function attachAgents(){
+  Object.keys(B).forEach(function(k){ B[k].A = BenchAgent.createAgent(B[k].E, { baseUrl: pageBase() }); });
+}
+function studioBase(){
+  /* What the Studio already holds counts as chosen when a brief is read here:
+     the lanes you filled and your switches. Master, cast size and dials are
+     left for the brief to speak to. */
+  var r = E().toRecipe(""), st = S();
+  return { modules: onTexts(), fields: JSON.parse(JSON.stringify(st.fields)), discipline: !!st.discipline,
+           strangers: !!st.strangers, castOpen: !!st.castOpen, askQuestions: st.askQuestions !== false,
+           askCount: r.askCount, mediumHold: r.mediumHold, seed: r.seed };
+}
+function describeDecision(d){
+  var what = { castCount:"Cast", master:"Master", module:(d.category ? (catByKey(d.category)||{}).label || d.category : "Module"), dial:"Dial", field:"Text" }[d.what] || d.what;
+  var val = d.what === "module" ? shortText(d.value, 54) : d.what === "dial" ? (d.id + " " + d.value) : d.what === "field" ? d.id : String(d.value);
+  return '<span class="decision"><b>'+esc(what)+'</b>'+esc(val)+(d.why ? ' <em>'+esc(d.why)+'</em>' : '')+'</span>';
+}
+function readBrief(){
+  var text = ($("#briefIn").value || "").trim();
+  if(!text){ toast("Paste the client's words first."); $("#briefIn").focus(); return; }
+  checkpoint();
+  var res = B[cur].A.compose({ brief: text, base: studioBase(), keepCast: true });
+  renderAll(); persist(); flashTag("image");
+  var blockers = res.gaps.filter(function(g){ return g.level === "blocker"; }).length;
+  $("#briefOut").innerHTML = (res.decisions.length ? '<div class="decisions">' + res.decisions.map(describeDecision).join("") + '</div>' : '<p class="note">Nothing in those words settles anything the Studio does not already have.</p>')
+    + '<div class="row" style="margin-top:8px"><button type="button" class="btn sm" id="briefUndo">Undo</button>'
+    + (res.questions ? '<button type="button" class="btn sm" id="briefQs">Copy '+(blockers ? blockers + ' must-ask ' : '')+'questions for the client</button>' : '')
+    + '<span class="note">'+(res.ready ? 'Nothing blocks the prompt.' : blockers + ' thing'+(blockers===1?'':'s')+' still need an answer.')+'</span></div>';
+  var u = $("#briefUndo"); if(u) u.onclick = function(){ undo(); $("#briefOut").innerHTML = ""; };
+  var q = $("#briefQs"); if(q) q.onclick = function(){ copyText(res.questions, null, "Questions copied, ready to send."); };
+}
+function toScene(i){
+  var p = S().cast[i], keep = cur;
+  if(!(p.name||"").trim()){ toast("Give them a name first."); return; }
+  cur = "main";
+  var st = S(), idx = -1;
+  for(var j=0;j<maxCast();j++){ if(!slotFilled(st.cast[j])){ idx = j; break; } }
+  if(idx < 0){ cur = keep; toast("The Scene cast is full. Empty a slot there first."); return; }
+  checkpoint();
+  var slot = blankSlot();
+  Object.keys(slot).forEach(function(k){ if(p[k] !== undefined && k !== "likes") slot[k] = p[k]; });
+  slot.kind = p.kind || "person";
+  st.cast[idx] = slot;
+  if(st.castCount < idx + 1) st.castCount = idx + 1;
+  persist(); cur = keep;
+  toast(p.name + " is now in slot " + (idx+1) + " of the Scene bench.");
+}
+
+/* ---------------- Agent desk ---------------- */
+function deskOpen(){ return !$("#agentDesk").hidden; }
+function openDesk(){
+  $("#agentDesk").hidden = false; $("#shell").hidden = true; closeOverlay();
+  renderDesk();
+  if(location.hash !== "#agent"){ try{ history.replaceState(null, "", "#agent"); }catch(e){} }
+  setTimeout(function(){ $("#agent-brief").focus(); }, 40);
+}
+function closeDesk(){
+  $("#agentDesk").hidden = true; $("#shell").hidden = false;
+  if(location.hash === "#agent"){ try{ history.replaceState(null, "", location.pathname + location.search); }catch(e){} }
+  renderAll();
+}
+function renderDesk(){
+  $("#agent-bench").value = cur;
+  var ms = M().masters;
+  $("#agent-master").innerHTML = '<option value="">Pick from the words</option>' + ms.map(function(m){ return '<option value="'+esc(m.id)+'">'+esc(m.name)+': '+esc(m.blurb||"")+'</option>'; }).join("");
+  $("#deskServerNote").innerHTML = pageBase() ? ' Over HTTP: <code>GET /api/agent/compose?brief=…</code>, guide at <code>/llms.txt</code>.' : '';
+  var h = "";
+  M().masters.forEach(function(m){ h += ""; });
+  h += '<h3>Masters</h3><ol>' + ms.map(function(m){ return '<li><span>'+esc(m.id)+'</span>'+esc(m.name)+': '+esc(m.blurb||"")+'</li>'; }).join("") + '</ol>';
+  var mid = masterId();
+  M().categories.forEach(function(c){
+    var rows = c.items.filter(function(it){ return P().suitsMaster(it, mid); });
+    if(!rows.length) return;
+    h += '<h3>'+esc(c.label)+' <span class="note">'+esc(c.note||"")+'</span></h3><ol>' + rows.map(function(it){
+      var need = P().needsOf(it);
+      return '<li><span>#'+it.n+'</span>'+esc(it.t)+(need > 1 ? ' <span>needs '+need+'</span>' : '')+'</li>';
+    }).join("") + '</ol>';
+  });
+  $("#agent-catalogue-body").innerHTML = h;
+}
+function parseCastText(t){
+  t = (t || "").trim(); if(!t) return null;
+  if(t.charAt(0) === "[") return JSON.parse(t);
+  var keys = ["marker","looks","wears","manner"];
+  return t.split(/\n+/).map(function(line){
+    var parts = line.split("|").map(function(x){ return x.trim(); });
+    var head = parts[0], p = {};
+    if(/\+photo\b/i.test(head)){ p.photo = true; head = head.replace(/\+photo\b/i, ""); }
+    if(/\((animal|cat|dog|pet|horse)\)/i.test(head)) p.kind = "animal";
+    p.name = head.replace(/\([^)]*\)/g, "").trim();
+    parts.slice(1).forEach(function(v, i){ if(v && keys[i]) p[keys[i]] = v; });
+    return p;
+  }).filter(function(p){ return p.name; });
+}
+function deskCompose(){
+  var bench = $("#agent-bench").value;
+  var input = { bench: bench, brief: $("#agent-brief").value.trim(), fill: $("#agent-fill").checked ? "empty" : "none",
+                discipline: $("#agent-discipline").checked, keepCast: $("#agent-keep").checked };
+  var recipe = {};
+  var rtxt = $("#agent-recipe-in").value.trim();
+  if(rtxt){ try{ recipe = rtxt.indexOf("#recipe=") > -1 ? decodeRecipe(rtxt.split("#recipe=")[1]) : JSON.parse(rtxt); }catch(e){ $("#agent-note").textContent = "The recipe JSON could not be read: " + e.message; return null; } }
+  try{ var cast = parseCastText($("#agent-cast").value); if(cast) input.cast = cast; }
+  catch(e){ $("#agent-note").textContent = "The cast could not be read: " + e.message; return null; }
+  var cnt = $("#agent-count").value; if(cnt !== "") recipe.castCount = Math.max(0, parseInt(cnt, 10) || 0);
+  var ms = $("#agent-master").value; if(ms) recipe.master = ms;
+  recipe.askQuestions = $("#agent-ask").checked;
+  input.recipe = recipe;
+  var ctx = $("#agent-context").value.trim(); if(ctx) input.context = ctx;
+  if(!input.brief && !input.cast && !rtxt){ $("#agent-note").textContent = "Give it the client's words, a cast or a recipe."; return null; }
+  $("#agent-note").textContent = "";
+  var res = PromptBench.compose(input);
+  showDeskResult(res);
+  return res;
+}
+function showDeskResult(res){
+  $("#agent-result").hidden = false;
+  var blockers = res.gaps.filter(function(g){ return g.level === "blocker"; });
+  var st = $("#agent-status"); st.setAttribute("data-ready", res.ready ? "true" : "false");
+  st.textContent = res.ready ? "Ready. Nothing blocks the prompt" + (res.gaps.length ? "; " + res.gaps.length + " optional detail" + (res.gaps.length===1?"":"s") + " below." : ".")
+                             : "Not ready. " + blockers.length + " blocker" + (blockers.length===1?"":"s") + ": ask the client the questions below, add the answers, compose again.";
+  $("#agent-prompt").value = res.prompt; $("#agent-shareable").value = res.shareable; $("#agent-followup").value = res.followup;
+  $("#agent-questions").value = res.questions || "Nothing to ask.";
+  $("#agent-gaps").innerHTML = res.gaps.map(function(g){ return '<li data-level="'+g.level+'" data-id="'+esc(g.id)+'" data-path="'+esc((g.fill||{}).path||"")+'"><b>'+esc(g.level)+'</b> '+esc(g.question)+'<small>fill: '+esc((g.fill||{}).path||"")+(g.fill && g.fill.category ? " ("+esc(g.fill.category)+")" : "")+'</small></li>'; }).join("") || '<li>Nothing open.</li>';
+  $("#agent-decisions").innerHTML = res.decisions.map(function(d){ return '<li>'+describeDecision(d)+'</li>'; }).join("") || '<li>Nothing decided from the words; everything came from what you set.</li>';
+  $("#agent-recipe").textContent = JSON.stringify(res.recipe, null, 2);
+  $("#agent-json").textContent = JSON.stringify(res, null, 2);
+  $("#agent-result").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+$("#agent-form").addEventListener("submit", function(e){ e.preventDefault(); deskCompose(); });
+$("#agent-bench").addEventListener("change", function(){ switchBench(this.value); renderDesk(); });
+$("#agent-exit").addEventListener("click", closeDesk);
+$("#agent-open-studio").addEventListener("click", closeDesk);
+$("#openDesk").addEventListener("click", openDesk);
+$("#briefGo").addEventListener("click", readBrief);
+window.addEventListener("hashchange", function(){ if(location.hash === "#agent" && !deskOpen()) openDesk(); });
+
+/* ---------------- window.PromptBench ---------------- */
+function leanState(){ var s2 = E().getState(); (s2.cast||[]).forEach(function(p){ if(p.photo) p.photo = true; }); return s2; }
+function leanRecipe(){ var r = E().toRecipe(""); (r.cast||[]).forEach(function(p){ if(p.photo) p.photo = true; }); return r; }
+var PromptBench = window.PromptBench = {
+  schema: BenchAgent.SCHEMA,
+  help: "Call manifest() first. compose({ brief, cast, recipe }) returns { prompt, shareable, followup, gaps, questions, ready, recipe, decisions }. It updates the Studio on screen. Or open #agent for a form.",
+  bench: function(){ return cur; },
+  useBench: function(k){ if(!B[k]) throw new Error("bench is main or persona"); switchBench(k); return cur; },
+  manifest: function(k){
+    var a = k && B[k] ? B[k].A : B[cur].A;
+    return a.manifest({ scope: packSource === "server" ? packScope : "public (bundled)",
+      page: { desk: "#agent", ids: { brief:"#agent-brief", cast:"#agent-cast", count:"#agent-count", master:"#agent-master", recipe:"#agent-recipe-in", compose:"#agent-compose", prompt:"#agent-prompt", shareable:"#agent-shareable", gaps:"#agent-gaps", questions:"#agent-questions", status:"#agent-status[data-ready]" },
+              api: "window.PromptBench", http: pageBase() ? { guide: "/llms.txt", compose: "/api/agent/compose", openapi: "/openapi.json" } : null } });
+  },
+  model: function(){ return E().model(); },
+  state: leanState,
+  recipe: leanRecipe,
+  compose: function(input){
+    input = input || {};
+    if(input.bench && input.bench !== cur) switchBench(input.bench);
+    checkpoint();
+    var res = B[cur].A.compose(input);
+    renderAll(); persist();
+    return res;
+  },
+  suggest: function(brief){ return B[cur].A.suggest(brief, { usable: E().offered().usable.map(function(r){ return r.n; }) }); },
+  gaps: function(){ return B[cur].A.gaps(); },
+  questions: function(){ return B[cur].A.questions(); },
+  apply: function(recipe){ var clean = JSON.parse(JSON.stringify(recipe || {})); if(clean.bench && clean.bench !== cur) switchBench(clean.bench); checkpoint(); var r = E().fromRecipe(clean); renderAll(); persist(); return r; },
+  assemble: function(mode){ return E().assemble(mode === "share" ? "shareable" : (mode || "prompt")); },
+  link: function(){ return recipeLink(publicRecipe()); },
+  openDesk: openDesk, closeDesk: closeDesk
+};
+
+/* ================= SERVER ================= */
+function fetchJSON(url, ms){
+  return new Promise(function(res, rej){
+    var done = false, tm = setTimeout(function(){ if(!done){ done = true; rej(new Error("timeout")); } }, ms || 2500);
+    fetch(url, { cache:"no-store", credentials:"same-origin" }).then(function(r){
+      if(!r.ok) throw new Error("status " + r.status);
+      var v = r.headers.get("X-Pack-Version"), s = r.headers.get("X-Pack-Scope");
+      return r.json().then(function(j){ return { json:j, version:v, scope:s }; });
+    }).then(function(x){ if(!done){ done = true; clearTimeout(tm); res(x); } }, function(e){ if(!done){ done = true; clearTimeout(tm); rej(e); } });
+  });
+}
+function tryServer(){
+  if(!/^https?:$/.test(location.protocol) || typeof fetch !== "function") return Promise.resolve(false);
+  return Promise.all([fetchJSON("api/packs?all=auto&bench=main"), fetchJSON("api/packs?all=auto&bench=persona")]).then(function(r){
+    var seen = {}, list = [];
+    r.forEach(function(x){ (Array.isArray(x.json) ? x.json : []).forEach(function(p){ if(seen[p.path]) return; seen[p.path] = true; list.push({ name:(p.data && p.data.pack) || p.path, path:p.path, data:p.data }); }); });
+    if(!list.length) return false;
+    sourcePacks = list; packSource = "server"; serverVersion = r[0].version || ""; packScope = r[0].scope || "public";
+    return true;
+  }).catch(function(){ return false; });
+}
+var lastCheck = 0;
+function checkServerVersion(){
+  if(packSource !== "server" || !serverVersion || Date.now() - lastCheck < 20000) return;
+  lastCheck = Date.now();
+  fetch("api/packs/version", { cache:"no-store" }).then(function(r){ return r.ok ? r.json() : null; }).then(function(v){
+    if(!v || !v.version || v.version === serverVersion) return;
+    $("#bannerSlot").innerHTML = '<div class="banner"><span style="flex:1">The packs on the server changed since this page loaded. Nothing here has moved.</span><button type="button" class="btn sm" id="reloadPacks">Reload packs</button></div>';
+    $("#reloadPacks").onclick = function(){ tryServer().then(function(){ reloadEngines(); $("#bannerSlot").innerHTML = ""; toast("Packs reloaded. Your selection is untouched."); }); };
+  }).catch(function(){});
+}
+window.addEventListener("focus", checkServerVersion);
+
+/* ================= BOOT ================= */
+(function(){
+  var th = store(THEME_KEY); if(th === "light" || th === "dark") document.documentElement.setAttribute("data-theme", th);
+})();
+function boot(){
+  B.main = makeBench("main");
+  B.persona = makeBench("persona");
+  attachAgents();
+  cur = UI.bench === "persona" ? "persona" : "main";
+  /* First visit with no cast from any pack: show a working example rather than an empty shell. */
+  if(!B.main.restored){
+    var keep = cur; cur = "main";
+    if(!(M().people||[]).length){ castAct("example"); B.main.hist = []; }
+    var pick = function(key, re){ var c = catByKey(key); if(!c) return; var it = c.items.filter(function(x){ return inMaster(x) && P().fitsCast(x) && re.test(x.t); })[0]; if(it) S().on[it.n] = true; };
+    S().master = "B";
+    pick("MEDIUM", /risograph/i); pick("PALETTE", /pink and teal|Grey blue/i); pick("SCENE", /explaining something at length/i); pick("MOOD", /private joke/i); pick("FRAMING", /doorway/i);
+    S().discipline = true;
+    persist(); cur = keep;
+  }
+  $("#xrayBtn").setAttribute("aria-pressed", UI.xray);
+  setTab(UI.tab || "prompt", true);
+  setView(isNarrow() ? (UI.view || "recipe") : "recipe");
+  renderAll();
+  try{ $("#pb-agent-manifest").textContent = JSON.stringify(PromptBench.manifest()).replace(/</g, "\\u003c"); }catch(e){}
+  var h = location.hash || "";
+  if(h === "#agent" || /[?&]agent(=|&|$)/.test(location.search)) openDesk();
+  if(h.indexOf("#recipe=") === 0){ try{ applyRecipe(decodeRecipe(h.slice(8)), "a shared link"); }catch(e){ toast("That link could not be read. It may have been cut off."); } }
+}
+tryServer().then(function(fromServer){
+  if(fromServer) refreshUnlock();
+  boot();
+  if(fromServer){
+    toast(sourcePacks.length + " packs from the server" + (packScope === "private" ? ", private packs included." : packScope === "unlocked" ? ", hidden packs unlocked." : "."));
+  }
+});
+</script>

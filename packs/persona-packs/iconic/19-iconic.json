@@ -1,0 +1,54 @@
+{
+  "pack": "Persona: Signature object",
+  "bench": "persona",
+  "categories": [
+    {
+      "key": "ICONIC",
+      "label": "Signature object",
+      "note": "The one thing that belongs to them",
+      "order": 190,
+      "items": [
+        {
+          "m": "*",
+          "t": "A battered notebook, always within reach."
+        },
+        {
+          "m": "*",
+          "t": "A camera on a strap."
+        },
+        {
+          "m": "*",
+          "t": "A mug that is clearly theirs."
+        },
+        {
+          "m": "*",
+          "t": "A toolbag, set down but close."
+        },
+        {
+          "m": "*",
+          "t": "A musical instrument, carried rather than played."
+        },
+        {
+          "m": "*",
+          "t": "A walking stick, used easily."
+        },
+        {
+          "m": "*",
+          "t": "A tablet under one arm."
+        },
+        {
+          "m": "*",
+          "t": "A bundle of keys on a long lanyard."
+        },
+        {
+          "m": "*",
+          "t": "A plant in a pot, carried like a pet."
+        },
+        {
+          "m": "*",
+          "t": "An old radio, repaired more than once."
+        }
+      ]
+    }
+  ]
+}

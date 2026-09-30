@@ -1,0 +1,54 @@
+{
+  "pack": "Persona: Setting",
+  "bench": "persona",
+  "categories": [
+    {
+      "key": "SETTING",
+      "label": "Setting",
+      "note": "What sits behind them, at this distance",
+      "order": 240,
+      "items": [
+        {
+          "m": "*",
+          "t": "A plain studio backdrop in one colour."
+        },
+        {
+          "m": "*",
+          "t": "A textured paper backdrop, lit unevenly."
+        },
+        {
+          "m": "*",
+          "t": "A window behind them, the room dark by comparison."
+        },
+        {
+          "m": "*",
+          "t": "A kitchen, close enough to read one or two objects."
+        },
+        {
+          "m": "*",
+          "t": "A workshop, tools softly out of focus."
+        },
+        {
+          "m": "*",
+          "t": "A bookshelf, titles unreadable."
+        },
+        {
+          "m": "*",
+          "t": "A street at night, lights thrown out of focus."
+        },
+        {
+          "m": "*",
+          "t": "A field, horizon low."
+        },
+        {
+          "m": "*",
+          "t": "A vehicle interior, seen from the passenger seat."
+        },
+        {
+          "m": "*",
+          "t": "Nothing behind them at all: flat colour."
+        }
+      ]
+    }
+  ]
+}

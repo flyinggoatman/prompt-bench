@@ -1,0 +1,24 @@
+{
+  "pack": "DLC: More fields",
+  "fields": [
+    {
+      "id": "title",
+      "order": 15,
+      "label": "Working title",
+      "hint": "Not printed in the image. It tells the model the shape of the joke before the details arrive.",
+      "placeholder": "For example: The Great Sofa Relocation",
+      "section": "WORKING TITLE",
+      "wrap": "The image is about this idea, though these words do not appear in it: {v}"
+    },
+    {
+      "id": "mustsee",
+      "order": 25,
+      "label": "One thing the viewer must notice",
+      "hint": "Everything else can be background. This has to land.",
+      "placeholder": "For example: the cat is holding the keys",
+      "section": "THE ONE THING",
+      "wrap": "Whatever else happens, the viewer must clearly see this: {v}",
+      "carryToFollowUp": true
+    }
+  ]
+}

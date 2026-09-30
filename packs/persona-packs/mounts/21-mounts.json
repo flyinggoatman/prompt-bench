@@ -1,0 +1,42 @@
+{
+  "pack": "Persona: Mount",
+  "bench": "persona",
+  "categories": [
+    {
+      "key": "MOUNTS",
+      "label": "Mount",
+      "note": "Something they ride",
+      "order": 210,
+      "items": [
+        {
+          "m": "*",
+          "t": "A working horse, standing still."
+        },
+        {
+          "m": "*",
+          "t": "A tall horse, mid step."
+        },
+        {
+          "m": "*",
+          "t": "A pony, stocky and patient."
+        },
+        {
+          "m": "*",
+          "t": "A unicorn, drawn as a real animal rather than a decoration."
+        },
+        {
+          "m": "*",
+          "t": "A large wolf, saddled."
+        },
+        {
+          "m": "*",
+          "t": "A mechanical mount, worn and practical."
+        },
+        {
+          "m": "*",
+          "t": "No mount."
+        }
+      ]
+    }
+  ]
+}

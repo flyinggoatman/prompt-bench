@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prompt Bench membership</title>
+<meta name="description" content="Prompt Bench membership: the website is free; a one-off membership opens the MCP tools and the agent API.">
+<meta name="referrer" content="no-referrer">
+<link rel="alternate" type="text/plain" href="/llms.txt" title="Guide for AI agents">
+<style>
+:root{
+  --ground:#e6e9ef;--panel:#f6f7fa;--raise:#ffffff;--ink:#141824;--muted:#646c7e;--faint:#8a92a3;--line:#d3d8e2;
+  --pink:#d92a63;--pink-soft:#fbe1ea;--teal:#0b8a80;--teal-soft:#d8f1ee;--warn:#9a5a00;--warn-soft:#fdf0d8;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono","JetBrains Mono",Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --ground:#12151c;--panel:#1a1e27;--raise:#222733;--ink:#e8ebf2;--muted:#a3abbc;--faint:#7a8296;--line:#2f3544;
+  --pink:#f0588a;--pink-soft:#3a1d29;--teal:#2fbfb2;--teal-soft:#15312f;--warn:#f0b24a;--warn-soft:#3a2d14;
+  color-scheme:dark;
+}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;min-height:100vh;background:var(--ground);color:var(--ink);font:15px/1.5 var(--sans);padding:0 16px}
+main{max-width:760px;margin:0 auto;padding-block:48px 40px;display:flex;flex-direction:column;gap:16px}
+header h1{margin:0;font-size:clamp(28px,5vw,38px);letter-spacing:-.02em}
+header p{margin:6px 0 0;color:var(--muted);max-width:60ch}
+.top{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.top a{color:var(--muted);font-size:14px}
+.card{background:var(--raise);border:1px solid var(--line);border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:12px}
+.card h2{margin:0;font-size:19px}
+.card p{margin:0;color:var(--muted);font-size:14px}
+.card.hot{border-color:var(--pink);box-shadow:0 0 0 3px var(--pink-soft)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.cols ul{margin:4px 0 0;padding-left:18px;color:var(--muted);font-size:14px}
+.cols h3{margin:0;font-size:14px}
+.price{font:600 24px/1.2 var(--sans)}
+.btn{display:inline-block;text-align:center;text-decoration:none;font:600 15px var(--sans);padding:11px 16px;border-radius:10px;
+  background:var(--pink);color:#fff;border:0;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn[aria-disabled=true],.btn:disabled{opacity:.55;cursor:not-allowed}
+.btn:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--pink);outline-offset:2px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+input[type=password],input[type=text]{flex:1 1 260px;min-width:0;font:14px var(--mono);padding:10px 12px;border-radius:9px;
+  border:1px solid var(--line);background:var(--panel);color:var(--ink)}
+.token{font:14px var(--mono);background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:12px;word-break:break-all;user-select:all}
+pre{margin:0;font:13px/1.5 var(--mono);background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:12px;overflow-x:auto;white-space:pre-wrap;word-break:break-all}
+.warn{background:var(--warn-soft);color:var(--warn);border-radius:9px;padding:10px 12px;font-size:14px}
+.ok{background:var(--teal-soft);color:var(--teal);border-radius:9px;padding:10px 12px;font-size:14px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;color:var(--faint);font-size:12px;font-weight:600;padding:0 6px 6px 0;border-bottom:1px solid var(--line)}
+td{padding:8px 6px 8px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.mono{font-family:var(--mono)}
+footer{color:var(--faint);font-size:13px;margin-top:8px}
+footer a{color:inherit}
+</style>
+</head>
+<body>
+<main>
+  <nav class="top"><a href="/home">← Prompt Bench</a></nav>
+  <header>
+    <h1>Membership</h1>
+    <p>The Prompt Bench website is free, and stays free. A membership is a one-off payment that opens the MCP tools and the agent API, so your own AI assistant can compose prompts with Prompt Bench and Persona Bench directly.</p>
+  </header>
+
+  <section class="card hot" id="welcome" hidden aria-live="polite">
+    <h2>Welcome</h2>
+    <p id="welcomeMsg">Confirming your payment…</p>
+    <div id="welcomeToken" hidden>
+      <div class="warn">This is your membership token. It is shown <b>once</b>. Copy it somewhere safe now: Prompt Bench keeps only a fingerprint of it and cannot show it again.</div>
+      <div class="token" id="welcomeTokenText"></div>
+      <div class="row"><button class="btn" type="button" data-copy="welcomeTokenText">Copy token</button></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>What you get</h2>
+    <div class="cols">
+      <div><h3>Free for everyone</h3><ul id="freeList"><li>The website: Studio, Classic, Persona</li></ul></div>
+      <div><h3>With a membership</h3><ul id="paidList"><li>The MCP tools</li><li>The agent API</li></ul></div>
+    </div>
+    <div class="row" style="justify-content:space-between">
+      <span class="price" id="price">Price to be announced</span>
+      <a class="btn" id="buy" href="#" aria-disabled="true">Not on sale yet</a>
+    </div>
+    <p class="hint">Payment is handled by Stripe. Prompt Bench never sees your card.</p>
+  </section>
+
+  <section class="card">
+    <h2>Connect your assistant</h2>
+    <p>The MCP server is <span class="mono" id="mcpUrl">/mcp</span>. Send your token in the <span class="mono">Authorization</span> header.</p>
+    <p><b>Claude Code</b></p>
+    <pre id="cmdClaude">claude mcp add --transport http prompt-bench https://…/mcp --header "Authorization: Bearer YOUR_TOKEN"</pre>
+    <p><b>Any client that takes a URL and headers</b></p>
+    <pre id="cmdGeneric">URL:    https://…/mcp   (HTTP transport)
+Header: Authorization: Bearer YOUR_TOKEN</pre>
+    <p><b>Plain HTTP</b></p>
+    <pre id="cmdCurl">curl -H "Authorization: Bearer YOUR_TOKEN" "https://…/api/agent/compose?brief=a+risograph+poster"</pre>
+    <p class="hint">Clients that only sign in through a web page (such as some connector directories) are not supported yet.</p>
+  </section>
+
+  <section class="card">
+    <h2>Your membership</h2>
+    <p>Paste your token to see your membership, your tokens and how much you have used. The token stays in this page only; it is never saved or put in the address bar.</p>
+    <form class="row" id="statusForm" autocomplete="off">
+      <label class="sr" for="tokenIn" hidden>Membership token</label>
+      <input type="password" id="tokenIn" placeholder="pb_…" spellcheck="false" autocapitalize="off" aria-label="Membership token">
+      <button class="btn" type="submit">Show</button>
+    </form>
+    <div id="statusOut" aria-live="polite"></div>
+  </section>
+
+  <footer>Terms, privacy and support details will be published here before membership goes on sale.</footer>
+</main>
+<script>
+"use strict";
+var $ = function(id){ return document.getElementById(id); };
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+var base = location.origin;
+function fillCommands(tok){
+  var t = tok || "YOUR_TOKEN";
+  $("mcpUrl").textContent = base + "/mcp";
+  $("cmdClaude").textContent = 'claude mcp add --transport http prompt-bench ' + base + '/mcp --header "Authorization: Bearer ' + t + '"';
+  $("cmdGeneric").textContent = "URL:    " + base + "/mcp   (HTTP transport)\nHeader: Authorization: Bearer " + t;
+  $("cmdCurl").textContent = 'curl -H "Authorization: Bearer ' + t + '" "' + base + '/api/agent/compose?brief=a+risograph+poster"';
+}
+fillCommands();
+
+fetch("/api/membership", { cache:"no-store" }).then(function(r){ return r.json(); }).then(function(j){
+  if(j.free) $("freeList").innerHTML = j.free.map(function(x){ return "<li>" + esc(x) + "</li>"; }).join("");
+  if(j.paid) $("paidList").innerHTML = j.paid.map(function(x){ return "<li>" + esc(x) + "</li>"; }).join("");
+  if(j.price) $("price").textContent = j.price;
+  if(j.checkout && /^https:\/\//.test(j.checkout)){
+    $("buy").href = j.checkout; $("buy").textContent = "Get a membership"; $("buy").removeAttribute("aria-disabled");
+  } else {
+    $("buy").addEventListener("click", function(e){ e.preventDefault(); });
+  }
+  if(!j.enabled) $("statusOut").innerHTML = '<div class="warn">Membership is not switched on for this server.</div>';
+}).catch(function(){});
+
+document.addEventListener("click", function(e){
+  var b = e.target.closest("[data-copy]"); if(!b) return;
+  var text = $(b.getAttribute("data-copy")).textContent;
+  (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(function(){ b.textContent = "Copied"; }, function(){
+    var r = document.createRange(); r.selectNodeContents($(b.getAttribute("data-copy"))); getSelection().removeAllRanges(); getSelection().addRange(r);
+    b.textContent = "Selected: press Ctrl C";
+  });
+});
+
+/* After a checkout: Stripe sends the buyer back with ?session_id=. The page
+   asks the server for the token, which exists only once the server has a
+   verified payment for that session; the address alone proves nothing. */
+var sid = new URLSearchParams(location.search).get("session_id");
+if(sid){
+  history.replaceState(null, "", location.pathname);   // keep the id out of history and screenshots
+  $("welcome").hidden = false;
+  var tries = 0;
+  (function poll(){
+    fetch("/api/membership/welcome?session_id=" + encodeURIComponent(sid), { cache:"no-store" })
+      .then(function(r){ return r.json().then(function(j){ return { s:r.status, j:j }; }); })
+      .then(function(res){
+        if(res.j.ok){
+          $("welcomeMsg").textContent = "Your payment is confirmed and your membership is active.";
+          $("welcomeTokenText").textContent = res.j.token; $("welcomeToken").hidden = false; fillCommands(res.j.token);
+          return;
+        }
+        if(res.s === 202 && ++tries < 40){ setTimeout(poll, 3000); return; }
+        $("welcomeMsg").textContent = res.j.error || "Something went wrong. Contact support with the time of your purchase.";
+      })
+      .catch(function(){ if(++tries < 40) setTimeout(poll, 3000); });
+  })();
+}
+
+function showStatus(tok){
+  $("statusOut").innerHTML = "<p>Checking…</p>";
+  fetch("/api/membership/status", { cache:"no-store", headers:{ Authorization: "Bearer " + tok } })
+    .then(function(r){ return r.json().then(function(j){ return { s:r.status, j:j }; }); })
+    .then(function(res){
+      var j = res.j;
+      if(!j.ok){ $("statusOut").innerHTML = '<div class="warn">' + esc(j.error || "That token is not recognised.") + "</div>"; return; }
+      var live = (j.entitlements || []).filter(function(e){ return e.live; })[0];
+      var h = live ? '<div class="ok">Membership active' + (live.ends_at ? " until " + esc(live.ends_at.slice(0,10)) : ", no end date") + (live.disputed ? ". A payment dispute is open; access continues while it is resolved." : ".") + "</div>"
+                   : '<div class="warn">No active membership on this token.</div>';
+      h += "<p>Member since " + esc(String(j.member.since).slice(0,10)) + ". Compositions so far: " + esc(j.uses) + ".</p>";
+      h += "<table><thead><tr><th>Token</th><th>Made</th><th>Last used</th><th></th></tr></thead><tbody>";
+      (j.credentials || []).forEach(function(c){
+        h += "<tr><td class='mono'>" + esc(c.prefix) + "…" + (c.credential_id === j.this ? " <b>(this one)</b>" : "") + "</td><td>" + esc(String(c.created_at).slice(0,10)) + "</td><td>" + esc(c.last_used_at ? c.last_used_at.slice(0,16).replace("T"," ") : "never") + "</td><td>" + (c.revoked_at ? "revoked" : "") + "</td></tr>";
+      });
+      h += "</tbody></table>";
+      h += '<div class="row"><button class="btn ghost" type="button" id="rotate">Replace this token</button></div><div id="rotateOut"></div>';
+      $("statusOut").innerHTML = h;
+      $("rotate").addEventListener("click", function(){
+        if(!confirm("Replace this token? The current one stops working straight away, everywhere you use it.")) return;
+        fetch("/api/membership/rotate", { method:"POST", headers:{ Authorization:"Bearer " + tok, "Content-Type":"application/json" }, body:"{}" })
+          .then(function(r){ return r.json(); }).then(function(k){
+            if(!k.ok){ $("rotateOut").innerHTML = '<div class="warn">' + esc(k.error || "Could not replace it.") + "</div>"; return; }
+            $("tokenIn").value = k.token; fillCommands(k.token);
+            $("rotateOut").innerHTML = '<div class="warn">Your new token, shown once. Update your assistant with it now.</div><div class="token" id="newTok">' + esc(k.token) + '</div><div class="row"><button class="btn" type="button" data-copy="newTok">Copy token</button></div>';
+          });
+      });
+    })
+    .catch(function(){ $("statusOut").innerHTML = '<div class="warn">The server did not answer.</div>'; });
+}
+$("statusForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  var t = $("tokenIn").value.trim();
+  if(t) showStatus(t);
+});
+</script>
+</body>
+</html>

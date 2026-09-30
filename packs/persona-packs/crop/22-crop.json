@@ -1,0 +1,43 @@
+{
+  "pack": "Persona: Crop",
+  "bench": "persona",
+  "categories": [
+    {
+      "key": "CROP",
+      "label": "Crop",
+      "note": "How close the frame sits",
+      "order": 220,
+      "items": [
+        {
+          "m": "*",
+          "t": "Head and shoulders, centred."
+        },
+        {
+          "m": "*",
+          "t": "A tight crop on the face, hair cut by the frame."
+        },
+        {
+          "m": "*",
+          "t": "Bust, to the middle of the chest."
+        },
+        {
+          "m": "*",
+          "t": "Half length, to the waist."
+        },
+        {
+          "m": "*",
+          "t": "Three quarter length, to the knee."
+        },
+        {
+          "m": "*",
+          "t": "Full length, head to foot."
+        },
+        {
+          "m": "*",
+          "t": "Off centre, with space on the side they are looking towards.",
+          "castOk": true
+        }
+      ]
+    }
+  ]
+}

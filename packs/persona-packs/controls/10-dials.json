@@ -1,0 +1,350 @@
+{
+  "pack": "Persona: dials",
+  "bench": "persona",
+  "dials": [
+    {
+      "id": "skinage",
+      "label": "Skin age",
+      "lo": "Young",
+      "hi": "Weathered",
+      "min": 0,
+      "max": 10,
+      "value": 4,
+      "order": 10,
+      "stops": [
+        {
+          "upTo": 2,
+          "text": "Young skin. Even surface, no lines at rest."
+        },
+        {
+          "upTo": 5,
+          "text": "Skin in its thirties. The first lines show only in expression."
+        },
+        {
+          "upTo": 8,
+          "text": "Skin in its fifties. Settled lines around the eyes and mouth, looser at the jaw."
+        },
+        {
+          "upTo": 10,
+          "text": "Long weathered skin. Deep lines, sun and wind in the surface, the texture of a life outdoors."
+        }
+      ]
+    },
+    {
+      "id": "blemish",
+      "label": "Skin imperfections",
+      "lo": "Clear",
+      "hi": "Lived in",
+      "min": 0,
+      "max": 10,
+      "value": 3,
+      "order": 20,
+      "stops": [
+        {
+          "upTo": 2,
+          "text": "Clear skin, drawn simply."
+        },
+        {
+          "upTo": 5,
+          "text": "A few marks: a spot or two, faint freckles, an old scar."
+        },
+        {
+          "upTo": 8,
+          "text": "Visible texture: pores, blemishes, uneven colour, a healed scar or two."
+        },
+        {
+          "upTo": 10,
+          "text": "Everything the skin has been through is visible, drawn without judgement."
+        }
+      ]
+    },
+    {
+      "id": "beard",
+      "label": "Beard length",
+      "lo": "Shaved",
+      "hi": "Long",
+      "min": 0,
+      "max": 10,
+      "value": 0,
+      "order": 30,
+      "stops": [
+        {
+          "upTo": 0,
+          "text": "Clean shaven."
+        },
+        {
+          "upTo": 3,
+          "text": "Stubble, a few days old."
+        },
+        {
+          "upTo": 6,
+          "text": "A short beard, close to the jaw."
+        },
+        {
+          "upTo": 8,
+          "text": "A full beard reaching the collarbone."
+        },
+        {
+          "upTo": 10,
+          "text": "A long beard well past the chest."
+        }
+      ]
+    },
+    {
+      "id": "hairlength",
+      "label": "Hair length",
+      "lo": "Shaved",
+      "hi": "Long",
+      "min": 0,
+      "max": 10,
+      "value": 5,
+      "order": 40,
+      "stops": [
+        {
+          "upTo": 1,
+          "text": "Shaved to the scalp."
+        },
+        {
+          "upTo": 3,
+          "text": "A short crop."
+        },
+        {
+          "upTo": 6,
+          "text": "Hair to the jaw."
+        },
+        {
+          "upTo": 8,
+          "text": "Hair past the shoulders."
+        },
+        {
+          "upTo": 10,
+          "text": "Hair to the waist."
+        }
+      ]
+    },
+    {
+      "id": "likeness",
+      "label": "Likeness to caricature",
+      "lo": "True",
+      "hi": "Caricature",
+      "min": 0,
+      "max": 10,
+      "value": 3,
+      "order": 50,
+      "stops": [
+        {
+          "upTo": 2,
+          "text": "Proportions stay true. The drawing is stylised, the face is not exaggerated."
+        },
+        {
+          "upTo": 5,
+          "text": "Gentle exaggeration. The features that identify them are a little stronger."
+        },
+        {
+          "upTo": 8,
+          "text": "Clear caricature. Distinctive features pushed, the rest simplified."
+        },
+        {
+          "upTo": 10,
+          "text": "Full caricature. Two or three features carry the whole likeness."
+        }
+      ]
+    },
+    {
+      "id": "feeling",
+      "label": "Expression strength",
+      "lo": "Still",
+      "hi": "Vivid",
+      "min": 0,
+      "max": 10,
+      "value": 4,
+      "order": 60,
+      "stops": [
+        {
+          "upTo": 2,
+          "text": "A still face. Whatever they feel stays behind the eyes."
+        },
+        {
+          "upTo": 5,
+          "text": "A readable expression, held lightly."
+        },
+        {
+          "upTo": 8,
+          "text": "A strong expression involving the whole face."
+        },
+        {
+          "upTo": 10,
+          "text": "The expression is the picture. Everything else supports it."
+        }
+      ]
+    },
+    {
+      "id": "backdrop",
+      "label": "Background presence",
+      "lo": "Plain",
+      "hi": "Full scene",
+      "min": 0,
+      "max": 10,
+      "value": 3,
+      "order": 70,
+      "stops": [
+        {
+          "upTo": 2,
+          "text": "A plain background in one colour or tone."
+        },
+        {
+          "upTo": 5,
+          "text": "A suggestion of a place: two or three shapes, nothing detailed."
+        },
+        {
+          "upTo": 8,
+          "text": "A readable setting behind them, still clearly secondary to the face."
+        },
+        {
+          "upTo": 10,
+          "text": "A full scene, with the person placed in it rather than in front of it."
+        }
+      ]
+    },
+    {
+      "id": "depth",
+      "label": "Depth of field",
+      "lo": "All sharp",
+      "hi": "Face only",
+      "min": 0,
+      "max": 10,
+      "value": 5,
+      "order": 80,
+      "stops": [
+        {
+          "upTo": 2,
+          "text": "Everything is equally sharp, front to back."
+        },
+        {
+          "upTo": 5,
+          "text": "The background softens a little behind the shoulders."
+        },
+        {
+          "upTo": 8,
+          "text": "The background falls away into soft shapes. The face stays sharp."
+        },
+        {
+          "upTo": 10,
+          "text": "Only the eyes and the near side of the face are sharp. Everything else dissolves."
+        }
+      ]
+    },
+    {
+      "id": "softness",
+      "label": "Light softness",
+      "lo": "Hard",
+      "hi": "Soft",
+      "min": 0,
+      "max": 10,
+      "value": 6,
+      "order": 90,
+      "stops": [
+        {
+          "upTo": 2,
+          "text": "Hard light. Edges of shadow are crisp, contrast is high."
+        },
+        {
+          "upTo": 5,
+          "text": "Directional light with a defined but not sharp shadow edge."
+        },
+        {
+          "upTo": 8,
+          "text": "Soft light wrapping the face, shadows fading gradually."
+        },
+        {
+          "upTo": 10,
+          "text": "Enveloping light with almost no visible shadow edge."
+        }
+      ]
+    },
+    {
+      "id": "saturation",
+      "label": "Colour saturation",
+      "lo": "Muted",
+      "hi": "Vivid",
+      "min": 0,
+      "max": 10,
+      "value": 5,
+      "order": 100,
+      "stops": [
+        {
+          "upTo": 2,
+          "text": "Nearly colourless. A restricted palette close to grey."
+        },
+        {
+          "upTo": 5,
+          "text": "Muted colour, nothing pure."
+        },
+        {
+          "upTo": 8,
+          "text": "Full colour, still matte and hand made."
+        },
+        {
+          "upTo": 10,
+          "text": "Saturated colour, pushed to the edge of the palette."
+        }
+      ]
+    },
+    {
+      "id": "wear",
+      "label": "Wear and weathering",
+      "lo": "New",
+      "hi": "Worn",
+      "min": 0,
+      "max": 10,
+      "value": 5,
+      "order": 110,
+      "stops": [
+        {
+          "upTo": 2,
+          "text": "Clothes and objects look new and well kept."
+        },
+        {
+          "upTo": 5,
+          "text": "Everything shows ordinary use."
+        },
+        {
+          "upTo": 8,
+          "text": "Clothes are softened, seams shine, objects are scuffed and mended."
+        },
+        {
+          "upTo": 10,
+          "text": "Everything is worn nearly through, repaired more than once, and kept anyway."
+        }
+      ]
+    },
+    {
+      "id": "jewellery",
+      "label": "Jewellery density",
+      "lo": "None",
+      "hi": "Loaded",
+      "min": 0,
+      "max": 10,
+      "value": 2,
+      "order": 120,
+      "stops": [
+        {
+          "upTo": 1,
+          "text": "No jewellery at all."
+        },
+        {
+          "upTo": 4,
+          "text": "One or two small pieces, worn every day."
+        },
+        {
+          "upTo": 7,
+          "text": "Several pieces that plainly belong together."
+        },
+        {
+          "upTo": 10,
+          "text": "Heavily adorned, and every piece looks earned rather than bought."
+        }
+      ]
+    }
+  ]
+}

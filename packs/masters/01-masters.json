@@ -1,0 +1,36 @@
+{
+  "pack": "Masters",
+  "masters": [
+    {
+      "id": "A",
+      "name": "Poster",
+      "blurb": "A made object the four of them would have produced about themselves. Loud, funny, designed to be shown off.",
+      "body": "ROLE\nYou are making a single mock poster or printed cover about {N} recurring character{s}: {cast}. It is a deliberate designed object, and you should commit to that conceit fully. It must read from across a room.\n\nWHAT CARRIES THE GROUP\nThe relationship is shown by how the figures overlap, lean, react to each other and share the frame, not by lining them up. Give them different heights and depths. Somebody is cropped by the edge. Nobody stands in a row facing the viewer.\nInvented job titles and an invented team name are welcome. Titles describe what a person does, never what they lack.",
+      "alt": {
+        "1": "ROLE\nYou are making a single mock poster or printed cover about one recurring character: {cast}. It is a deliberate designed object, and you should commit to that conceit fully. It must read from across a room.\n\nWHAT CARRIES THE SUBJECT\nThe poster is about this one person. Their character is shown by what surrounds them, what they are holding, what the layout says about them and how they occupy the frame. An invented job title is welcome, and it describes what they do, never what they lack.",
+        "0": "ROLE\nYou are making a single mock poster or printed cover. It is a deliberate designed object, and you should commit to that conceit fully. It must read from across a room.\n\nWHAT CARRIES IT\nWith nobody specified, the poster is carried by its subject matter, its layout and its objects. An invented title is welcome."
+      }
+    },
+    {
+      "id": "B",
+      "name": "Moment",
+      "blurb": "One unposed thing happening. Quiet, close, no design furniture. The version that will age best.",
+      "body": "ROLE\nYou are drawing one moment, not a picture of a group. A single event is happening and each character is reacting to it differently. Draw the moment two seconds before or after the one that was supposed to be captured.\n\nWHAT CARRIES THE GROUP\nThe relationship is shown by attention: who is looking at whom, who has already moved to help, who has not noticed. Nobody is posed. Nobody is presenting to the viewer. This is not a poster, a title card, a character select screen or a promotional image.",
+      "alt": {
+        "1": "ROLE\nYou are drawing one moment, not a portrait. A single event is happening and {cast} is reacting to it. Draw the moment two seconds before or after the one that was supposed to be captured.\n\nWHAT CARRIES IT\nThe moment is shown by attention: what they have noticed, what they have already moved to do, what they have not registered yet. Nobody is posed. Nobody is presenting to the viewer. This is not a poster, a title card, a character select screen or a promotional image.",
+        "0": "ROLE\nYou are drawing one moment rather than a posed picture. A single event is happening and the scene is reacting to it. Draw the moment two seconds before or after the one that was supposed to be captured. Nothing is posed and nothing presents itself to the viewer."
+      },
+      "castOk": true
+    },
+    {
+      "id": "C",
+      "name": "Set",
+      "blurb": "An arrangement rather than a scene. Sheets, flat lays, avatars, cards. Best for a group icon.",
+      "body": "ROLE\nYou are making a single arranged image: an ordered set of cells, objects or busts on one canvas, treated as one composition so that style, palette and character appearance stay identical throughout.\n\nWHAT CARRIES THE GROUP\nThe relationship is shown by juxtaposition and by belongings: whose things sit next to whose, who is repeated, what they share. Keep the background plain so the arrangement reads clearly.",
+      "alt": {
+        "1": "ROLE\nYou are making a single arranged image about {cast}: an ordered set of cells, objects or busts on one canvas, treated as one composition so that style, palette and appearance stay identical throughout.\n\nWHAT CARRIES IT\nThe character is shown by juxtaposition and by belongings: what sits next to what, what repeats, what is clearly theirs. Keep the background plain so the arrangement reads clearly.",
+        "0": "ROLE\nYou are making a single arranged image: an ordered set of cells or objects on one canvas, treated as one composition so that style and palette stay identical throughout. Keep the background plain so the arrangement reads clearly."
+      }
+    }
+  ]
+}

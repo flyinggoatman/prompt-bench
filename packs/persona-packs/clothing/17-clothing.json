@@ -1,0 +1,58 @@
+{
+  "pack": "Persona: Clothing",
+  "bench": "persona",
+  "categories": [
+    {
+      "key": "CLOTHING",
+      "label": "Clothing",
+      "note": "Garments, layers and condition",
+      "order": 170,
+      "items": [
+        {
+          "m": "*",
+          "t": "A plain shirt, sleeves rolled."
+        },
+        {
+          "m": "*",
+          "t": "A knitted jumper, well worn."
+        },
+        {
+          "m": "*",
+          "t": "A jacket over a t shirt."
+        },
+        {
+          "m": "*",
+          "t": "Workwear, with the marks of the work on it."
+        },
+        {
+          "m": "*",
+          "t": "A long coat, open."
+        },
+        {
+          "m": "*",
+          "t": "A tailored suit, softly cut."
+        },
+        {
+          "m": "*",
+          "t": "Layers that do not match, chosen for warmth."
+        },
+        {
+          "m": "*",
+          "t": "Loose comfortable clothes at home."
+        },
+        {
+          "m": "*",
+          "t": "Traditional dress, drawn respectfully and specifically."
+        },
+        {
+          "m": "*",
+          "t": "Clothes a size too big."
+        },
+        {
+          "m": "*",
+          "t": "Clothes carefully pressed."
+        }
+      ]
+    }
+  ]
+}

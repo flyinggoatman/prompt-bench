@@ -1,0 +1,65 @@
+{
+  "pack": "DLC: Weather and time",
+  "categories": [
+    {
+      "key": "CONDITIONS",
+      "label": "Conditions",
+      "note": "Weather and time",
+      "order": 64,
+      "items": [
+        {
+          "m": "ABD",
+          "t": "Heavy rain visible outside, nobody has gone out yet."
+        },
+        {
+          "m": "ABD",
+          "t": "Snow on shoulders, just in from outside, melting."
+        },
+        {
+          "m": "ABD",
+          "t": "A heatwave. Windows open, fan pointing at the wrong person."
+        },
+        {
+          "m": "ABD",
+          "t": "Wind. Everything loose is in the air, a door is about to slam."
+        },
+        {
+          "m": "ABD",
+          "t": "Early morning, nobody is dressed, one person is fully dressed."
+        },
+        {
+          "m": "ABD",
+          "t": "Late night, one lamp, the rest of the house dark."
+        },
+        {
+          "m": "ABD",
+          "t": "Mid afternoon slump. Nothing is happening and it is being felt."
+        },
+        {
+          "m": "ABD",
+          "t": "A bank holiday. Nothing is open. This was not planned for."
+        },
+        {
+          "m": "ABD",
+          "t": "The first warm day. Everyone has overestimated it.",
+          "needs": 2,
+          "alt": {
+            "1": "The first warm day, and they have overestimated it."
+          }
+        },
+        {
+          "m": "ABD",
+          "t": "Fog. Only the nearest person is fully visible."
+        },
+        {
+          "m": "ABD",
+          "t": "A dark winter afternoon that feels like night at four."
+        },
+        {
+          "m": "ABD",
+          "t": "Sunday. That specific Sunday feeling."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "pack": "DLC: Gag mechanisms",
+  "categories": [
+    {
+      "key": "GAG",
+      "label": "Gag",
+      "note": "The comedy mechanism",
+      "order": 45,
+      "items": [
+        {
+          "m": "ABD",
+          "t": "The thing everyone is worried about is fine. The thing nobody is watching is not.",
+          "needs": 2,
+          "alt": {
+            "1": "The thing they are worried about is fine. The thing behind them is not."
+          }
+        },
+        {
+          "m": "ABD",
+          "t": "One character has solved the problem off frame and is walking back in to find everyone still panicking.",
+          "needs": 2,
+          "alt": {
+            "1": "Walking back in having solved the problem off frame, to a room that has got worse without them."
+          }
+        },
+        {
+          "m": "ABD",
+          "t": "Scale joke. Something is much bigger or much smaller than it should be and nobody remarks on it."
+        },
+        {
+          "m": "ABD",
+          "t": "The cat is doing exactly what a person is doing, better."
+        },
+        {
+          "m": "ABD",
+          "t": "Everyone is looking in different directions and all of them are wrong.",
+          "needs": 2,
+          "alt": {
+            "1": "Looking confidently in entirely the wrong direction."
+          }
+        },
+        {
+          "m": "ABD",
+          "t": "Two people having completely different conversations and both think it is going well."
+        },
+        {
+          "m": "ABD",
+          "t": "The instructions are visible and clearly say the opposite of what is happening."
+        },
+        {
+          "m": "ABD",
+          "t": "Somebody is holding the item they are looking for.",
+          "castOk": true
+        },
+        {
+          "m": "ABD",
+          "t": "A very serious face in a very silly situation."
+        },
+        {
+          "m": "ABD",
+          "t": "Something has been fixed with tape in a way that should not work and does."
+        },
+        {
+          "m": "ABD",
+          "t": "The reaction is enormous. The cause is tiny and visible."
+        },
+        {
+          "m": "ABD",
+          "t": "One person has already left. Their mug is still warm."
+        },
+        {
+          "m": "ABD",
+          "t": "An object from a previous scene is still here, in a worse state."
+        },
+        {
+          "m": "ABD",
+          "t": "Repetition. The same small mistake, twice, visible in the same frame."
+        },
+        {
+          "m": "ABD",
+          "t": "A perfectly ordinary thing being treated as an emergency, and an emergency being treated as ordinary."
+        },
+        {
+          "m": "ABD",
+          "t": "A background character who is simply a duplicate of {4}.",
+          "alt": {
+            "3": "A background figure who is simply a duplicate of {3}.",
+            "2": "A background figure who is simply a duplicate of {2}.",
+            "1": "A background figure who is simply a duplicate of {1}, unnoticed."
+          }
+        },
+        {
+          "m": "ABD",
+          "t": "Somebody has read the room and is quietly moving the breakables."
+        },
+        {
+          "m": "ABD",
+          "t": "The plan is written down and is only two steps long. They are on step four.",
+          "castOk": true
+        }
+      ]
+    }
+  ]
+}

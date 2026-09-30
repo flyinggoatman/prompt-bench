@@ -1,0 +1,101 @@
+{
+  "pack": "Wording, settings and cast fields",
+  "wording": {
+    "castHeading": "CAST",
+    "castWithPhotos": "Reference photographs are attached for identity only. Read them to learn who these people are and what makes each of them recognisable. Do not read them for how to draw. Every face in this image is built in the style set out above, by the same hand and with the same marks as the room around it, and is never copied, traced or rendered from the photograph. Identify each character by their signifiers rather than by exact facial likeness. A photographic or half photographic face in a drawn scene is wrong even when the likeness is perfect, and a good likeness is no reason to keep one.",
+    "castWithoutPhotos": "Identify each character by their signifiers. Every face is built in the style set out above, by the same hand and with the same marks as the room around it.",
+    "outfitRule": "Outfits change in every image within these descriptions. Never repeat an exact outfit.",
+    "missingPhotoOne": "No reference photo is provided for {names}. Before you draw anything, ask me for a photo of them and for one recognisable marker to identify them by. Do not invent an appearance.",
+    "missingPhotoMany": "No reference photo is provided for {names}. Before you draw anything, ask me for a photo of each of them and for one recognisable marker to identify them by. Do not invent an appearance.",
+    "descriptionOpen": "{NAME}.",
+    "listTwo": "{a} and {b}",
+    "listMany": "{list} and {last}",
+    "thisImageHeading": "THIS IMAGE",
+    "moduleLine": "{LABEL}: {v}",
+    "dialsHeading": "DIALS",
+    "variationHeading": "VARIATION",
+    "defaultSection": "ALSO",
+    "followUpOpen": "Keep the previous image exactly as it is: same characters, same style, same palette, same composition. Change only the following.",
+    "followUpItem": "- {v}",
+    "followUpClose": "Do not redraw anything else. Do not change anyone's face, clothing or position unless listed above.",
+    "disciplineHeading": "GETTING THE DETAILS RIGHT",
+    "publicContext": "FILLING IN FROM WHAT YOU ALREADY KNOW\nUse the conversation you are already in. Anything the person has said, asked for or attached earlier is yours to use, and a detail you can reasonably take from it is better filled in than asked about. Where a creative choice is yours to make and nobody has asked to make it themselves, make it.\n\nFacts about people are different. Fill in what the conversation genuinely supports, then show the person what you have filled in as a short readable list and ask, in one question, whether you have it right. Offer them a way to confirm and a way to say something is wrong. Ask this once, and wait for the answer before generating anything.\n\nIf they confirm, carry on, and let what they confirmed shape whatever you ask next rather than asking the same thing again in another form. If they say something is wrong, ask about that part in ordinary conversation in the same thread, change only the part they corrected, and keep everything they confirmed. A detail nobody has supplied, and that the conversation does not support, stays a question or stays a placeholder rather than becoming an invention.",
+    "publicCastIntro": "Replace everything inside square brackets. Leave a line as it is and I will ask you about it, or choose it myself if you would rather not decide.",
+    "publicCastWhoPerson": "{id} is a person.",
+    "publicCastWhoAnimal": "{id} is an animal.",
+    "publicCastName": "Name: [optional. Leave this out and I will keep calling them {id}.]",
+    "publicCastField": "{label}: [{hint}]",
+    "publicCastRepeat": "Add {next}, and any others, in the same shape. An animal has no clothing line.{photoOwner}",
+    "publicIntro": "HOW TO RUN THIS PROMPT\nBefore generating anything, decide whether information essential to the image is genuinely missing. If the brief below is already enough, or the person tells you to decide, make the image and do not interview them.\n\nWhen you do need something, ask for it using this platform's own native interactive input or questionnaire controls if it has any: single choice for options that exclude each other, multi select where several answers can apply, free text for facts that cannot safely be guessed, visual selection only where the platform supplies real previews.{uploadOffer} Use only controls this platform actually provides, and never invent previews, asset names or capabilities it does not have. Allow a custom answer alongside the suggested ones where that helps. If there are no native controls at all, ask the same questions in ordinary conversation.\n\nPut everything you already know you need into a single interaction of {q} short question{qs}, phrased to be read on a phone. Do not ask fewer, and do not run one questionnaire after another. Where a later question genuinely depends on an earlier answer, ask that one as an ordinary conversational follow up instead. Never ask for anything already supplied, and never show internal tool names, schemas or raw answer data to the person. Wait for the answers before generating, and treat what comes back as authoritative.",
+    "publicCharacters": "WHO IS IN THE IMAGE\nEveryone in the image, whether a person or an animal, has a stable identifier: Person_1, Person_2, Person_3 and so on. Person_1 is the main subject. The word Person is only a label; Person_2 may perfectly well be a dog, a cat or a horse.\n\nA name is optional. When a name is given, attach it to the identifier rather than replacing it, so Person_1 keeps that label and carries the name as well. Never invent a name for somebody who was not given one; an unnamed character simply stays Person_3.\n\nThe cast section below is a blank form. Every square bracket is a placeholder to replace. Whoever is running this can fill them in directly, or leave them alone and be asked. Treat anything still in square brackets as unanswered: ask about it, or decide it yourself if they have said you should. Never draw a character from a placeholder as though it were a description.\n\nCollect only what changes the picture. Do not make anyone fill in fields the image does not need, and do not ask again for anything already supplied.\n\nYou do not know in advance how many characters there will be. Ask who else should appear and offer a way to say nobody else. If several are described at once, split them into sequential identifiers yourself, so two named people and one unnamed animal become Person_2 and Person_3 carrying their names and Person_4 with no name. Do not assume this platform can add repeating fields or reveal new ones when an option is chosen. Adding a character is your own bookkeeping, not something the interface does.",
+    "castSizeExact": "This image has exactly {N} character{s}: {cast}. The cast described below is the complete list.",
+    "castSizeOne": "This image has exactly one character: {cast}. The cast described below is the complete list.",
+    "castSizeNone": "No specific characters are established for this image. Whoever appears is yours to decide from the brief below.",
+    "castSizeOpen": "This image starts with {N} character{s}: {cast}. Ask whether anybody else should appear, and offer a way to say nobody else.",
+    "strangersNone": "Everybody visible in the image belongs to the cast above.",
+    "strangersAllowed": "Other figures may appear as unnamed background presence: passers by, a queue, people at other tables. They stay strangers, drawn generically, never named, never described as characters and never somebody to ask about.",
+    "photosOne": "One reference photograph is attached. It is of {names}.",
+    "photosSomeOfOne": "{count} reference photographs are attached. They are all of {names}, from different angles and occasions.",
+    "photosMany": "{count} reference photographs are attached, covering {names}.",
+    "photosComplete": "Those are the complete reference set for this image. Any other image in this conversation belongs to other work and is unrelated to this prompt.",
+    "publicCastComplete": "That is the whole cast. An animal has no clothing line.{photoOwner} Everybody in the image is listed above, so treat the list as finished and fill in the brackets rather than adding anybody.",
+    "publicCharactersOpen": "You do not know in advance how many characters there will be. Ask who else should appear and offer a way to say nobody else. If several are described at once, split them into sequential identifiers yourself, so two named people and one unnamed animal become Person_2 and Person_3 carrying their names and Person_4 with no name. Adding a character is your own bookkeeping, not something the interface does.",
+    "publicWhenToAsk": "WHEN TO ASK\nRun that single interaction in your first reply, using the platform's own controls, before generating anything.{laterImages} Where the brief already answers everything, generate and say nothing.",
+    "publicAskHowMany": "One of those questions is how many characters the image has. Offer it as a single choice with a way to say only the one described below, and treat the answer as settled for the rest of the conversation."
+  },
+  "settings": {
+    "maxCast": 5,
+    "variationPools": 3
+  },
+  "castFields": [
+    {
+      "key": "marker",
+      "label": "Signifier",
+      "hint": "The one thing always present. This is what makes them recognisable, not their face.",
+      "line": "Constant in every image: {v}.",
+      "order": 10,
+      "promptOrder": 40
+    },
+    {
+      "key": "looks",
+      "label": "Appearance",
+      "hint": "Build, hair, age, how they carry themselves.",
+      "line": "{v}.",
+      "order": 20,
+      "promptOrder": 10
+    },
+    {
+      "key": "wears",
+      "label": "Clothing",
+      "hint": "What they actually reach for, not one fixed outfit.",
+      "line": "{v}.",
+      "order": 30,
+      "promptOrder": 20,
+      "outfitRule": true
+    },
+    {
+      "key": "manner",
+      "label": "Manner",
+      "hint": "How they behave around the others.",
+      "line": "{v}.",
+      "order": 40,
+      "promptOrder": 30
+    },
+    {
+      "key": "likes",
+      "label": "Interests",
+      "hint": "Shown as objects in the scene, never as a label.",
+      "line": "Interested in {v}, which may show up as objects in the scene rather than as a label.",
+      "order": 50,
+      "promptOrder": 50
+    },
+    {
+      "key": "avoid",
+      "label": "Never draw them with",
+      "hint": "Specific to this character. Keep it short.",
+      "line": "Never draw {name} with {v}.",
+      "order": 60,
+      "promptOrder": 60
+    }
+  ]
+}

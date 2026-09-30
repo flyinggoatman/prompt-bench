@@ -1,0 +1,58 @@
+{
+  "pack": "Persona: Face",
+  "bench": "persona",
+  "categories": [
+    {
+      "key": "FACE",
+      "label": "Face",
+      "note": "Head shape and features",
+      "order": 110,
+      "items": [
+        {
+          "m": "*",
+          "t": "A round face, soft jaw, full cheeks."
+        },
+        {
+          "m": "*",
+          "t": "An oval face, even proportions, a gentle chin."
+        },
+        {
+          "m": "*",
+          "t": "A square face, wide jaw, flat cheekbones."
+        },
+        {
+          "m": "*",
+          "t": "A heart shaped face, wide brow, narrow chin."
+        },
+        {
+          "m": "*",
+          "t": "A long narrow face, high cheekbones, hollow cheeks."
+        },
+        {
+          "m": "*",
+          "t": "A broad flat brow and a short nose."
+        },
+        {
+          "m": "*",
+          "t": "A strong aquiline nose and a pronounced bridge."
+        },
+        {
+          "m": "*",
+          "t": "A wide mouth with full lips."
+        },
+        {
+          "m": "*",
+          "t": "A small mouth with a thin upper lip."
+        },
+        {
+          "m": "*",
+          "t": "Ears that sit close to the head."
+        },
+        {
+          "m": "*",
+          "t": "Ears that stand away from the head."
+        }
+      ]
+    }
+  ]
+}

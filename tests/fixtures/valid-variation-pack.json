@@ -1,0 +1,12 @@
+{
+  "pack": "Variation",
+  "variation": [
+    {
+      "id": "installer-regression",
+      "order": 10,
+      "options": [
+        "Known-good installer regression fixture."
+      ]
+    }
+  ]
+}

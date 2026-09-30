@@ -1,0 +1,19 @@
+{
+  "format": "prompt-bench-unlock-codes",
+  "version": 1,
+  "codes": [
+    {
+      "code": "DEMO1234",
+      "category": "examples",
+      "label": "Example unlock",
+      "groups": ["example"],
+      "nsfw": false,
+      "expires": null,
+      "disabled": false,
+      "notes": "Public demonstration code for the fictional locked example pack.",
+      "created": "2026-01-01T00:00:00Z",
+      "updated": "2026-01-01T00:00:00Z"
+    }
+  ],
+  "revoked": []
+}

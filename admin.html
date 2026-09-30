@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Prompt Bench admin</title>
+<style>
+:root{
+  --bg:#F4F3EF;--surface:#FFFFFF;--surface2:#FAF9F6;--surface3:#F0EEE9;
+  --text:#15181F;--soft:#5A6170;--faint:#888E9B;--line:#E5E2DB;--line2:#D3CFC6;
+  --accent:#DE2168;--accent2:#C11A58;--accentSoft:#FCE8F0;--teal:#0E766C;--tealSoft:#E2F2F0;
+  --danger:#B23C1B;--dangerSoft:#FBEBE4;--radius:16px;--font:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Arial,sans-serif;
+  color-scheme:light;
+}
+:root[data-theme=dark]{
+  --bg:#0F1116;--surface:#171A21;--surface2:#1C2029;--surface3:#242935;
+  --text:#E9EBF0;--soft:#A3AAB8;--faint:#79808E;--line:#272C36;--line2:#3A404E;
+  --accent:#FF5C97;--accent2:#FF7AAB;--accentSoft:rgba(255,92,151,.14);--teal:#45CFC0;--tealSoft:rgba(69,207,192,.13);
+  --danger:#F08159;--dangerSoft:rgba(240,129,89,.14);color-scheme:dark;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){
+  --bg:#0F1116;--surface:#171A21;--surface2:#1C2029;--surface3:#242935;
+  --text:#E9EBF0;--soft:#A3AAB8;--faint:#79808E;--line:#272C36;--line2:#3A404E;
+  --accent:#FF5C97;--accent2:#FF7AAB;--accentSoft:rgba(255,92,151,.14);--teal:#45CFC0;--tealSoft:rgba(69,207,192,.13);
+  --danger:#F08159;--dangerSoft:rgba(240,129,89,.14);color-scheme:dark;
+}}
+*{box-sizing:border-box}html,body{margin:0;padding:0}body{background:var(--bg);color:var(--text);font:400 15px/1.5 var(--font);padding-bottom:48px}
+a{color:var(--accent)}button,input{font:inherit}.topbar{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--line)}
+.topbar-in{max-width:880px;height:58px;margin:auto;padding:0 20px;display:flex;align-items:center;gap:12px}.brand{display:flex;align-items:center;gap:10px}.mark{width:30px;height:30px;border-radius:9px;background:linear-gradient(140deg,var(--accent),var(--teal));position:relative}.mark:after{content:"";position:absolute;inset:9px;border-radius:3px;background:var(--surface)}.brand strong{display:block;font-size:15px}.brand small{display:block;font-size:11.5px;color:var(--faint)}.top-actions{margin-left:auto;display:flex;gap:8px}
+.wrap{max-width:880px;margin:auto;padding:24px 20px;display:flex;flex-direction:column;gap:16px}.hero{padding:2px}.hero h1{font-size:30px;margin:0 0 6px}.hero p{margin:0;color:var(--soft);max-width:70ch}.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px}.card-head{display:flex;align-items:center;gap:10px;margin-bottom:5px}.card-head h2{font-size:17px;margin:0}.badge{margin-left:auto;background:var(--surface3);color:var(--soft);border-radius:999px;padding:3px 9px;font-size:11.5px;font-weight:650}.hint{margin:0 0 14px;color:var(--soft);font-size:13.5px}.hint:last-child{margin-bottom:0}.btn-row{display:flex;flex-wrap:wrap;gap:8px}.btn{border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:9px;padding:9px 12px;font-weight:650;cursor:pointer}.btn:hover{background:var(--surface2);border-color:var(--line2)}.btn-primary{background:var(--text);color:var(--surface);border-color:var(--text)}.btn-accent{background:var(--accent);color:#fff;border-color:var(--accent)}.btn-danger{color:var(--danger)}.btn-sm{font-size:13px;padding:7px 10px}.hiddenfile{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.form-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:end}.form-stack{display:grid;gap:10px}.field label{display:block;font-size:12px;font-weight:700;color:var(--soft);margin-bottom:5px}.field input{width:100%;border:1px solid var(--line2);background:var(--surface2);color:var(--text);border-radius:9px;padding:10px 11px;outline:none}.field input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accentSoft)}
+.table-scroll{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13.5px}th{text-align:left;color:var(--faint);font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:0 8px 8px 4px;border-bottom:1px solid var(--line)}td{padding:10px 8px 10px 4px;border-bottom:1px solid var(--line);vertical-align:top}.sub{display:block;color:var(--soft);font-size:12.5px;margin-top:2px}.path{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--faint);font-size:12px;word-break:break-all}.act{text-align:right}.tag{display:inline-block;margin-left:6px;padding:2px 7px;border-radius:999px;background:var(--surface3);color:var(--soft);font-size:10px;font-weight:700;text-transform:uppercase}.tag.priv{background:var(--dangerSoft);color:var(--danger)}.tag.up{background:var(--tealSoft);color:var(--teal)}.tag.broken{background:var(--danger);color:#fff}.note{display:none;border:1px solid var(--danger);background:var(--dangerSoft);border-radius:12px;padding:12px 14px}.log{white-space:pre-wrap;background:var(--surface2);border:1px solid var(--line);border-radius:11px;padding:12px 14px;font:400 12.5px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;max-height:38vh;overflow:auto}.logcard{display:none}footer{color:var(--faint);font-size:12.5px;padding:2px}
+body.drag:after{content:"Drop pack files to install them";position:fixed;inset:10px;z-index:99;border:2px dashed var(--accent);border-radius:22px;background:color-mix(in srgb,var(--bg) 88%,transparent);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent)}
+.codes-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:10px}.codes-form .wide{grid-column:1/-1}.field select,.field textarea{width:100%;border:1px solid var(--line2);background:var(--surface2);color:var(--text);border-radius:9px;padding:10px 11px;font:inherit}.checkrow{display:flex;gap:8px;align-items:flex-start;font-size:13.5px;margin-top:6px}.checkrow input{margin-top:3px}.tag.nsfw{background:var(--dangerSoft);color:var(--danger)}.tag.off{opacity:.6}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.warn{background:var(--dangerSoft);color:var(--danger);border-radius:9px;padding:10px 12px;font-size:13.5px;margin:8px 0}
+@media(max-width:620px){.form-row{grid-template-columns:1fr}.form-row .btn{width:100%}.wrap{padding:18px 14px}.topbar-in{padding:0 14px}.hero h1{font-size:25px}}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topbar-in">
+  <div class="brand"><span class="mark" aria-hidden="true"></span><span><strong>Prompt Bench admin</strong><small>Pack management</small></span></div>
+  <div class="top-actions"><a class="btn btn-sm" id="homeLink" href="/home">Home</a><a class="btn btn-sm" href="/studio">Open the bench</a><button class="btn btn-sm" id="theme" type="button">Theme</button></div>
+</div></header>
+
+<main class="wrap">
+  <section class="hero"><h1>Prompt Bench packs</h1><p>Install and remove Prompt Bench packs, import pack repositories from GitHub, and load private packs into this browser. The persona bench has its own page at <a href="admin-persona.html">admin-persona.html</a>.</p></section>
+  <div class="note" id="privnote"></div>
+
+  <section class="card">
+    <div class="card-head"><h2>Install local packs</h2></div>
+    <p class="hint">Choose JSON pack files, .zip files of packs, or a folder. Each file is parsed and checked for recognised Prompt Bench keys before it is written to <code>uploads/</code>.</p>
+    <div class="btn-row"><button class="btn btn-primary" id="pick" type="button">Choose files</button><button class="btn" id="pickFolder" type="button">Choose a folder</button><button class="btn" id="refresh" type="button">Refresh list</button></div>
+    <input type="file" id="f" class="hiddenfile" multiple accept=".json,.zip,application/json,application/zip"><input type="file" id="fdir" class="hiddenfile" webkitdirectory directory multiple>
+    <p class="hint" style="margin-top:14px">You can also drag JSON or .zip files anywhere onto this page. A zip is opened in this browser and each pack inside is installed on its own.</p>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><h2>Import GitHub packs</h2><span class="badge">repository</span></div>
+    <p class="hint">Paste a GitHub repository link. Prompt Bench downloads the repository on the server, finds valid pack JSON files, ignores unrelated JSON such as catalog indexes, and installs the recognised packs into <code>uploads/</code>.</p>
+    <div class="form-stack">
+      <div class="field"><label for="githubUrl">GitHub repository link</label><input id="githubUrl" type="url" inputmode="url" autocomplete="off" placeholder="https://github.com/owner/repository"></div>
+      <div class="field"><label for="githubToken">GitHub token, optional for private repositories</label><input id="githubToken" type="password" autocomplete="off" placeholder="Leave blank for public repositories or when GITHUB_TOKEN is set on the server"></div>
+      <div class="btn-row"><button class="btn btn-accent" id="importGithub" type="button">Import GitHub packs</button></div>
+    </div>
+    <p class="hint" style="margin-top:14px">Paste a repository, branch or folder link, such as <code>github.com/owner/repository</code> or <code>…/tree/main/packs</code>. Packs inside .zip files in the repository are installed too. A token entered here is used for this import request only and is not saved by the page or written into pack files.</p>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><h2>Installed packs</h2><span class="badge" id="count"></span></div><div id="list"></div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><h2>Private packs</h2></div>
+    <p class="hint">Packs marked private are never sent to the public page. Pull them into this browser once and they stay in local storage.</p>
+    <div class="btn-row"><button class="btn btn-accent" id="pull" type="button">Load private packs into this browser</button><button class="btn btn-danger" id="forget" type="button">Forget them again</button></div>
+  </section>
+
+  <section class="card" id="codesCard">
+    <div class="card-head"><h2>Unlock codes</h2><span class="badge" id="codesCount"></span></div>
+    <p class="hint">Codes let people open private packs without signing in. Each code has a category (<code>people</code> for the cast, or anything you like), the unlock groups it opens, and optionally an expiry date. Marking a code NSFW also opens the <code>nsfw</code> group, which is what lets a browser show NSFW content. Codes are kept in <code id="codesFile">uploads/unlock-codes.db</code> on the server; codes in <code>.env</code> still work and are listed read only.</p>
+    <div id="codesBroken" class="warn" hidden></div>
+    <div id="codesList"></div>
+    <form id="codeForm" autocomplete="off">
+      <h3 style="margin:18px 0 0;font-size:15px" id="codeFormTitle">Add a code</h3>
+      <div class="codes-form">
+        <div class="field"><label for="cfCode">Code</label><input id="cfCode" class="mono" maxlength="32" placeholder="Letters and digits, 4 or more" autocapitalize="characters" spellcheck="false"></div>
+        <div class="field"><label for="cfCategory">Category</label><input id="cfCategory" list="cfCategories" placeholder="people"><datalist id="cfCategories"></datalist></div>
+        <div class="field"><label for="cfLabel">Label</label><input id="cfLabel" maxlength="80" placeholder="Who or what it is for"></div>
+        <div class="field"><label for="cfGroups">Unlock groups</label><input id="cfGroups" class="mono" placeholder="alice+bob"></div>
+        <div class="field"><label for="cfExpires">Expires</label><input id="cfExpires" type="date"></div>
+        <div class="field wide"><label for="cfNotes">Notes</label><input id="cfNotes" maxlength="500" placeholder="Only you see these"></div>
+        <div class="wide"><label class="checkrow"><input type="checkbox" id="cfNsfw"><span><b>NSFW.</b> This code also opens NSFW content. It is still never used with real people.</span></label>
+        <label class="checkrow"><input type="checkbox" id="cfDisabled"><span><b>Disabled.</b> Kept in the list, but it opens nothing and browsers that used it lose what only it opened.</span></label></div>
+      </div>
+      <div class="btn-row" style="margin-top:12px"><button class="btn btn-accent" type="submit" id="cfSave">Save code</button><button class="btn" type="button" id="cfCancel" hidden>Cancel</button><button class="btn" type="button" id="cfRandom">Suggest a random code</button></div>
+    </form>
+    <div style="margin-top:18px;border-top:1px solid var(--line);padding-top:14px">
+      <label class="checkrow"><input type="checkbox" id="nsfwOverride"><span><b>Debug: allow NSFW with real people, in this signed-in session only.</b> For checking that the real-person block is what stops it. Turns itself off when you sign out or the server restarts. Visitors can never turn this on.</span></label>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><h2>Redemptions</h2><span class="badge" id="redeemCount"></span></div>
+    <p class="hint">Every time a browser enters a right code it gets its own redemption id. Revoking an id locks that one browser out at once, with no restart. To keep somebody out for good, also change or disable the code they know.</p>
+    <div id="redeemList"></div>
+  </section>
+
+  <section class="card" id="membersCard">
+    <div class="card-head"><h2>Members</h2><span class="badge" id="membersCount"></span></div>
+    <p class="hint">Members pay once for the MCP tools and the agent API; the website stays free for everyone. A membership never opens a private pack. Tokens are shown once when made: Prompt Bench keeps only a fingerprint.</p>
+    <div id="membersState" class="hint"></div>
+    <form id="memberForm" autocomplete="off">
+      <h3 style="margin:14px 0 0;font-size:15px">Add a member by hand</h3>
+      <div class="codes-form">
+        <div class="field"><label for="mfName">Name</label><input id="mfName" maxlength="120"></div>
+        <div class="field"><label for="mfEmail">Email</label><input id="mfEmail" type="email" maxlength="200"></div>
+        <div class="field"><label for="mfEnds">Membership ends</label><input id="mfEnds" type="date"></div>
+        <div class="field wide"><label for="mfNotes">Notes</label><input id="mfNotes" maxlength="500" placeholder="Only you see these"></div>
+        <div class="wide"><label class="checkrow"><input type="checkbox" id="mfGrant" checked><span><b>Grant a membership now.</b> Leave the end date empty for lifetime.</span></label>
+        <label class="checkrow"><input type="checkbox" id="mfToken" checked><span><b>Issue a token now.</b> Shown once, below.</span></label></div>
+      </div>
+      <div class="btn-row" style="margin-top:12px"><button class="btn btn-accent" type="submit">Add member</button></div>
+    </form>
+    <div id="memberTokenOut"></div>
+    <div id="membersList" style="margin-top:14px"></div>
+    <details style="margin-top:14px"><summary>Recent payment events</summary><div id="eventsList"></div></details>
+  </section>
+
+  <section class="card logcard" id="logcard"><div class="card-head"><h2>Activity</h2></div><div class="log" id="log" aria-live="polite"></div></section>
+  <footer>Local uploads are capped at 512 KB per file. GitHub imports accept only GitHub repository links, use bounded downloads, and install only recognised Prompt Bench JSON packs. Nothing here executes pack content.</footer>
+</main>
+
+<script>
+"use strict";
+var BENCH="main";var PACK_VERSION="";var PACK_KEY="promptbench.packs.v2",THEME_KEY="promptbench.theme.v1";
+var el=function(id){return document.getElementById(id);},packs=[];
+function systemDark(){return !!(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)}
+function applyTheme(t){if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);else document.documentElement.removeAttribute("data-theme")}
+function currentTheme(){return document.documentElement.getAttribute("data-theme")||(systemDark()?"dark":"light")}
+try{applyTheme(localStorage.getItem(THEME_KEY))}catch(e){}
+function log(msg,bad){var t=new Date().toTimeString().slice(0,8);el("logcard").style.display="block";el("log").textContent+=t+"  "+(bad?"! ":"")+msg+"\n";el("log").scrollTop=el("log").scrollHeight}
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;")}
+function summarise(d){if(!d||typeof d!=="object")return"";var bits=[],n=function(k){return Array.isArray(d[k])?d[k].length:0};if(n("masters"))bits.push(n("masters")+" masters");if(n("people"))bits.push(n("people")+" cast");if(n("categories")){var items=0;d.categories.forEach(function(c){items+=(c.items||[]).length});bits.push(items+" modules")}if(n("dials"))bits.push(n("dials")+" dials");if(n("variation"))bits.push(n("variation")+" variation pools");if(n("fields"))bits.push(n("fields")+" fields");if(n("shared"))bits.push("shared text");if(d.wording)bits.push("wording");if(d.settings)bits.push("settings");if(n("castFields"))bits.push(n("castFields")+" cast fields");if(n("discipline"))bits.push(n("discipline")+" discipline rules");return bits.join(", ")}
+function render(){var h='<div class="table-scroll"><table><thead><tr><th>Pack</th><th>File</th><th></th></tr></thead><tbody>';packs.forEach(function(p){var d=p.data||{},tags="";if(d.private)tags+='<span class="tag priv">private</span>';tags+=p.source==="uploads"?'<span class="tag up">uploaded</span>':'<span class="tag">built in</span>';if(d._error)tags+='<span class="tag broken">broken</span>';h+='<tr><td><b>'+esc(d.pack||p.path)+'</b>'+tags+'<span class="sub">'+esc(summarise(d))+'</span></td><td class="path">'+esc(p.path)+'</td><td class="act">'+(p.source==="uploads"?'<button type="button" class="btn btn-sm btn-danger" data-rm="'+esc(p.path)+'">Remove</button>':'')+'</td></tr>'});h+='</tbody></table></div>';el("list").innerHTML=packs.length?h:'<p class="hint">No packs found.</p>';var priv=packs.filter(function(p){return p.data&&p.data.private}).length,mods=0;packs.forEach(function(p){((p.data&&p.data.categories)||[]).forEach(function(c){mods+=(c.items||[]).length})});el("count").textContent=packs.length+" files, "+mods+" modules, "+priv+" private";if(priv){el("privnote").style.display="block";el("privnote").textContent=priv+" private pack"+(priv===1?" is":"s are")+" installed and hidden from the public page."}else el("privnote").style.display="none"}
+function loadList(){fetch("api/packs?all=1&bench=main",{cache:"no-store"}).then(function(r){PACK_VERSION=r.headers.get("X-Pack-Version")||"";if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}).then(function(list){packs=list;render();log("Listed "+list.length+" packs.")}).catch(function(e){log("Could not list packs: "+e.message,true)})}
+function upload(name,obj){return fetch("api/upload",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({bench:BENCH,packVersion:PACK_VERSION,name:name,pack:obj})}).then(function(r){return r.json().then(function(j){if(j&&j.packVersion)PACK_VERSION=j.packVersion;return{ok:r.ok,j:j}})})}
+function unzipJson(file){
+/* The JSON packs inside a .zip, read in this browser. The server never
+   receives an archive: each pack is uploaded on its own, exactly like a
+   chosen .json file. Stored and deflated entries; nothing is executed. */
+return file.arrayBuffer().then(function(buf){var v=new DataView(buf),n=buf.byteLength,e=-1;
+for(var i=n-22;i>=Math.max(0,n-65557);i--){if(v.getUint32(i,true)===0x06054b50){e=i;break}}
+if(e<0)throw new Error("not a zip file");
+var count=v.getUint16(e+10,true),p=v.getUint32(e+16,true),out=[],dec=new TextDecoder("utf-8");
+if(count>500)throw new Error("zip has more than 500 files");
+var jobs=[];
+for(var k=0;k<count;k++){if(v.getUint32(p,true)!==0x02014b50)throw new Error("damaged zip directory");
+var method=v.getUint16(p+10,true),flags=v.getUint16(p+8,true),csize=v.getUint32(p+20,true),usize=v.getUint32(p+24,true),nl=v.getUint16(p+28,true),xl=v.getUint16(p+30,true),cl=v.getUint16(p+32,true),lo=v.getUint32(p+42,true);
+var name=dec.decode(new Uint8Array(buf,p+46,nl));p+=46+nl+xl+cl;
+if(/\/$/.test(name)||/(^|\/)__MACOSX\//.test(name)||!/\.json$/i.test(name))continue;
+if(flags&1){jobs.push(Promise.resolve({name:name,error:"encrypted"}));continue}
+if(usize>524288){jobs.push(Promise.resolve({name:name,error:"larger than 512 KB"}));continue}
+var start=lo+30+v.getUint16(lo+26,true)+v.getUint16(lo+28,true),data=new Uint8Array(buf,start,csize);
+jobs.push((method===0?Promise.resolve(data):method===8&&typeof DecompressionStream!=="undefined"?new Response(new Blob([data]).stream().pipeThrough(new DecompressionStream("deflate-raw"))).arrayBuffer().then(function(b){return new Uint8Array(b)}):Promise.reject(new Error("unsupported compression"))).then(function(nm){return function(bytes){return{name:nm,text:dec.decode(bytes)}}}(name),function(nm){return function(err){return{name:nm,error:err.message}}}(name)))}
+return Promise.all(jobs)})}
+function handleFiles(fileList){var picked=[];for(var i=0;i<fileList.length;i++)if(/\.(json|zip)$/i.test(fileList[i].name))picked.push(fileList[i]);
+if(!picked.length){log("No JSON or zip files in that selection.",true);return}
+var queue=[];
+/* Expand zips first, then upload one pack at a time: each upload returns the
+   new pack version, and the next one sends it. */
+(function expand(){var f=picked.shift();if(!f)return upload_all();
+if(!/\.zip$/i.test(f.name)){queue.push({name:f.name,read:function(){return f.text()}});return expand()}
+log("Opening "+f.name+"...");
+unzipJson(f).then(function(entries){var base=f.name.replace(/\.zip$/i,"");if(!entries.length)log(f.name+" contains no JSON files.",true);
+entries.forEach(function(en){if(en.error){log(f.name+": "+en.name+" skipped ("+en.error+").",true);return}
+var short=en.name.split("/").filter(Boolean);short=short.slice(-2).join("--");queue.push({name:base+"--"+short,read:function(){return Promise.resolve(en.text)}})});expand()}).catch(function(e){log(f.name+" could not be opened: "+e.message,true);expand()})})();
+function upload_all(){(function next(){var item=queue.shift();if(!item){loadList();return}
+item.read().then(function(text){var obj;try{obj=JSON.parse(text)}catch(e){log(item.name+" is not valid JSON, skipped.",true);return next()}
+return upload(item.name,obj).then(function(res){if(res.ok&&res.j.ok)log("Installed "+res.j.saved+".");else log(item.name+" rejected: "+(res.j.error||"unknown"),true);next()})}).catch(function(e){log(item.name+" failed: "+e.message,true);next()})})()}}
+function importGithub(){var url=el("githubUrl").value.trim(),token=el("githubToken").value;if(!url){log("Paste a GitHub repository link first.",true);el("githubUrl").focus();return}var b=el("importGithub");b.disabled=true;b.textContent="Importing...";log("Importing packs from "+url+"...");fetch("api/import-github",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({bench:BENCH,packVersion:PACK_VERSION,url:url,token:token})}).then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j}})}).then(function(res){el("githubToken").value="";if(!res.ok||!res.j.ok){log("GitHub import failed: "+(res.j.error||"unknown error"),true);return}log("Imported "+res.j.installed.length+" pack file"+(res.j.installed.length===1?"":"s")+" from "+res.j.repository+" ("+res.j.branch+").");res.j.installed.forEach(function(x){log("Installed "+x.path+" as "+x.saved+".")});if(res.j.skipped&&res.j.skipped.length)log("Skipped "+res.j.skipped.length+" unrelated or invalid JSON file"+(res.j.skipped.length===1?"":"s")+".");loadList()}).catch(function(e){el("githubToken").value="";log("GitHub import failed: "+e.message,true)}).finally(function(){b.disabled=false;b.textContent="Import GitHub packs"})}
+el("theme").addEventListener("click",function(){var next=currentTheme()==="dark"?"light":"dark";applyTheme(next);try{localStorage.setItem(THEME_KEY,next)}catch(e){}});el("pick").addEventListener("click",function(){el("f").click()});el("pickFolder").addEventListener("click",function(){el("fdir").click()});el("f").addEventListener("change",function(e){handleFiles(e.target.files);e.target.value=""});el("fdir").addEventListener("change",function(e){handleFiles(e.target.files);e.target.value=""});el("refresh").addEventListener("click",loadList);el("importGithub").addEventListener("click",importGithub);el("githubUrl").addEventListener("keydown",function(e){if(e.key==="Enter")importGithub()});
+el("list").addEventListener("click",function(e){var b=e.target.closest("button[data-rm]");if(!b)return;var name=b.dataset.rm;if(!confirm("Remove "+name+" from the server?"))return;fetch("api/remove",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({bench:BENCH,packVersion:PACK_VERSION,name:name})}).then(function(r){return r.json()}).then(function(j){if(j.ok)log("Removed "+j.removed+".");else log("Could not remove: "+(j.error||"unknown"),true);loadList()}).catch(function(e){log("Remove failed: "+e.message,true)})});
+el("pull").addEventListener("click",function(){var priv=packs.filter(function(p){return p.data&&p.data.private});if(!priv.length){log("There are no private packs to load.",true);return}var store=[];try{store=JSON.parse(localStorage.getItem(PACK_KEY)||"[]")||[]}catch(e){store=[]}store=store.filter(function(s){return String(s.path||"").indexOf("private:")!==0});priv.forEach(function(p){store.push({name:(p.data.pack||p.path),path:"private:"+p.path,data:p.data})});try{localStorage.setItem(PACK_KEY,JSON.stringify(store));log("Loaded "+priv.length+" private pack"+(priv.length>1?"s":"")+" into this browser.")}catch(e){log("Could not save to this browser: "+e.message,true)}});
+var CASTSRC_KEY="promptbench.castsource.v1";
+function forgetRememberedCast(){var raw=null;try{raw=localStorage.getItem(CASTSRC_KEY)}catch(e){return false}if(!raw)return false;var sig=null;try{var saved=JSON.parse(raw);sig=(saved&&!Array.isArray(saved)&&typeof saved.sig==="string")?saved.sig:null}catch(e){sig=null}if(sig!==null&&sig.indexOf("private:")<0)return false;try{localStorage.removeItem(CASTSRC_KEY);return true}catch(e){return false}}
+el("forget").addEventListener("click",function(){var store=[];try{store=JSON.parse(localStorage.getItem(PACK_KEY)||"[]")||[]}catch(e){store=[]}var before=store.length;store=store.filter(function(s){return String(s.path||"").indexOf("private:")!==0});try{localStorage.setItem(PACK_KEY,JSON.stringify(store));var alsoCast=(typeof forgetRememberedCast==="function")&&forgetRememberedCast();log("Removed "+(before-store.length)+" private pack(s) from this browser."+(alsoCast?" The remembered cast was cleared too.":""))}catch(e){log("Could not update this browser: "+e.message,true)}});
+["dragenter","dragover"].forEach(function(ev){document.addEventListener(ev,function(e){e.preventDefault();document.body.classList.add("drag")})});["dragleave","drop"].forEach(function(ev){document.addEventListener(ev,function(e){e.preventDefault();document.body.classList.remove("drag")})});document.addEventListener("drop",function(e){if(e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files.length)handleFiles(e.dataTransfer.files)});
+loadList();
+</script>
+<script>
+"use strict";
+/* ---------------- unlock codes and redemptions ---------------- */
+(function(){
+var CODES=null,EDITING=null;
+function post(url,body){return fetch(url,{method:"POST",credentials:"same-origin",headers:{"Content-Type":"application/json"},body:JSON.stringify(body||{})}).then(function(r){return r.json().then(function(j){return{ok:r.ok&&j.ok,j:j}})})}
+function groupsText(c){return(c.groups||[]).join("+")}
+function loadCodes(){return fetch("api/codes",{cache:"no-store",credentials:"same-origin"}).then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}).then(function(j){CODES=j;renderCodes()}).catch(function(e){log("Could not list codes: "+e.message,true)})}
+function renderCodes(){
+  var j=CODES;el("codesFile").textContent="uploads/"+j.database;
+  el("codesBroken").hidden=!j.broken;el("codesBroken").textContent=j.broken?"The codes database could not be read ("+j.broken+"). The server is running on the .env codes only, and will not overwrite the file until it is fixed or removed.":"";
+  el("cfCategories").innerHTML=(j.categories||[]).map(function(c){return'<option value="'+esc(c)+'">'}).join("");
+  el("nsfwOverride").checked=!!j.nsfwRealOverride;
+  var rows=j.codes||[],env=j.env||[];el("codesCount").textContent=(rows.length+env.length)+" codes";
+  var h='<div class="table-scroll"><table><thead><tr><th>Code</th><th>Opens</th><th>Category</th><th></th></tr></thead><tbody>';
+  if(!rows.length&&!env.length)h+='<tr><td colspan="4" class="sub">No codes yet. Add one below.</td></tr>';
+  rows.forEach(function(c){var tags="";if(c.nsfw)tags+='<span class="tag nsfw">NSFW</span>';if(c.disabled)tags+='<span class="tag off">disabled</span>';else if(!c.live)tags+='<span class="tag off">expired</span>';
+    h+='<tr><td><b class="mono">'+esc(c.code)+'</b>'+tags+'<span class="sub">'+esc(c.label||"")+(c.expires?" · until "+esc(c.expires):"")+'</span>'+(c.notes?'<span class="sub">'+esc(c.notes)+'</span>':'')+'</td><td class="mono">'+esc(groupsText(c)||"(nsfw only)")+'</td><td>'+esc(c.category||"")+'</td><td style="white-space:nowrap"><button class="btn btn-sm" type="button" data-cedit="'+esc(c.code)+'">Edit</button> <button class="btn btn-sm btn-danger" type="button" data-cdel="'+esc(c.code)+'">Delete</button></td></tr>'});
+  env.forEach(function(c){h+='<tr><td><b class="mono">'+esc(c.code)+'</b><span class="tag">.env</span><span class="sub">From BENCH_UNLOCK_CODES. Change it in .env on the server.</span></td><td class="mono">'+esc(c.groups.join("+"))+'</td><td>env</td><td></td></tr>'});
+  el("codesList").innerHTML=h+'</tbody></table></div>';
+}
+function fillForm(c){EDITING=c?c.code:null;el("codeFormTitle").textContent=c?"Edit "+c.code:"Add a code";el("cfCancel").hidden=!c;
+  el("cfCode").value=c?c.code:"";el("cfCategory").value=c?c.category:"people";el("cfLabel").value=c?(c.label||""):"";el("cfGroups").value=c?groupsText(c):"";
+  el("cfExpires").value=c&&c.expires?c.expires:"";el("cfNotes").value=c?(c.notes||""):"";el("cfNsfw").checked=!!(c&&c.nsfw);el("cfDisabled").checked=!!(c&&c.disabled)}
+el("codeForm").addEventListener("submit",function(e){e.preventDefault();
+  var body={was:EDITING,code:el("cfCode").value,category:el("cfCategory").value,label:el("cfLabel").value,groups:el("cfGroups").value,expires:el("cfExpires").value,notes:el("cfNotes").value,nsfw:el("cfNsfw").checked,disabled:el("cfDisabled").checked};
+  post("api/codes/save",body).then(function(r){if(!r.ok){log("Could not save the code: "+(r.j.error||"unknown"),true);return}log((EDITING?"Updated ":"Added ")+r.j.saved.code+".");fillForm(null);loadCodes()}).catch(function(e){log("Save failed: "+e.message,true)})});
+el("cfCancel").addEventListener("click",function(){fillForm(null)});
+el("cfRandom").addEventListener("click",function(){var a="ABCDEFGHJKLMNPQRSTUVWXYZ23456789",b=new Uint32Array(10),s="";crypto.getRandomValues(b);for(var i=0;i<10;i++)s+=a[b[i]%a.length];el("cfCode").value=s});
+el("codesList").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;
+  if(b.dataset.cedit){fillForm((CODES.codes||[]).filter(function(c){return c.code===b.dataset.cedit})[0]);el("cfCode").focus();return}
+  if(b.dataset.cdel){if(!confirm("Delete "+b.dataset.cdel+"? Browsers that used it lose whatever only it opened."))return;post("api/codes/delete",{code:b.dataset.cdel}).then(function(r){if(r.ok)log("Deleted "+r.j.deleted+".");else log("Could not delete: "+(r.j.error||"unknown"),true);loadCodes()})}});
+el("nsfwOverride").addEventListener("change",function(){var on=this.checked;post("api/admin/nsfw-override",{on:on}).then(function(r){if(!r.ok){log("Could not change the override: "+(r.j.error||"unknown"),true);el("nsfwOverride").checked=!on;return}log("NSFW real-person override "+(on?"on for this session. Reload the bench to use it.":"off."))})});
+function loadRedemptions(){return fetch("api/unlock/redemptions",{cache:"no-store",credentials:"same-origin"}).then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}).then(function(j){
+  var list=(j.redemptions||[]).slice().reverse();el("redeemCount").textContent=list.length+" redemptions";
+  var h='<div class="table-scroll"><table><thead><tr><th>Id</th><th>When</th><th>Code</th><th>Opened</th><th></th></tr></thead><tbody>';
+  if(!list.length)h+='<tr><td colspan="5" class="sub">Nobody has entered a code yet.</td></tr>';
+  list.forEach(function(r){h+='<tr><td><b class="mono">'+esc(r.id)+'</b>'+(r.revoked?'<span class="tag nsfw">revoked</span>':'')+'<span class="sub">'+esc(r.ip||"")+'</span></td><td>'+esc(String(r.at||"").replace("T"," ").replace("Z",""))+'</td><td class="mono">'+esc(r.code||"")+'</td><td class="mono">'+esc((r.granted||r.groups||[]).join("+"))+'</td><td>'+(r.revoked?'<button class="btn btn-sm" type="button" data-unrevoke="'+esc(r.id)+'">Let back in</button>':'<button class="btn btn-sm btn-danger" type="button" data-revoke="'+esc(r.id)+'">Revoke</button>')+'</td></tr>'});
+  el("redeemList").innerHTML=h+'</tbody></table></div>'}).catch(function(e){log("Could not list redemptions: "+e.message,true)})}
+el("redeemList").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;var id=b.dataset.revoke||b.dataset.unrevoke,undo=!!b.dataset.unrevoke;if(!id)return;
+  if(!undo&&!confirm("Revoke "+id+"? That browser loses everything it unlocked, at once."))return;
+  post("api/unlock/revoke",{id:id,undo:undo}).then(function(r){if(r.ok)log((undo?"Let "+id+" back in.":"Revoked "+id+"."));else log("Could not change "+id+": "+(r.j.error||"unknown"),true);loadRedemptions()})});
+fillForm(null);loadCodes();loadRedemptions();
+})();
+</script>
+<script>
+"use strict";
+/* ---------------- members ---------------- */
+(function(){
+function post(url,body){return fetch(url,{method:"POST",credentials:"same-origin",headers:{"Content-Type":"application/json"},body:JSON.stringify(body||{})}).then(function(r){return r.json().then(function(j){return{ok:r.ok&&j.ok,j:j}})})}
+function day(t){return t?String(t).slice(0,10):""}
+function showToken(tok,who){el("memberTokenOut").innerHTML='<div class="warn">Token for '+esc(who)+', shown once. Give it to them now; it cannot be shown again.</div><div class="mono" style="word-break:break-all;background:var(--surface2);border:1px solid var(--line2);border-radius:9px;padding:10px;user-select:all">'+esc(tok)+'</div>'}
+function load(){return fetch("api/members",{cache:"no-store",credentials:"same-origin"}).then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}).then(render).catch(function(e){log("Could not list members: "+e.message,true)})}
+function render(j){
+  el("membersState").innerHTML=!j.enabled?'Membership is <b>off</b> on this server (BENCH_MEMBERSHIP is not set). The MCP and agent API are free for everyone.':!j.available?'<span style="color:var(--danger)">Membership is on, but its database is unavailable: '+esc(j.error)+'</span>':'Membership is <b>on</b>. Stripe webhook: '+(j.stripe?'<b>configured</b>':'not configured (set STRIPE_WEBHOOK_SECRET)')+'.';
+  el("memberForm").hidden=!(j.enabled&&j.available);
+  var list=j.members||[];el("membersCount").textContent=list.length+" members";
+  var h='<div class="table-scroll"><table><thead><tr><th>Member</th><th>Membership</th><th>Tokens</th><th></th></tr></thead><tbody>';
+  if(!list.length)h+='<tr><td colspan="4" class="sub">No members yet.</td></tr>';
+  list.forEach(function(m){
+    var ents=m.entitlements||[],live=ents.filter(function(e){return e.live})[0],last=ents[ents.length-1];
+    var mem=live?'<span class="tag up">active</span>'+(live.disputed?'<span class="tag nsfw">disputed</span>':'')+'<span class="sub">'+(live.ends_at?'until '+day(live.ends_at):'lifetime')+' · '+esc(live.source)+'</span>':(last?'<span class="tag off">'+esc(last.status==="active"?"ended":last.status)+'</span><span class="sub">'+esc(last.reason||"")+'</span>':'<span class="sub">none</span>');
+    var toks=(m.credentials||[]).map(function(c){return '<span class="mono">'+esc(c.prefix)+'…</span>'+(c.revoked_at?' <span class="tag off">revoked</span>':' <button class="btn btn-sm btn-danger" type="button" data-mrevtok="'+esc(c.credential_id)+'">Revoke</button>')+'<span class="sub">'+esc(c.label||"")+' · used '+(c.last_used_at?day(c.last_used_at):'never')+'</span>'}).join("<br>")||'<span class="sub">none</span>';
+    var acts=(live?'<button class="btn btn-sm btn-danger" type="button" data-mend="'+esc(live.entitlement_id)+'">End membership</button>':(last&&last.status==="revoked"?'<button class="btn btn-sm" type="button" data-mrestore="'+esc(last.entitlement_id)+'">Restore</button>':'<button class="btn btn-sm" type="button" data-mgrant="'+esc(m.member_id)+'">Grant</button>'))+' <button class="btn btn-sm" type="button" data-mtoken="'+esc(m.member_id)+'" data-name="'+esc(m.name||m.email||m.member_id)+'">New token</button>';
+    h+='<tr><td><b>'+esc(m.name||"(no name)")+'</b><span class="sub">'+esc(m.email||"")+'</span><span class="sub mono">'+esc(m.member_id)+' · '+esc(m.uses)+' uses</span>'+(m.notes?'<span class="sub">'+esc(m.notes)+'</span>':'')+'</td><td>'+mem+'</td><td>'+toks+'</td><td style="white-space:nowrap">'+acts+'</td></tr>'});
+  el("membersList").innerHTML=h+'</tbody></table></div>';
+  var ev=j.events||[];el("eventsList").innerHTML=ev.length?'<div class="table-scroll"><table><thead><tr><th>When</th><th>Event</th><th>Result</th></tr></thead><tbody>'+ev.map(function(e){return '<tr><td>'+esc(String(e.received_at).replace("T"," ").replace("Z",""))+'</td><td class="mono">'+esc(e.event_type)+'</td><td>'+esc(e.status)+'<span class="sub">'+esc(e.detail)+'</span></td></tr>'}).join("")+'</tbody></table></div>':'<p class="hint">No payment events yet.</p>';
+}
+el("memberForm").addEventListener("submit",function(e){e.preventDefault();var name=el("mfName").value;
+  post("api/members/create",{name:name,email:el("mfEmail").value,notes:el("mfNotes").value,ends:el("mfEnds").value,grant:el("mfGrant").checked,token:el("mfToken").checked}).then(function(r){if(!r.ok){log("Could not add the member: "+(r.j.error||"unknown"),true);return}log("Added member "+r.j.member+".");if(r.j.token)showToken(r.j.token,name||r.j.member);el("memberForm").reset();el("mfGrant").checked=el("mfToken").checked=true;load()})});
+el("membersList").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;var d=b.dataset;
+  var done=function(msg){return function(r){if(r.ok)log(msg);else log("Could not: "+(r.j.error||"unknown"),true);load()}};
+  if(d.mend){if(!confirm("End this membership now? Their tokens stop working at once."))return;post("api/members/entitlement",{entitlement:d.mend,status:"revoked",reason:"ended by the owner"}).then(done("Membership ended."))}
+  else if(d.mrestore){post("api/members/entitlement",{entitlement:d.mrestore,status:"active",reason:"restored by the owner"}).then(done("Membership restored."))}
+  else if(d.mgrant){post("api/members/grant",{member:d.mgrant}).then(done("Membership granted."))}
+  else if(d.mrevtok){if(!confirm("Revoke this token? It stops working at once."))return;post("api/members/revoke-token",{credential:d.mrevtok}).then(done("Token revoked."))}
+  else if(d.mtoken){post("api/members/token",{member:d.mtoken}).then(function(r){if(!r.ok){log("Could not issue a token: "+(r.j.error||"unknown"),true);return}showToken(r.j.token,d.name);log("Issued a token.");load()})}});
+load();
+})();
+</script>
+</body>
+</html>

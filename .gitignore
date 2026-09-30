@@ -1,0 +1,10 @@
+__pycache__/
+# Written by the server on each unlock-code redemption.
+uploads/unlock-redemptions.jsonl
+
+# The live codes database and its atomic-save temporary file: runtime state
+# holding real codes. Never commit them.
+uploads/unlock-codes.db
+uploads/unlock-codes.db.tmp
+# The members database and its SQLite side files: runtime state, never commit.
+data/

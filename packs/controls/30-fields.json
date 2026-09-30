@@ -1,0 +1,37 @@
+{
+  "pack": "Fields",
+  "fields": [
+    {
+      "id": "extras",
+      "order": 10,
+      "label": "Your own additions",
+      "hint": "Anything specific you want in this image. A gift someone is holding, a real detail, a joke only you three would get.",
+      "placeholder": "For example: Susan is carrying the bright bag she always uses",
+      "section": "ALSO",
+      "wrap": "{v}",
+      "carryToFollowUp": true
+    },
+    {
+      "id": "context",
+      "order": 5,
+      "label": "The setting",
+      "hint": "Who these people are to each other, and why they are together. This is the one line that makes the whole prompt make sense.",
+      "placeholder": "Two friends who work together and have stopped pretending it is only work.",
+      "default": "Four fictional recurring characters who know each other well and are comfortable enough to be unposed around one another. Their relationship should be communicated through attention, shared tasks, small reactions and familiar everyday behaviour rather than exposition.",
+      "section": "CONTEXT",
+      "wrap": "{v}",
+      "rows": 4
+    },
+    {
+      "id": "avoid",
+      "order": 20,
+      "label": "Things to keep out",
+      "hint": "Use sparingly. Naming a thing puts the word in the prompt either way, which can summon it. Occupying the space with something else works better. Three items maximum.",
+      "placeholder": "For example: remote controls, hoods",
+      "attachTo": "core",
+      "splitList": true,
+      "limit": 3,
+      "wrap": "Also keep out: {v}."
+    }
+  ]
+}

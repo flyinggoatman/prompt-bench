@@ -1,0 +1,80 @@
+{
+  "pack": "Anatomy and continuity rules",
+  "discipline": [
+    {
+      "id": "count",
+      "order": 10,
+      "text": "Count the picture before finishing it. The number of people, the anatomy of each one and the number of every named object match what this prompt, the character descriptions and any reference material establish."
+    },
+    {
+      "id": "limbs",
+      "order": 20,
+      "text": "Each human figure has the anatomy their description or reference establishes. Where nothing else is established, that is one head on one neck, two arms and two legs, each arm beginning at a shoulder and each leg beginning at a hip, and each limb staying joined to one person along its whole length. Where a limb difference, an amputation, a prosthesis or another physical difference is established, that is what the picture shows, accurately and consistently."
+    },
+    {
+      "id": "hands",
+      "order": 30,
+      "text": "Each hand follows the anatomy established for that character. Where an ordinary hand is intended, that is four fingers and one thumb arranged naturally. A hand holding something closes around it in a grip that works, so it is plain what is held and which hand holds it."
+    },
+    {
+      "id": "face",
+      "order": 40,
+      "text": "Each face keeps the features its description or reference establishes. Where an ordinary human face is intended, that is two eyes level with one another, one nose, one mouth and two ears set coherently on the head. Teeth that show suit the character, the expression and the angle."
+    },
+    {
+      "id": "pairs",
+      "order": 50,
+      "text": "Paired things stay true to their established design: the two shoes of one pair match each other, sleeves belong to their garment, a pair of glasses keeps its lenses, one set of headphones keeps its earpieces. Asymmetry that the prompt or a reference establishes is deliberate and stays."
+    },
+    {
+      "id": "singular",
+      "order": 60,
+      "text": "Each object appears in the number this prompt establishes. One of something stays one identifiable object throughout, and where several are called for they stay that many, each keeping its own identity. Track who holds or owns each one and where it sits, so a phone, a mug, a bag, a set of keys, a pair of glasses, headphones or a cable remains the same object wherever it appears in the scene."
+    },
+    {
+      "id": "attached",
+      "order": 70,
+      "text": "Straps, cables, handles and the like follow paths that work. A strap follows the body and the thing it carries, a cable runs between the two ends it connects, a handle stays joined to whatever it lifts, and every visible attachment point meets the object it belongs to."
+    },
+    {
+      "id": "separate",
+      "order": 80,
+      "text": "Every person and every object keeps a coherent form of its own. Where forms overlap, depth and occlusion make plain which is in front and which continues behind. Clothing stays on its wearer, hair stays on its character, and each thing stays distinguishable from the others and from the background."
+    },
+    {
+      "id": "contact",
+      "order": 90,
+      "text": "Anything resting on or held up by something meets it in a way that works. Objects on a table make contact with the tabletop, feet meet the ground as the pose requires, a seated body is carried by its seat, and weight is borne by whatever sits underneath it."
+    },
+    {
+      "id": "fits",
+      "order": 92,
+      "text": "Everything occupies a space that could hold it. A case, box, vehicle, doorway, seat, frame or enclosure is drawn large enough for whatever is shown inside it, with room at the edges, and anything shown inside one is small enough to be there. Where somebody or something is larger than the space the prompt names, they are drawn beside it, behind it, leaning over it or reaching into it, whichever the scene supports. Where the prompt, a character description or a reference establishes a deliberate impossibility, that is what the picture shows."
+    },
+    {
+      "id": "proportion",
+      "order": 94,
+      "text": "Sizes agree with one another inside the frame. People, furniture, doorways, vehicles, animals, plants and handheld objects keep the relative sizes they would really have, so a mug reads as a mug against a hand, a bench as a bench against a person, and a room as a room against the people standing in it. Where a description or reference establishes something unusually large or small, it keeps that established size wherever it appears."
+    },
+    {
+      "id": "light",
+      "order": 100,
+      "text": "Lighting stays consistent with the light sources the image establishes. Each visible shadow agrees with the position, direction and quality of the light that casts it, and where several sources are established their combined effect stays coherent."
+    },
+    {
+      "id": "sameness",
+      "order": 110,
+      "text": "Across panels, cells, frames or views, each character keeps the identity, anatomy, face, hair, build, clothing and established physical differences they began with, and each recurring object keeps its design and colour, until the story changes one of them."
+    },
+    {
+      "id": "persistence",
+      "order": 120,
+      "text": "Across those panels the established number, scale, orientation, depth and relative position of people and objects all hold. When the viewpoint changes they are drawn from the new viewpoint with those same relationships intact."
+    },
+    {
+      "id": "consequence",
+      "order": 130,
+      "text": "Changes between panels follow events in the story. An object nobody has touched keeps the state and the place it had. Something set down stays where it was put, something picked up travels with whoever carries it, something dropped lies where it fell, and a deliberate change persists from the moment it happens."
+    }
+  ]
+}
